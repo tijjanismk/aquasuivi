@@ -137,6 +137,14 @@ async function parcours() {
   // --- Connexion ---
   verifier('mauvais mot de passe → 401', (await appel('POST', '/auth/connexion', { identifiant: telA, motDePasse: 'faux-faux-faux' })).corps['code'], 'IDENTIFIANTS_INVALIDES');
   verifier('compte inconnu → même réponse', (await appel('POST', '/auth/connexion', { identifiant: '+22300000001', motDePasse: 'faux-faux-faux' })).corps['code'], 'IDENTIFIANTS_INVALIDES');
+  // Force brute : au-delà de la limite (10 par défaut), même le bon mot de
+  // passe est refusé pour ce couple adresse × identifiant.
+  const cible = numero();
+  let code = '';
+  for (let i = 0; i < 12 && code !== 'TROP_DE_TENTATIVES'; i++) {
+    code = String((await appel('POST', '/auth/connexion', { identifiant: cible, motDePasse: `essai-${i}-faux` })).corps['code']);
+  }
+  verifier('force brute freinée → TROP_DE_TENTATIVES', code, 'TROP_DE_TENTATIVES');
   verifier('connexion numéro espacé', (await appel('POST', '/auth/connexion', { identifiant: espace, motDePasse: 'bassin-A-2026' })).statut, 200);
   verifier('/auth/moi', (await appel('GET', '/auth/moi', undefined, a.jetonAcces)).corps['id'], a.utilisateur.id);
 

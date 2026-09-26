@@ -12,6 +12,7 @@ import type { User } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service.js';
 import type { ContenuJeton } from './garde.js';
 import { EMPREINTE_LEURRE, hacher, verifier } from './mot-de-passe.js';
+import { lesLimiteurs } from './limiteur.js';
 
 const DUREE_ACCES_S = 15 * 60;
 const DUREE_RAFRAICHISSEMENT_MS = 90 * 24 * 3600 * 1000;
@@ -80,7 +81,8 @@ export class AuthService {
 
   /// Inscription libre d'un particulier (D19) : toujours PISCICULTEUR. Les
   /// rôles d'encadrement ne s'obtiennent que par un administrateur.
-  async inscrire(corps: unknown) {
+  async inscrire(corps: unknown, ip = '') {
+    lesLimiteurs().inscription.verifier(ip);
     const d = lire(inscription, corps);
     const existe = await this.prisma.client.user.findFirst({
       where: { OR: [{ telephone: d.telephone }, ...(d.email ? [{ email: d.email }] : [])] },
@@ -100,18 +102,25 @@ export class AuthService {
         derniereConnexion: new Date(),
       },
     });
+    lesLimiteurs().inscription.noter(ip);
     return this.ouvrirSession(user, d.appareil);
   }
 
-  async connecter(corps: unknown) {
+  async connecter(corps: unknown, ip = '') {
     const d = lire(connexion, corps);
     const identifiant = d.identifiant.includes('@')
       ? { email: d.identifiant.toLowerCase() }
       : { telephone: telephone.safeParse(d.identifiant).data ?? d.identifiant };
+    const cle = `${ip}|${JSON.stringify(identifiant)}`;
+    lesLimiteurs().connexion.verifier(cle);
     const user = await this.prisma.client.user.findFirst({ where: identifiant });
 
     const ok = await verifier(d.motDePasse, user?.motDePasse ?? EMPREINTE_LEURRE);
-    if (!user || !user.motDePasse || !ok || !user.actif) throw REFUS();
+    if (!user || !user.motDePasse || !ok || !user.actif) {
+      lesLimiteurs().connexion.noter(cle);
+      throw REFUS();
+    }
+    lesLimiteurs().connexion.oublier(cle);
 
     await this.prisma.client.user.update({
       where: { id: user.id },

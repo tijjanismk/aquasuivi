@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Ip, Post } from '@nestjs/common';
 import { AuthService } from './auth.service.js';
 import { Publique, Utilisateur, type UtilisateurConnecte } from './garde.js';
 
@@ -8,15 +8,15 @@ export class AuthController {
 
   @Publique()
   @Post('inscription')
-  inscrire(@Body() corps: unknown) {
-    return this.service.inscrire(corps);
+  inscrire(@Body() corps: unknown, @Ip() ip: string) {
+    return this.service.inscrire(corps, ip);
   }
 
   @Publique()
   @HttpCode(200)
   @Post('connexion')
-  connecter(@Body() corps: unknown) {
-    return this.service.connecter(corps);
+  connecter(@Body() corps: unknown, @Ip() ip: string) {
+    return this.service.connecter(corps, ip);
   }
 
   /// Publique : c'est précisément quand le jeton d'accès a expiré qu'on l'appelle.

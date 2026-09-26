@@ -17,8 +17,17 @@ app.useBodyParser('json', { limit: '5mb' });
 app.setGlobalPrefix('api');
 app.useGlobalInterceptors(new FrontiereInterceptor());
 app.useGlobalFilters(new PrismaExceptionFilter());
-// Admin servi par Vite en développement. À restreindre avant toute mise en ligne.
-app.enableCors({ origin: true, exposedHeaders: ['x-total-count'] });
+// Origines autorisées (admin, PWA), séparées par des virgules. Sans valeur,
+// tout est accepté : c'est le mode développement, où Vite change de port.
+const origines = (process.env['AQUA_ORIGINES'] ?? '')
+  .split(',')
+  .map((o) => o.trim())
+  .filter(Boolean);
+app.enableCors({ origin: origines.length > 0 ? origines : true, exposedHeaders: ['x-total-count'] });
+// Derrière le proxy HTTPS (Caddy), l'adresse du client arrive dans
+// X-Forwarded-For : sans cela, tout le monde aurait l'adresse du proxy et
+// la limite de tentatives bloquerait le pays entier d'un coup.
+if (process.env['AQUA_DERRIERE_PROXY'] === '1') app.set('trust proxy', 1);
 
 const port = Number(process.env.PORT ?? 3000);
 await app.listen(port);
