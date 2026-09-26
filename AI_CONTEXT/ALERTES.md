@@ -19,6 +19,12 @@ L'API est fermée par défaut depuis D18 : JWT, cloisonnement par
 - **Rôle porté par le jeton** : rétrograder un compte prend effet au plus
   15 minutes après (l'accès aux fermes, lui, est relu à chaque requête).
 
+## Données de référence
+
+- `tauxSurvieRef` est saisi **en fraction** (0,9) dans le seed alors que
+  les indicateurs donnent la survie **en pourcentage** (94). Le moteur
+  d'alertes accepte les deux ; l'admin devrait l'afficher en %.
+
 ## PWA — à savoir
 
 - **Composants UI dupliqués** : `apps/pwa/src/ui/` est une copie de

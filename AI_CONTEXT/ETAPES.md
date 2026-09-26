@@ -74,10 +74,7 @@ Avant d'écrire l'API, parce que l'API va s'appuyer dessus.
 - [x] Tests de `rationnement.ts` : bornes `>= poidsMin` / `< poidsMax`,
       priorité du palier thermique sur le générique quel que soit l'ordre,
       0 °C distinct d'« absente », absence de palier — `test/rationnement.ts`
-- [ ] Trancher le seuil de coefficient de variation, ou retirer le
-      commentaire qui l'évoque sans l'implémenter (`indicateurs.ts:131-136`)
-      — **décision métier en attente** ; le moteur d'alertes (étape 8) en
-      a besoin
+- [x] Seuil de coefficient de variation : par espèce, 25 % par défaut (D22)
 
 **Fin :** `pnpm test:shared` couvre les trois modules de calcul. ✅
 (`b4.ts && geometrie.ts && rationnement.ts`), et depuis D20 les contrôles
@@ -226,20 +223,25 @@ vocale — rien de cela n'est commencé.
 
 ---
 
-## Étape 8 — Moteur d'alertes
+## Étape 8 — Moteur d'alertes `[x]` (D22)
 
-Les seuils sont **stockés** depuis l'étape 3 ; rien ne les interprète.
+`packages/shared/src/alertes.ts`, appelé par l'API, l'admin (via l'API) et
+la PWA (localement, hors ligne).
 
-- [ ] Densité au-dessus de `densiteMaxM2` / `densiteMaxM3`
-- [ ] Température hors `temperatureOptMin/Max`, oxygène sous `oxygeneMin`
-- [ ] Croissance sous la référence de l'espèce (`performance < 1`)
-- [ ] Coefficient de variation au-dessus du seuil (étape 2)
-- [ ] **Récolte dans le délai d'attente** — déjà calculé
-      (`conformite.recoltesNonConformes`), reste à remonter comme alerte
-      bloquante
+- [x] Densité au-dessus de `densiteMaxM2` / `densiteMaxM3`
+- [x] Température hors `temperatureOptMin/Max` (attention) ou hors
+      `temperatureMin/Max` (critique), oxygène sous `oxygeneMin`, pH
+- [x] Croissance sous la référence de l'espèce (`performance < 1`)
+- [x] Coefficient de variation au-dessus du seuil — **tranché** : champ
+      `seuilHeterogeneitePct` de l'espèce, 25 % par défaut
+- [x] **Récolte dans le délai d'attente** en alerte critique, traitement
+      en cours en information
+- [x] En plus : mortalité anormale, aliment mal valorisé, pesée en retard
+- [x] `GET /cycles/:id/alertes`, `GET /alertes` (tableau de bord), outil
+      MCP `alertes_en_cours`
 
 **Fin :** un cycle surdensifié déclenche une alerte visible sur mobile
-et dans l'admin.
+et dans l'admin. ✅ `pnpm --filter @aqua/e2e test:alertes`.
 
 ---
 

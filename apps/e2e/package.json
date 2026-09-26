@@ -4,11 +4,12 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "tsx test/parcours-auth.ts && tsx test/parcours-controles.ts && tsx test/parcours-sync.ts && tsx test/parcours-cycle.ts && tsx test/parcours-mcp.ts && tsx test/parcours-admin.ts && tsx test/parcours-saisie.ts && tsx test/parcours-pwa.ts",
+    "test": "tsx test/parcours-auth.ts && tsx test/parcours-controles.ts && tsx test/parcours-sync.ts && tsx test/parcours-cycle.ts && tsx test/parcours-mcp.ts && tsx test/parcours-admin.ts && tsx test/parcours-saisie.ts && tsx test/parcours-pwa.ts && tsx test/parcours-alertes.ts",
     "test:auth": "tsx test/parcours-auth.ts",
     "test:controles": "tsx test/parcours-controles.ts",
     "test:sync": "tsx test/parcours-sync.ts",
     "test:pwa": "tsx test/parcours-pwa.ts",
+    "test:alertes": "tsx test/parcours-alertes.ts",
     "test:cycle": "tsx test/parcours-cycle.ts",
     "test:admin": "tsx test/parcours-admin.ts",
     "typecheck": "tsc --noEmit",

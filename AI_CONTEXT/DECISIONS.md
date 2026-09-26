@@ -418,6 +418,29 @@ Retirer l'accès à une ferme ne l'efface pas du téléphone.
 
 ---
 
+## D22 — Alertes : une fonction pure dans `shared`, jamais bloquantes
+
+**Problème.** Les seuils existaient en base sans que rien ne les lise ; et
+l'alerte qui compte le plus — l'oxygène à l'aube — doit apparaître au bord
+du bassin, sans réseau.
+
+**Choix.** `calculerAlertes(cycle, { aujourdhui, mesures })` dans
+`@aqua/shared` (D1), sur le même agrégat que les indicateurs (D13). Trois
+niveaux : `critique`, `attention`, `info`, avec un message qui dit **quoi
+faire**. Seuils lus sur l'espèce (D10) ; le seuil de coefficient de
+variation devient une colonne (`seuilHeterogeneitePct`), 25 % par défaut
+— valeur usuelle en pisciculture, à affiner espèce par espèce dans l'admin.
+
+Une alerte **ne bloque jamais** une saisie : une récolte faite pendant un
+délai d'attente a eu lieu, il faut l'enregistrer — elle ressort en
+critique jusqu'au bilan.
+
+**Coût.** `GET /alertes` recalcule chaque cycle en cours (300 au plus) :
+suffisant pour une région, pas pour un tableau de bord national, qui
+demanderait des alertes matérialisées.
+
+---
+
 ## Décisions en attente
 
 - **Devise de stockage — non tranché, et ce n'est pas du formatage.**
@@ -435,9 +458,3 @@ Retirer l'accès à une ferme ne l'efface pas du téléphone.
   (D19). Un code par SMS suppose un fournisseur et un coût par envoi.
 - **Mot de passe oublié.** Sans e-mail ni SMS, seul un administrateur
   peut réinitialiser.
-- **Moteur d'alertes.** Les seuils existent en base (`densiteMax*`,
-  `oxygeneMin`, `temperatureOpt*`, référence de gain quotidien) mais
-  rien ne les interprète. Où vit la règle : `shared` ou API ?
-  → `shared`, par cohérence avec D1, mais non tranché.
-- **Seuil de coefficient de variation.** ≈ 25 % évoqué en commentaire,
-  jamais implémenté ni sourcé.
