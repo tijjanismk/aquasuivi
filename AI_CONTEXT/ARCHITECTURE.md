@@ -115,7 +115,7 @@ synchronisation filtre dessus.
 (référentiels, saisie, indicateurs), l'admin des référentiels, le
 serveur MCP. `pnpm test:shared` puis `pnpm test:e2e`.
 
-Non écrit : alertes, simulation,
+Non écrit :
 consolidation territoriale. Voir `ETAPES.md`.
 
 L'API est **fermée par défaut** (`GardeJwt` global, `@Publique()` pour

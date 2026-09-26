@@ -6,6 +6,7 @@ import { BrowserRouter, Navigate, NavLink, Outlet, Route, Routes, useParams } fr
 import {
   Fish,
   FlaskConical,
+  Calculator,
   LayoutDashboard,
   LogOut,
   Scale,
@@ -26,6 +27,7 @@ import { PageFormulaire } from './pages/PageFormulaire';
 import { FicheParent } from './pages/FicheParent';
 import { FicheCycle } from './pages/FicheCycle';
 import { Connexion } from './pages/Connexion';
+import { Simulation } from './pages/Simulation';
 import { authProvider, type Utilisateur } from './session';
 
 /// Les listes partagent une seule route. Sans cette clé, React réutilise
@@ -102,6 +104,11 @@ function MiseEnPage() {
             {FERMES.libelle}
           </NavLink>
 
+          <NavLink to="/simulation" className={({ isActive }) => lienLateral(isActive)}>
+            <Calculator className="size-4" />
+            Simulation
+          </NavLink>
+
           <div className="mt-4 px-3 pb-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
             Référentiels
           </div>
@@ -151,6 +158,7 @@ export function App() {
             }
           >
             <Route index element={<Accueil />} />
+            <Route path="/simulation" element={<Simulation />} />
 
             {/* Référentiels : liste puis formulaire, sans fiche intermédiaire. */}
             <Route

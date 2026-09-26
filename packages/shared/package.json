@@ -16,7 +16,7 @@
     "build": "tsc -p tsconfig.build.json",
     "prepare": "tsc -p tsconfig.build.json",
     "typecheck": "tsc --noEmit",
-    "test": "tsx test/b4.ts && tsx test/geometrie.ts && tsx test/rationnement.ts && tsx test/controles.ts && tsx test/alertes.ts"
+    "test": "tsx test/b4.ts && tsx test/geometrie.ts && tsx test/rationnement.ts && tsx test/controles.ts && tsx test/alertes.ts && tsx test/simulation.ts"
   },
   "devDependencies": {
     "@types/node": "^24.0.0",

@@ -16,6 +16,7 @@ import { Saisie } from './ecrans/Saisie';
 import { Pesee } from './ecrans/Pesee';
 import { Corrections } from './ecrans/Corrections';
 import { Compte } from './ecrans/Compte';
+import { Simuler } from './ecrans/Simuler';
 
 function useEnLigne() {
   const [enLigne, setEnLigne] = useState(navigator.onLine);
@@ -140,6 +141,7 @@ export function App() {
         <Route path="/connexion" element={<Connexion />} />
         <Route path="/" element={<Protege enfant={<Fermes />} />} />
         <Route path="/compte" element={<Protege enfant={<Compte />} />} />
+        <Route path="/simuler" element={<Protege enfant={<Simuler />} />} />
         <Route path="/fermes/:id" element={<Protege enfant={<Ferme />} />} />
         <Route path="/bassins/:id" element={<Protege enfant={<Bassin />} />} />
         <Route path="/cycles/:id" element={<Protege enfant={<Cycle />} />} />

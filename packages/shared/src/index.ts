@@ -5,3 +5,4 @@ export * from './rationnement.js';
 export * from './indicateurs.js';
 export * from './controles.js';
 export * from './alertes.js';
+export * from './simulation.js';

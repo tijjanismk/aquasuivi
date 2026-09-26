@@ -10,6 +10,8 @@ import { SaisieService } from './saisie/saisie.service.js';
 import { ControlesService } from './saisie/controles.service.js';
 import { SyncController } from './sync/sync.controller.js';
 import { SyncService } from './sync/sync.service.js';
+import { SimulationsController } from './simulations/simulations.controller.js';
+import { SimulationsService } from './simulations/simulations.service.js';
 import { CyclesController } from './cycles/cycles.controller.js';
 import { CyclesService } from './cycles/cycles.service.js';
 import { SanteController } from './sante.controller.js';
@@ -43,6 +45,7 @@ function secretJwt(): string {
     SaisieController,
     CyclesController,
     SyncController,
+    SimulationsController,
   ],
   providers: [
     AuthService,
@@ -50,6 +53,7 @@ function secretJwt(): string {
     SaisieService,
     ControlesService,
     SyncService,
+    SimulationsService,
     CyclesService,
     // Tout est fermé par défaut ; `@Publique()` ouvre une route (D18).
     { provide: APP_GUARD, useClass: GardeJwt },

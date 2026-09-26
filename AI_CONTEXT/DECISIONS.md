@@ -441,6 +441,25 @@ demanderait des alertes matérialisées.
 
 ---
 
+## D23 — La simulation est un cycle fictif, chiffré comme un vrai
+
+**Problème.** Un modèle de projection à part aurait ses propres formules
+de prix de revient ; au premier écart avec le bilan réel, personne ne
+saurait lequel croire.
+
+**Choix.** `simuler()` construit un `CycleComplet` fictif — alevins,
+mortalités au taux de référence, aliment à l'indice de référence, récolte
+**comptée** au poids visé (D14) — puis appelle `calculerIndicateurs`.
+Densité par défaut : 80 % du maximum de l'espèce ; poids visé par défaut :
+milieu de la fourchette marchande ; chaque valeur par défaut est rendue
+comme **hypothèse** lisible. Le calcul tourne aussi dans la PWA : un
+particulier chiffre son projet sans réseau.
+
+**Coût.** La projection est aussi bonne que les repères de l'espèce ;
+ils sont en base (D10), donc corrigibles sans redéploiement.
+
+---
+
 ## Décisions en attente
 
 - **Devise de stockage — non tranché, et ce n'est pas du formatage.**

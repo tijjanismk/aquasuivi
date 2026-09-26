@@ -245,18 +245,23 @@ et dans l'admin. ✅ `pnpm --filter @aqua/e2e test:alertes`.
 
 ---
 
-## Étape 9 — Simulation
+## Étape 9 — Simulation `[x]` (D23)
 
-Objectif annoncé du projet, modèle `Simulation` déjà en place.
+`packages/shared/src/simulation.ts` ; API `apps/api/src/simulations/`,
+page Simulation de l'admin, écran « Simuler un projet » de la PWA (hors ligne).
 
-- [ ] À partir d'un capital, d'une espèce, d'un type d'infrastructure et
-      d'une surface : projeter production, charges, prix de revient et
-      seuil de rentabilité
-- [ ] Réutiliser `calculerIndicateurs` sur des paramètres du référentiel
-      plutôt que sur des données de terrain (c'est la raison d'être de D13)
+- [x] À partir d'un capital, d'une espèce, d'un type d'infrastructure et
+      d'une surface : production, charges, prix de revient, seuil de
+      rentabilité (prix et quantité), besoin de financement, taille
+      finançable, résultat annuel
+- [x] Réutilise `calculerIndicateurs` sur un **cycle projeté** construit
+      depuis les repères de l'espèce (D13)
+- [x] Simulations enregistrées par leur auteur (`Simulation`)
 
 **Fin :** une simulation et un cycle réel comparables passent par le
-même code.
+même code. ✅ `packages/shared/test/simulation.ts` rejoue le cycle projeté
+dans `calculerIndicateurs` ; `pnpm --filter @aqua/e2e test:simulation`
+vérifie qu'API, admin et PWA hors ligne donnent le même résultat.
 
 ---
 

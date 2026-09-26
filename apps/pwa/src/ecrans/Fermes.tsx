@@ -1,5 +1,5 @@
 import { Link } from 'react-router';
-import { Plus, UserRound } from 'lucide-react';
+import { Calculator, Plus, UserRound } from 'lucide-react';
 import { db } from '../db';
 import { useRequete } from '../donnees';
 import { utilisateur } from '../session';
@@ -54,6 +54,9 @@ export function Fermes() {
             );
           })}
       </Section>
+      <Link to="/simuler" data-test="lien-simuler" className={stylesBouton({ variant: 'outline', className: 'w-full' })}>
+        <Calculator /> Simuler un projet
+      </Link>
     </>
   );
 }
