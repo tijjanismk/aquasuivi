@@ -51,6 +51,12 @@ export const REFERENTIELS: Ressource[] = [
       { nom: 'dureeCycleRef', libelle: 'Durée de cycle de référence (j)', type: 'entier' },
       { nom: 'densiteMaxM2', libelle: 'Densité max (/m²)', type: 'nombre' },
       { nom: 'densiteMaxM3', libelle: 'Densité max (/m³)', type: 'nombre' },
+      {
+        nom: 'seuilHeterogeneitePct',
+        libelle: 'Seuil d’hétérogénéité (%)',
+        type: 'nombre',
+        aide: 'Coefficient de variation des poids au-delà duquel un tri est conseillé. Vide : 25 %.',
+      },
       { nom: 'sourceParametres', libelle: 'Source des paramètres', type: 'texte', aide: 'Traçabilité : d’où viennent ces valeurs.' },
       { nom: 'actif', libelle: 'Actif', type: 'booleen', enListe: true },
     ],

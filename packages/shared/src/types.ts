@@ -36,6 +36,8 @@ export interface Espece {
   oxygeneMin?: number | null;
   densiteMaxM2?: number | null;
   densiteMaxM3?: number | null;
+  /** Coefficient de variation (%) au-delà duquel un tri s'impose. */
+  seuilHeterogeneitePct?: number | null;
 }
 
 export interface InfrastructureDim {

@@ -8,6 +8,8 @@ import { formaterDate, formaterMontant, formaterNombre, t } from '@/i18n';
 import { Alerte, Badge, Card } from '@/composants/ui/divers';
 import { Button } from '@/composants/ui/button';
 import { TableauRessource } from '@/composants/TableauRessource';
+import { ListeAlertes } from '@/composants/Alertes';
+import type { Alerte as AlerteCycle } from '@aqua/shared';
 
 interface Indicateurs {
   cycle: { dureeJours: number | null };
@@ -68,6 +70,7 @@ export function FicheCycle() {
   const { id = '' } = useParams();
   const [indicateurs, setIndicateurs] = useState<Indicateurs | null>(null);
   const [erreurIndicateurs, setErreurIndicateurs] = useState<string | null>(null);
+  const [alertes, setAlertes] = useState<AlerteCycle[]>([]);
 
   const cycle = useOne({ resource: CYCLES.nom, id });
   const ligne = cycle.data?.data as Record<string, unknown> | undefined;
@@ -83,6 +86,10 @@ export function FicheCycle() {
       })
       .then(setIndicateurs)
       .catch((e: Error) => setErreurIndicateurs(e.message));
+    appelApi(`/cycles/${id}/alertes`)
+      .then((r) => (r.ok ? r.json() : []))
+      .then(setAlertes)
+      .catch(() => setAlertes([]));
   }, [id]);
 
   const infrastructure = ligne?.['infrastructure'] as
@@ -122,6 +129,12 @@ export function FicheCycle() {
           </Button>
         </Link>
       </div>
+
+      {alertes.length > 0 && (
+        <section className="mb-6" data-test="alertes">
+          <ListeAlertes alertes={alertes} />
+        </section>
+      )}
 
       <section className="mb-8" data-test="indicateurs">
         <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted-foreground">

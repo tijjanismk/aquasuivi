@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 import { ChevronRight } from 'lucide-react';
 import { API_URL } from '../config';
+import { appelApi } from '../session';
+import { ListeAlertes } from '@/composants/Alertes';
+import type { Alerte as AlerteCycle } from '@aqua/shared';
 import { REFERENTIELS } from '../referentiels';
 import { formaterNombre } from '../i18n';
 import { Alerte, Card } from '@/composants/ui/divers';
@@ -18,6 +21,44 @@ const LIBELLES: Record<string, string> = {
   produitsSanitaires: 'Produits sanitaires',
   paliers: 'Paliers',
 };
+
+interface CycleEnAlerte {
+  cycleId: string;
+  numero: number;
+  ferme: string;
+  bassin: string;
+  alertes: AlerteCycle[];
+}
+
+/// Cycles en cours qui demandent un geste, sur les fermes visibles (étape 8).
+function AlertesEnCours() {
+  const [cycles, setCycles] = useState<CycleEnAlerte[] | null>(null);
+  useEffect(() => {
+    appelApi('/alertes')
+      .then((r) => (r.ok ? r.json() : []))
+      .then(setCycles)
+      .catch(() => setCycles([]));
+  }, []);
+  if (!cycles || cycles.length === 0) return null;
+  return (
+    <section data-test="alertes-en-cours" className="mb-8">
+      <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+        Alertes en cours
+      </h3>
+      <div className="grid gap-3 lg:grid-cols-2">
+        {cycles.map((c) => (
+          <Card key={c.cycleId} className="p-4">
+            <Link to={`/cycles/${c.cycleId}`} className="mb-2 flex items-center justify-between font-medium hover:text-primary">
+              {c.ferme} · {c.bassin} · cycle {c.numero}
+              <ChevronRight className="size-4 text-muted-foreground" />
+            </Link>
+            <ListeAlertes alertes={c.alertes} />
+          </Card>
+        ))}
+      </div>
+    </section>
+  );
+}
 
 export function Accueil() {
   const [sante, setSante] = useState<Sante | null>(null);
@@ -56,6 +97,8 @@ export function Accueil() {
           ))}
         </div>
       )}
+
+      <AlertesEnCours />
 
       <div className="grid gap-3 sm:grid-cols-2">
         {REFERENTIELS.map((r) => (

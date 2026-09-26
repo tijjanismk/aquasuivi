@@ -167,6 +167,29 @@ serveur.registerTool(
 );
 
 serveur.registerTool(
+  'alertes_en_cours',
+  {
+    title: 'Alertes en cours',
+    description:
+      'Cycles en cours qui demandent un geste, les plus graves en premier : densité excessive, ' +
+      'oxygène bas, température hors plage, croissance lente, lot hétérogène, mortalité élevée, ' +
+      'récolte pendant un délai d’attente sanitaire, pesée en retard. Chaque alerte porte un ' +
+      'niveau (critique, attention, info) et un message qui dit quoi faire.',
+    inputSchema: {
+      cycleId: z.string().optional().describe("Restreindre à un cycle, obtenu via `lister_cycles`."),
+    },
+    annotations: LECTURE,
+  },
+  async ({ cycleId }) => {
+    try {
+      return texte(cycleId ? await api.alertesCycle(cycleId) : await api.alertes());
+    } catch (e) {
+      return echec(e);
+    }
+  },
+);
+
+serveur.registerTool(
   'consulter_referentiel',
   {
     title: 'Consulter un référentiel',

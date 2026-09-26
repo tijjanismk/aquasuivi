@@ -131,6 +131,9 @@ model Espece {
   dureeCycleRef         Int?
   densiteMaxM2          Decimal? @db.Decimal(8, 2)
   densiteMaxM3          Decimal? @db.Decimal(8, 2)
+  /// Coefficient de variation (%) au-delà duquel le lot est à trier. Vide :
+  /// 25 % (SEUIL_HETEROGENEITE_DEFAUT dans @aqua/shared).
+  seuilHeterogeneitePct Decimal? @db.Decimal(5, 2)
 
   /// Origine des valeurs de référence, pour traçabilité.
   sourceParametres String?

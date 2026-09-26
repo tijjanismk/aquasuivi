@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
-import { calculerIndicateurs, type CycleComplet } from '@aqua/shared';
+import { aujourdhui, calculerAlertes, calculerIndicateurs, type CycleComplet } from '@aqua/shared';
 import { PrismaService } from '../prisma/prisma.service.js';
 import type { UtilisateurConnecte } from '../auth/garde.js';
 import { fermesLisibles } from '../auth/portee.js';
@@ -36,6 +36,45 @@ export class CyclesService {
   /// lit rien elle-même (D13) : c'est ce qui la rend rejouable sur le téléphone
   /// à partir du cache local.
   async indicateurs(cycleId: string, u: UtilisateurConnecte) {
+    return calculerIndicateurs((await this.charger(cycleId, u)).agregat);
+  }
+
+  async alertes(cycleId: string, u: UtilisateurConnecte) {
+    const { agregat, mesures } = await this.charger(cycleId, u);
+    return calculerAlertes(agregat, { aujourdhui: aujourdhui(), mesures });
+  }
+
+  /// Alertes de tous les cycles en cours visibles par l'utilisateur, les plus
+  /// graves d'abord. Borné : au-delà, c'est un tableau de bord national, pas
+  /// une liste à parcourir.
+  async alertesEnCours(u: UtilisateurConnecte) {
+    const ferme = fermesLisibles(u);
+    const cycles = await this.prisma.client.cycle.findMany({
+      where: { dateCloture: null, ...(ferme ? { infrastructure: { ferme } } : {}) },
+      select: { id: true, numero: true, infrastructure: { select: { id: true, nom: true, ferme: { select: { id: true, nom: true } } } } },
+      orderBy: { dateMiseEnCharge: 'desc' },
+      take: 300,
+    });
+    const rang = { critique: 0, attention: 1, info: 2 } as const;
+    const resultat = [];
+    for (const c of cycles) {
+      const alertes = await this.alertes(c.id, u);
+      if (alertes.length === 0) continue;
+      resultat.push({
+        cycleId: c.id,
+        numero: c.numero,
+        bassin: c.infrastructure.nom,
+        bassinId: c.infrastructure.id,
+        ferme: c.infrastructure.ferme.nom,
+        fermeId: c.infrastructure.ferme.id,
+        alertes,
+      });
+    }
+    return resultat.sort((a, b) => rang[a.alertes[0]!.niveau] - rang[b.alertes[0]!.niveau]);
+  }
+
+  /// Agrégat du cycle et relevés d'eau, depuis PostgreSQL.
+  private async charger(cycleId: string, u: UtilisateurConnecte) {
     const ferme = fermesLisibles(u);
     const cycle = await this.prisma.client.cycle.findFirst({
       where: { id: cycleId, ...(ferme ? { infrastructure: { ferme } } : {}) },
@@ -165,9 +204,19 @@ export class CyclesService {
         oxygeneMin: nbOuNul(e.oxygeneMin),
         densiteMaxM2: nbOuNul(e.densiteMaxM2),
         densiteMaxM3: nbOuNul(e.densiteMaxM3),
+        seuilHeterogeneitePct: nbOuNul(e.seuilHeterogeneitePct),
       })),
     };
 
-    return calculerIndicateurs(agregat);
+    const mesures = (
+      await this.prisma.client.mesureEau.findMany({ where: { cycleId }, orderBy: { dateMesure: 'asc' } })
+    ).map((m) => ({
+      dateMesure: jour(m.dateMesure),
+      heure: m.heure,
+      temperature: nbOuNul(m.temperature),
+      oxygeneDissous: nbOuNul(m.oxygeneDissous),
+      ph: nbOuNul(m.ph),
+    }));
+    return { agregat, mesures };
   }
 }

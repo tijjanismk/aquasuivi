@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react';
 import { liveQuery } from 'dexie';
 import {
+  aujourdhui,
+  calculerAlertes,
   calculerIndicateurs,
   rationConseillee,
+  type Alerte,
   type CycleComplet,
   type Indicateurs,
 } from '@aqua/shared';
@@ -143,6 +146,7 @@ export async function cycleComplet(cycleId: string): Promise<CycleComplet | null
       oxygeneMin: nb(e['oxygeneMin']),
       densiteMaxM2: nb(e['densiteMaxM2']),
       densiteMaxM3: nb(e['densiteMaxM3']),
+      seuilHeterogeneitePct: nb(e['seuilHeterogeneitePct']),
     })),
   };
 }
@@ -150,6 +154,7 @@ export async function cycleComplet(cycleId: string): Promise<CycleComplet | null
 export interface EtatCycle {
   indicateurs: Indicateurs;
   ration: ReturnType<typeof rationConseillee>;
+  alertes: Alerte[];
 }
 
 /// Indicateurs et ration conseillée du jour : palier de l'espèce du lot le
@@ -160,6 +165,23 @@ export async function etatCycle(cycleId: string): Promise<EtatCycle | null> {
   const complet = await cycleComplet(cycleId);
   if (!complet || complet.lots.length === 0) return null;
   const indicateurs = calculerIndicateurs(complet);
+  const releves = await db.mesures.where('cycleId').equals(cycleId).toArray();
+  // Même moteur que l'API (étape 8) : l'alerte d'oxygène s'affiche au bord
+  // du bassin, sans attendre le réseau.
+  const alertes = calculerAlertes(
+    complet,
+    {
+      aujourdhui: aujourdhui(),
+      mesures: releves.map((m) => ({
+        dateMesure: m['dateMesure'],
+        heure: m['heure'] ?? null,
+        temperature: nb(m['temperature']),
+        oxygeneDissous: nb(m['oxygeneDissous']),
+        ph: nb(m['ph']),
+      })),
+    },
+    indicateurs,
+  );
 
   const principal = [...indicateurs.lots].sort((a, b) => b.biomasseKg - a.biomasseKg)[0];
   let ration: EtatCycle['ration'] = null;
@@ -185,5 +207,5 @@ export async function etatCycle(cycleId: string): Promise<EtatCycle | null> {
       nb(derniere?.['temperature']),
     );
   }
-  return { indicateurs, ration };
+  return { indicateurs, ration, alertes };
 }

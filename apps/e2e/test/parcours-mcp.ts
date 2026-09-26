@@ -137,6 +137,7 @@ try {
   const outils = await serveur.envoyer('tools/list', {});
   const noms = (outils.result?.tools ?? []).map((o) => o.name).sort();
   const attendus = [
+    'alertes_en_cours',
     'configuration',
     'consulter_referentiel',
     'indicateurs_cycle',
@@ -146,7 +147,7 @@ try {
     'resume_ferme',
   ];
   verifier(
-    'les 7 outils sont déclarés',
+    'les 8 outils sont déclarés',
     JSON.stringify(noms) === JSON.stringify(attendus),
     noms.join(', '),
   );

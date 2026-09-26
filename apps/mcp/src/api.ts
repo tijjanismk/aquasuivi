@@ -147,6 +147,10 @@ export const api = {
   indicateurs: (cycleId: string) =>
     lire<Record<string, unknown>>(`/cycles/${cycleId}/indicateurs`),
 
+  alertes: () => lire<Record<string, unknown>[]>('/alertes'),
+
+  alertesCycle: (cycleId: string) => lire<Record<string, unknown>[]>(`/cycles/${cycleId}/alertes`),
+
   referentiel: (segment: string, recherche?: string) =>
     lire<Record<string, unknown>[]>(`/referentiels/${segment}`, {
       ...PAGE,

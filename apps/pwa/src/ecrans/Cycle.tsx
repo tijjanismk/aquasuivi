@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router';
 import {
-  Banknote, Droplets, Fish, FlaskConical, Pencil, Scale, Skull, Trash2, Wheat, Warehouse,
+  Banknote, Droplets, Info, TriangleAlert, Fish, FlaskConical, Pencil, Scale, Skull, Trash2, Wheat, Warehouse,
   type LucideIcon,
 } from 'lucide-react';
 import { db, TABLES, type Ligne, type Segment } from '../db';
@@ -133,10 +133,28 @@ export function Cycle() {
               <span className="text-muted-foreground"> ({nombre(etat.ration.tauxPct)} % de la biomasse)</span>
             </p>
           )}
-          {i.conformite.recoltesNonConformes > 0 && (
-            <Alerte className="mt-3">{i.conformite.recoltesNonConformes} récolte(s) pendant un délai d’attente sanitaire.</Alerte>
-          )}
         </Card>
+      )}
+
+      {etat && etat.alertes.length > 0 && (
+        <div data-test="alertes" className="mb-4 flex flex-col gap-2">
+          {etat.alertes.map((a) => (
+            <div
+              key={a.code}
+              data-test="alerte"
+              data-code={a.code}
+              className={cn(
+                'flex gap-2 rounded-lg border px-3 py-2 text-sm',
+                a.niveau === 'critique' && 'border-destructive/40 bg-destructive/10 text-destructive',
+                a.niveau === 'attention' && 'border-amber-500/40 bg-amber-500/10 text-amber-900 dark:text-amber-200',
+                a.niveau === 'info' && 'border-border bg-muted/60 text-muted-foreground',
+              )}
+            >
+              {a.niveau === 'info' ? <Info className="mt-0.5 size-4 shrink-0" /> : <TriangleAlert className="mt-0.5 size-4 shrink-0" />}
+              <span>{a.message}</span>
+            </div>
+          ))}
+        </div>
       )}
 
       {!clos && (
