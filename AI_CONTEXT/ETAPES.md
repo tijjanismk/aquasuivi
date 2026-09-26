@@ -272,6 +272,25 @@ vérifie qu'API, admin et PWA hors ligne donnent le même résultat.
 
 ---
 
+## Étape 10 — Mise en ligne `[~]` — `deploy/`
+
+- [x] Sécurité : CORS limité aux domaines (`AQUA_ORIGINES`), limite des
+      tentatives de connexion et d'inscription, adresse réelle derrière le
+      proxy (`AQUA_DERRIERE_PROXY`)
+- [x] Docker Compose : PostgreSQL non exposé, API qui migre au démarrage,
+      Caddy (HTTPS Let's Encrypt, en-têtes de sécurité, politique de
+      contenu stricte, service worker jamais mis en cache)
+- [x] Sauvegarde quotidienne (`deploy/sauvegarder.sh`) et procédure
+      (`deploy/README.md`)
+- [ ] **Premier déploiement réel** : les images n'ont pas été construites
+      ici (Docker Desktop écarté sur la machine de développement) — voir
+      ALERTES.md
+
+**Fin :** `https://terrain.…` s'installe sur un téléphone Android et
+synchronise avec `https://api.…`.
+
+---
+
 ## Ordre et dépendances
 
 ```

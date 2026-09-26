@@ -25,6 +25,17 @@ L'API est fermée par défaut depuis D18 : JWT, cloisonnement par
   les indicateurs donnent la survie **en pourcentage** (94). Le moteur
   d'alertes accepte les deux ; l'admin devrait l'afficher en %.
 
+## Mise en ligne — pas encore éprouvée
+
+- `deploy/Dockerfile`, `deploy/docker-compose.yml` et `deploy/Caddyfile`
+  **n'ont pas été exécutés** : le démon Docker ne tourne pas sur la machine
+  de développement. Ont été vérifiés : l'interpolation du compose
+  (`docker compose config`), `pnpm install --frozen-lockfile`, chaque
+  commande de build, et le démarrage de l'API sans fichier `.env`. Le
+  Caddyfile a été relu, pas validé par `caddy adapt`.
+  → Premier déploiement : lancer d'abord sur un serveur de préproduction.
+- Une seule instance d'API : la limite de tentatives est en mémoire.
+
 ## Administration — à savoir
 
 - **Rôle porté par le jeton** : un changement de rôle prend effet au plus

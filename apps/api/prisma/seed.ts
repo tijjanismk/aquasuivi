@@ -7,7 +7,11 @@ import type { Prisma } from '@prisma/client';
 import { hacher } from '../src/auth/mot-de-passe.js';
 
 // The .env file lives at the monorepo root, not next to this script.
-process.loadEnvFile(path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../../.env'));
+try {
+  process.loadEnvFile(path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../../.env'));
+} catch {
+  // pas de .env (conteneur) : variables d'environnement du système
+}
 
 // Initialize database connection pool
 const pool = new Pool({

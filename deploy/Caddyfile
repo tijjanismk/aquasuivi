@@ -1,0 +1,58 @@
+# Trois sous-domaines, certificats Let's Encrypt obtenus et renouvelés par
+# Caddy. Le HTTPS n'est pas un confort : sans lui, le téléphone refuse
+# d'installer la PWA et de lancer son service worker (D19).
+
+{
+	email {$ACME_EMAIL}
+}
+
+(securite) {
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		Permissions-Policy "camera=(), microphone=(), geolocation=(self)"
+		# Politique de contenu stricte : le jeton de rafraîchissement vit en
+		# IndexedDB (PWA) ou localStorage (admin), une faille XSS le rendrait
+		# lisible (D18). Aucun script tiers, aucun script en ligne.
+		Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://{$DOMAINE_API}; worker-src 'self'; manifest-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
+		-Server
+	}
+}
+
+(statique) {
+	encode zstd gzip
+	# Fichiers au nom haché : immuables, mis en cache un an.
+	@immuables path /assets/*
+	header @immuables Cache-Control "public, max-age=31536000, immutable"
+	# Jamais en cache : sans cela, une nouvelle version n'atteindrait pas les
+	# téléphones — le service worker servirait l'ancienne indéfiniment.
+	@frais path / /index.html /sw.js /registerSW.js /workbox-*.js /manifest.webmanifest
+	header @frais Cache-Control "no-cache"
+	# Application monopage : toute route inconnue renvoie index.html.
+	try_files {path} /index.html
+	file_server
+}
+
+{$DOMAINE_PWA} {
+	import securite
+	root * /srv/pwa
+	import statique
+}
+
+{$DOMAINE_ADMIN} {
+	import securite
+	root * /srv/admin
+	import statique
+}
+
+{$DOMAINE_API} {
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		-Server
+	}
+	encode zstd gzip
+	# L'API lit l'adresse du client dans X-Forwarded-For (AQUA_DERRIERE_PROXY=1),
+	# pour limiter les tentatives par téléphone et non pour tout le pays.
+	reverse_proxy api:3000
+}

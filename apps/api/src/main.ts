@@ -9,7 +9,13 @@ import { PrismaExceptionFilter } from './common/prisma-exception.filter.js';
 
 // Le .env est à la racine du monorepo. PrismaService ne lit DATABASE_URL
 // qu'à l'instanciation, donc ce chargement précède bien son usage.
-process.loadEnvFile(path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../../.env'));
+// En production (conteneur), pas de fichier : les variables viennent de
+// l'environnement, et leur absence est signalée plus loin (JWT_SECRET…).
+try {
+  process.loadEnvFile(path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../../.env'));
+} catch {
+  // pas de .env : variables d'environnement du système
+}
 
 const app = await NestFactory.create<NestExpressApplication>(AppModule);
 // 100 ko par défaut : un push de retour de terrain (jusqu'à 1 000 changements) dépasse.

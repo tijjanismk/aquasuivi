@@ -8,33 +8,55 @@ par ferme, secteur, région et Direction Nationale.
 
 ```
 apps/
-  api/          NestJS 12 + Prisma 7 + PostgreSQL 17
-  admin/        React + Refine          (à venir)
-  mobile/       React Native + WatermelonDB (à venir)
+  api/          NestJS 12 + Prisma 7 + PostgreSQL 17 — auth JWT, saisie, sync, alertes
+  admin/        React + Refine + Tailwind — référentiels, saisie, administration
+  pwa/          application de terrain installable, hors ligne (IndexedDB)
+  mcp/          serveur MCP en lecture seule, pour interroger les données
+  e2e/          parcours de bout en bout (API, navigateur réel, mode avion)
 packages/
-  shared/       types, dates, géométrie, rationnement, indicateurs
+  shared/       types, dates, géométrie, rationnement, indicateurs,
+                contrôles de saisie, alertes, simulation
+deploy/         mise en ligne : Docker Compose + Caddy (HTTPS automatique)
+AI_CONTEXT/     architecture, décisions (D1…D23), étapes, points d'attention
 ```
 
 `packages/shared` est le cœur de l'architecture. Toutes les formules métier y
 vivent **une seule fois** et tournent à l'identique sur l'API, l'admin et le
-téléphone. Sur un mobile natif, elles auraient dû être réécrites dans un second
-langage, avec la divergence que cela finit toujours par produire.
+téléphone — y compris hors ligne : indicateurs, contrôles de saisie, alertes
+et simulation d'un projet.
 
 ## Démarrer
 
 ```bash
-cp .env.example .env
+cp .env.example .env      # puis générer JWT_SECRET, choisir le compte admin
 pnpm install
-pnpm db:up          # PostgreSQL 17 dans Docker
-pnpm db:migrate     # crée le schéma
-pnpm db:seed        # référentiel : espèces, types, aliments, rationnement
-pnpm test:shared    # vérifie les formules sur le cas de référence B4
+pnpm db:migrate           # schéma + contraintes métier (PostgreSQL local ou `pnpm db:up`)
+pnpm db:seed              # référentiels + premier administrateur
+pnpm dev:api              # http://localhost:3000/api
+pnpm dev:admin            # http://localhost:5173
+pnpm dev:pwa              # http://localhost:5180 — l'application de terrain
 ```
 
-Après la première migration, appliquer
-`apps/api/prisma/migrations/00000000000000_contraintes_metier/migration.sql` :
-il porte les contraintes que le langage de schéma Prisma ne sait pas exprimer,
-notamment l'index partiel « un seul cycle ouvert par infrastructure ».
+Un particulier crée son compte depuis l'application de terrain, avec son
+numéro de téléphone ; les rôles d'encadrement se donnent dans l'admin.
+
+## Tests
+
+```bash
+pnpm test:shared          # formules : cycle B4, géométrie, ration, contrôles, alertes, simulation
+pnpm test:e2e             # API, admin et PWA démarrées ; PWA en build de production :
+                          #   pnpm build:pwa && pnpm preview:pwa
+```
+
+Les parcours e2e se lancent aussi un par un (`pnpm --filter @aqua/e2e
+test:sync`, `test:pwa`, …) ; ils écrivent dans la base de développement et
+nettoient derrière eux.
+
+## Mise en ligne
+
+Voir [deploy/README.md](deploy/README.md) : un serveur, trois sous-domaines,
+`docker compose up`. HTTPS est obligatoire pour installer l'application sur
+un téléphone.
 
 ## Modèle de données
 
@@ -74,44 +96,39 @@ d'index — avantage réel sur un UUID v4 quand les tables grossissent.
 
 ## Synchronisation
 
-Le domaine est presque entièrement en **ajout** : une pêche de contrôle, une
-vente, un traitement sont des lignes nouvelles, pas des modifications. Et chaque
-enregistrement a en pratique un seul auteur. La synchronisation est donc le cas
-le plus simple qui existe — ni CRDT, ni moteur commercial nécessaire.
-
-### Protocole
-
-Conforme à ce qu'attend WatermelonDB.
+Le téléphone saisit dans sa base locale, puis synchronise dès qu'il a du
+réseau (décision D21 dans `AI_CONTEXT/DECISIONS.md`).
 
 ```
-GET  /sync/pull?lastPulledAt=<ms>
-  → { changes: { <table>: { created: [...], updated: [...], deleted: [ids] } },
-      timestamp: <ms> }
+GET  /sync/pull?depuis=<curseur>&appareilId=<ulid>
+  → { curseur, saisie: { <table>: { modifies: [...], supprimes: [ids] } },
+      referentiels, geographie }
 
 POST /sync/push
-  { lastPulledAt: <ms>, changes: { <table>: { created, updated, deleted } } }
+  { appareilId, changements: [ { ressource, id, operation, donnees,
+                                 versionBase, modifieLe } ] }
+  → { resultats: [ { statut: applique | conflit | rejete, gagnant?, code? } ] }
 ```
 
-Trois règles tiennent l'ensemble :
-
-1. **Portée.** Le pull ne renvoie que les fermes auxquelles l'utilisateur a
-   accès, via `AccesFerme`. Un encadreur porte ses fermes affectées, un
-   pisciculteur la sienne. Les référentiels descendent en lecture seule et ne
-   remontent jamais.
-2. **Conflits.** Dernière écriture gagne, comparaison sur `updatedAt`. Mais
-   rien ne disparaît en silence : la valeur écartée part dans `ConflitSync`,
-   consultable depuis le back-office. Sur un système qui alimente une
-   statistique nationale, une donnée perdue sans trace est inacceptable.
-3. **Suppressions.** Jamais physiques. `deletedAt` est renseigné et `updatedAt`
-   bumpé, donc le pull suivant emporte la suppression.
+1. **Portée.** Le pull ne renvoie que les fermes lisibles par l'utilisateur
+   (`AccesFerme`, région pour les profils territoriaux). Une ferme confiée
+   après le dernier pull arrive en entier.
+2. **Conflits.** Détectés par version (`versionBase`), tranchés par la
+   modification la plus récente — l'heure du téléphone bornée à celle du
+   serveur. La valeur écartée part dans `ConflitSync`, consultable dans
+   l'admin : aucune donnée ne disparaît en silence.
+3. **Refus ligne par ligne.** Chaque changement passe par les mêmes droits
+   et contrôles que la saisie en ligne ; un refus (`CYCLE_DEJA_OUVERT`,
+   date hors du cycle…) revient sur sa ligne, sans bloquer le reste, et
+   s'affiche dans l'écran « À corriger » du téléphone.
+4. **Suppressions.** Jamais physiques : `deletedAt`, propagé aux enfants.
 
 ### Le cas qui va se produire
 
-Deux appareils ouvrent hors ligne un cycle sur le même bassin. L'index partiel
-`cycles_un_seul_ouvert_par_infrastructure` rejette le second à la
-synchronisation. **C'est le comportement voulu** : c'est une vraie erreur de
-terrain — deux personnes ont chargé le même bassin — et elle doit remonter à
-l'agent, pas être absorbée par le code.
+Deux appareils ouvrent hors ligne un cycle sur le même bassin. Le second est
+refusé à la synchronisation (`CYCLE_DEJA_OUVERT`). **C'est le comportement
+voulu** : c'est une vraie erreur de terrain — deux personnes ont chargé le
+même bassin — et elle doit remonter à l'agent, pas être absorbée par le code.
 
 ## Dates
 

@@ -1,0 +1,72 @@
+# Production : PostgreSQL, API, et Caddy (HTTPS, admin, PWA).
+#
+#   cp deploy/.env.exemple deploy/.env   # puis le remplir
+#   docker compose -f deploy/docker-compose.yml --env-file deploy/.env up -d --build
+#
+# Voir deploy/README.md pour la procédure complète.
+
+name: aquasuivi
+
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?POSTGRES_USER manquant}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD manquant}
+      POSTGRES_DB: ${POSTGRES_DB:-aquasuivi}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    # Aucun port publié : la base n'est joignable que par l'API.
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB:-aquasuivi}']
+      interval: 5s
+      retries: 20
+
+  api:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      target: api
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-aquasuivi}?schema=public
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET manquant (32 caractères au moins)}
+      AQUA_ORIGINES: https://${DOMAINE_PWA},https://${DOMAINE_ADMIN}
+      AQUA_DERRIERE_PROXY: '1'
+      AQUA_LIMITE_CONNEXIONS: ${AQUA_LIMITE_CONNEXIONS:-10}
+      AQUA_LIMITE_INSCRIPTIONS: ${AQUA_LIMITE_INSCRIPTIONS:-30}
+      AQUA_ADMIN_TELEPHONE: ${AQUA_ADMIN_TELEPHONE:-}
+      AQUA_ADMIN_MOT_DE_PASSE: ${AQUA_ADMIN_MOT_DE_PASSE:-}
+    depends_on:
+      db:
+        condition: service_healthy
+
+  web:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      target: web
+      args:
+        VITE_API_URL: https://${DOMAINE_API:?DOMAINE_API manquant}/api
+    restart: unless-stopped
+    environment:
+      DOMAINE_PWA: ${DOMAINE_PWA:?DOMAINE_PWA manquant}
+      DOMAINE_ADMIN: ${DOMAINE_ADMIN:?DOMAINE_ADMIN manquant}
+      DOMAINE_API: ${DOMAINE_API}
+      ACME_EMAIL: ${ACME_EMAIL:?ACME_EMAIL manquant}
+    ports:
+      - '80:80'
+      - '443:443'
+      - '443:443/udp'
+    volumes:
+      # Certificats : les perdre, c'est risquer la limite de Let's Encrypt.
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - api
+
+volumes:
+  pgdata:
+  caddy_data:
+  caddy_config:
