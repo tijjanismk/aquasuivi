@@ -1,0 +1,23 @@
+{
+  "name": "aqua-suivi",
+  "private": true,
+  "packageManager": "pnpm@9.15.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "db:up": "docker compose up -d",
+    "db:migrate": "pnpm --filter @aqua/api exec prisma migrate dev",
+    "db:seed": "pnpm --filter @aqua/api exec tsx prisma/seed.ts",
+    "db:studio": "pnpm --filter @aqua/api exec prisma studio",
+    "dev:api": "pnpm --filter @aqua/api start:dev",
+    "dev:admin": "pnpm --filter @aqua/admin dev",
+    "dev:pwa": "pnpm --filter @aqua/pwa dev",
+    "build:pwa": "pnpm --filter @aqua/pwa build",
+    "preview:pwa": "pnpm --filter @aqua/pwa preview",
+    "test:shared": "pnpm --filter @aqua/shared test",
+    "test:e2e": "pnpm --filter @aqua/e2e test",
+    "typecheck": "pnpm -r typecheck",
+    "mcp": "pnpm --filter @aqua/mcp start"
+  }
+}

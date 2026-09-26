@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "aqua-suivi": {
+      "command": "node",
+      "args": ["apps/mcp/dist/serveur.js"],
+      "env": {
+        "AQUA_API_URL": "http://localhost:3000/api"
+      }
+    }
+  }
+}

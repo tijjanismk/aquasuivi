@@ -1,0 +1,762 @@
+// =============================================================================
+//  Aqua-Suivi — schéma relationnel
+//
+//  Reprise du modèle éprouvé sur la version Laravel, corrigé et étendu :
+//   · toute opération porte sa date de terrain, distincte de sa date de saisie
+//   · polyculture : l'espèce descend au niveau du lot, pas du cycle
+//   · échantillons individuels conservés (coefficient de variation, tri)
+//   · qualité d'eau et délai d'attente sanitaire
+//   · géographie en clés étrangères, jamais en texte libre
+//
+//  Identifiants : ULID générés PAR LE CLIENT. C'est la condition du hors-ligne —
+//  deux téléphones sans réseau doivent pouvoir créer des lignes sans collision.
+//  Le @default(ulid()) ne sert qu'aux enregistrements nés côté serveur.
+// =============================================================================
+
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// =============================================================================
+//  ÉNUMÉRATIONS
+// =============================================================================
+
+enum RoleUtilisateur {
+  PISCICULTEUR
+  ENCADREUR
+  SECTEUR
+  REGION
+  NATIONAL
+  ADMIN
+}
+
+/// Ce qu'un utilisateur peut faire sur une ferme donnée.
+enum NiveauAcces {
+  PROPRIETAIRE // le pisciculteur sur sa propre exploitation
+  ENCADREUR // saisit pour le compte de l'exploitant
+  LECTURE // consulte sans modifier (secteur, région, national)
+}
+
+enum FormeInfrastructure {
+  RECTANGULAIRE
+  CIRCULAIRE
+  IRREGULIERE
+}
+
+/// Détermine si densités et rendements se raisonnent au m² ou au m³.
+enum MesureBase {
+  SUPERFICIE
+  VOLUME
+}
+
+/// Culture environment — nomenclature CWP/FAO.
+enum MilieuFao {
+  FRESHWATER
+  BRACKISHWATER
+  MARICULTURE
+}
+
+/// Production system — nomenclature CWP/FAO.
+enum SystemeFao {
+  PONDS_TANKS
+  CAGES
+  PENS_ENCLOSURES
+  RACEWAYS_SILOS
+  BARRAGES
+  RICE_FISH
+  RAFTS_ROPES_STAKES
+  HATCHERIES_NURSERIES
+}
+
+enum StatutCycle {
+  EN_COURS
+  EN_RECOLTE
+  BOUCLE
+}
+
+enum TypeRecolte {
+  VENTE
+  DON
+  AUTOCONSOMMATION
+}
+
+enum OrigineLot {
+  ECLOSERIE
+  CAPTURE
+  PRODUCTION_PROPRE
+}
+
+enum CategorieDepense {
+  EAU
+  MAIN_OEUVRE
+  AMORTISSEMENT
+  TRANSPORT
+  ENERGIE
+  AUTRE
+}
+
+// =============================================================================
+//  RÉFÉRENTIELS
+//  Administrés depuis le back-office, répliqués en lecture seule sur mobile.
+//  Aucune espèce ni aucun type d'infrastructure n'est codé en dur.
+// =============================================================================
+
+model Espece {
+  id              String  @id @default(ulid())
+  /// Code ASFIS 3 lettres. Laissé vide plutôt que deviné : un code faux
+  /// agrégerait la production nationale sous la mauvaise espèce.
+  codeFao         String? @unique @db.VarChar(3)
+  nom             String  @unique
+  nomScientifique String?
+  /// Nom vernaculaire — bambara ou autre langue locale.
+  nomLocal        String?
+  famille         String?
+
+  temperatureMin    Decimal? @db.Decimal(4, 1)
+  temperatureOptMin Decimal? @db.Decimal(4, 1)
+  temperatureOptMax Decimal? @db.Decimal(4, 1)
+  temperatureMax    Decimal? @db.Decimal(4, 1)
+  oxygeneMin        Decimal? @db.Decimal(4, 2)
+
+  /// Repères de performance : servent aux alertes, jamais à contraindre la saisie.
+  gainJournalierRef     Decimal? @db.Decimal(6, 2)
+  indiceConsommationRef Decimal? @db.Decimal(5, 2)
+  tauxSurvieRef         Decimal? @db.Decimal(5, 2)
+  poidsMarcheMin        Int?
+  poidsMarcheMax        Int?
+  dureeCycleRef         Int?
+  densiteMaxM2          Decimal? @db.Decimal(8, 2)
+  densiteMaxM3          Decimal? @db.Decimal(8, 2)
+
+  /// Origine des valeurs de référence, pour traçabilité.
+  sourceParametres String?
+  actif            Boolean  @default(true)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  lots     Lot[]
+  recoltes Recolte[]
+  paliers  PalierRationnement[]
+  cycles   Cycle[]
+}
+
+model TypeInfrastructure {
+  id               String              @id @default(ulid())
+  code             String              @unique
+  nom              String
+  forme            FormeInfrastructure @default(RECTANGULAIRE)
+  mesureBase       MesureBase          @default(SUPERFICIE)
+  milieuFao        MilieuFao           @default(FRESHWATER)
+  systemeFao       SystemeFao          @default(PONDS_TANKS)
+  horsSol          Boolean             @default(false)
+  aerable          Boolean             @default(false)
+  densiteMaxDefaut Decimal?            @db.Decimal(8, 2)
+  ordre            Int                 @default(0)
+  actif            Boolean             @default(true)
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+
+  infrastructures Infrastructure[]
+}
+
+model Aliment {
+  id              String   @id @default(ulid())
+  nom             String   @unique
+  marque          String?
+  granulometrieMm Decimal? @db.Decimal(5, 2)
+  tauxProteine    Decimal? @db.Decimal(5, 2)
+  prixKg          Decimal? @db.Decimal(10, 2)
+  /// Plage de taille de poisson à laquelle l'aliment convient.
+  poidsPoissonMin Int?
+  poidsPoissonMax Int?
+  fournisseur     String?
+  /// Distingue l'aliment produit localement de l'importé — la part locale
+  /// dans les charges est un indicateur suivi par les bailleurs.
+  local           Boolean  @default(false)
+  actif           Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  distributions Distribution[]
+}
+
+model ProduitSanitaire {
+  id                String   @id @default(ulid())
+  nom               String   @unique
+  matiereActive     String?
+  forme             String?
+  unite             String   @default("kg")
+  dosageRecommande  Decimal? @db.Decimal(10, 3)
+  dosageUnite       String?
+  prixUnitaire      Decimal? @db.Decimal(10, 2)
+  /// Règle sanitaire : nombre de jours avant commercialisation autorisée.
+  delaiAttenteJours Int      @default(0)
+  indication        String?
+  actif             Boolean  @default(true)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  traitements Traitement[]
+}
+
+/// Table de rationnement. Les taux étaient auparavant enfouis dans les
+/// formules ; ils deviennent une donnée visible, modifiable et sourcée,
+/// indexée sur l'espèce, la classe de poids ET la température de l'eau.
+model PalierRationnement {
+  id             String   @id @default(ulid())
+  especeId       String
+  espece         Espece   @relation(fields: [especeId], references: [id], onDelete: Cascade)
+  poidsMin       Decimal  @db.Decimal(8, 2)
+  poidsMax       Decimal  @db.Decimal(8, 2)
+  temperatureMin Decimal? @db.Decimal(4, 1)
+  temperatureMax Decimal? @db.Decimal(4, 1)
+  tauxPct        Decimal  @db.Decimal(5, 2)
+  tauxMinPct     Decimal? @db.Decimal(5, 2)
+  tauxMaxPct     Decimal? @db.Decimal(5, 2)
+  frequenceRepas Int      @default(2)
+  source         String?
+  actif          Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@unique([especeId, poidsMin, poidsMax, temperatureMin, temperatureMax], name: "palier_unique")
+  @@index([especeId, poidsMin, poidsMax])
+}
+
+// =============================================================================
+//  GÉOGRAPHIE ADMINISTRATIVE
+//  En clés étrangères : la consolidation régionale ne doit jamais reposer
+//  sur une comparaison de chaînes ("Sikasso" contre "sikasso").
+// =============================================================================
+
+model Region {
+  id        String   @id @default(ulid())
+  code      String?  @unique
+  nom       String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  cercles Cercle[]
+  fermes  Ferme[]
+  users   User[]
+}
+
+model Cercle {
+  id        String   @id @default(ulid())
+  nom       String
+  regionId  String
+  region    Region   @relation(fields: [regionId], references: [id], onDelete: Restrict)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  communes Commune[]
+  fermes   Ferme[]
+
+  @@unique([regionId, nom])
+  @@index([regionId])
+}
+
+model Commune {
+  id        String   @id @default(ulid())
+  nom       String
+  cercleId  String
+  cercle    Cercle   @relation(fields: [cercleId], references: [id], onDelete: Restrict)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  fermes Ferme[]
+
+  @@unique([cercleId, nom])
+  @@index([cercleId])
+}
+
+// =============================================================================
+//  IDENTITÉ ET DROITS
+//  Deux profils saisissent sur mobile — le pisciculteur sur ses bassins,
+//  l'agent d'encadrement sur les fermes qui lui sont affectées. L'accès est
+//  donc une relation, pas un champ sur l'utilisateur.
+// =============================================================================
+
+model User {
+  id                String          @id @default(ulid())
+  email             String?         @unique
+  telephone         String?         @unique
+  nom               String
+  prenom            String?
+  motDePasse        String?
+  role              RoleUtilisateur @default(PISCICULTEUR)
+  /// Portée géographique d'un profil secteur, région ou national.
+  regionId          String?
+  region            Region?         @relation(fields: [regionId], references: [id], onDelete: SetNull)
+  actif             Boolean         @default(true)
+  derniereConnexion DateTime?
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+
+  acces       AccesFerme[]
+  appareils   Appareil[]
+  jetons      JetonRafraichissement[]
+  simulations Simulation[]
+  mesures     MesureEau[]
+
+  @@index([role])
+}
+
+/// Qui a le droit de faire quoi sur quelle ferme. Un pisciculteur en a une
+/// ligne (PROPRIETAIRE), un encadreur en a autant que de fermes suivies.
+model AccesFerme {
+  id        String      @id @default(ulid())
+  userId    String
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fermeId   String
+  ferme     Ferme       @relation(fields: [fermeId], references: [id], onDelete: Cascade)
+  niveau    NiveauAcces
+  debutLe   DateTime?   @db.Date
+  finLe     DateTime?   @db.Date
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  @@unique([userId, fermeId])
+  @@index([fermeId])
+  @@index([userId])
+}
+
+/// Appareil synchronisé. Sert à tracer l'origine d'un enregistrement et à
+/// reprendre une synchronisation là où elle s'est arrêtée.
+model Appareil {
+  id             String    @id @default(ulid())
+  userId         String
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  libelle        String?
+  plateforme     String?
+  derniereSyncAt DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  jetons JetonRafraichissement[]
+
+  @@index([userId])
+}
+
+/// Jeton de rafraîchissement (D18). Seule l'empreinte SHA-256 est stockée :
+/// une fuite de la base ne donne aucune session.
+model JetonRafraichissement {
+  id         String    @id @default(ulid())
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  appareilId String?
+  appareil   Appareil? @relation(fields: [appareilId], references: [id], onDelete: Cascade)
+  /// Tous les jetons issus d'une même connexion. Rejouer un jeton remplacé
+  /// révoque la famille entière.
+  famille    String
+  empreinte  String    @unique
+  expireLe   DateTime
+  remplaceLe DateTime?
+  revoqueLe  DateTime?
+  createdAt  DateTime  @default(now())
+
+  @@index([userId])
+  @@index([famille])
+}
+
+// =============================================================================
+//  EXPLOITATION
+// =============================================================================
+
+model Ferme {
+  id          String  @id @default(ulid())
+  nom         String
+  promoteur   String?
+  telephone   String?
+  email       String?
+  cooperative String?
+
+  pays      String   @default("Mali")
+  regionId  String?
+  region    Region?  @relation(fields: [regionId], references: [id], onDelete: SetNull)
+  cercleId  String?
+  cercle    Cercle?  @relation(fields: [cercleId], references: [id], onDelete: SetNull)
+  communeId String?
+  commune   Commune? @relation(fields: [communeId], references: [id], onDelete: SetNull)
+  village   String?
+
+  /// Précision 10,7 ≈ 1 cm. L'ancien float(20,20) n'avait aucune partie
+  /// entière et ne pouvait pas stocker une latitude de 12,65.
+  latitude  Decimal? @db.Decimal(10, 7)
+  longitude Decimal? @db.Decimal(10, 7)
+  altitude  Decimal? @db.Decimal(7, 1)
+
+  dateCreation DateTime? @db.Date
+  actif        Boolean   @default(true)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  infrastructures Infrastructure[]
+  acces           AccesFerme[]
+
+  @@index([regionId, cercleId])
+  @@index([updatedAt])
+}
+
+model Infrastructure {
+  id                   String             @id @default(ulid())
+  nom                  String
+  fermeId              String
+  ferme                Ferme              @relation(fields: [fermeId], references: [id], onDelete: Cascade)
+  typeInfrastructureId String
+  typeInfrastructure   TypeInfrastructure @relation(fields: [typeInfrastructureId], references: [id], onDelete: Restrict)
+
+  /// Dimensions saisies. superficie et volume en sont dérivés au moment de
+  /// l'écriture par une fonction unique du paquet partagé, pour que l'API,
+  /// l'admin et le mobile calculent rigoureusement la même chose.
+  longueur          Decimal? @db.Decimal(8, 2)
+  largeur           Decimal? @db.Decimal(8, 2)
+  diametre          Decimal? @db.Decimal(8, 2)
+  profondeur        Decimal? @db.Decimal(6, 2)
+  niveauRemplissage Decimal  @default(100) @db.Decimal(5, 2)
+  superficie        Decimal? @db.Decimal(10, 2)
+  volume            Decimal? @db.Decimal(10, 2)
+
+  dateConstruction           DateTime? @db.Date
+  dateDerniereRehabilitation DateTime? @db.Date
+  actif                      Boolean   @default(true)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  cycles  Cycle[]
+  mesures MesureEau[]
+
+  @@unique([fermeId, nom])
+  @@index([fermeId])
+  @@index([updatedAt])
+}
+
+// =============================================================================
+//  ÉLEVAGE
+//  Le cycle est l'unité de gestion : de la mise en charge à la vidange.
+//  Le nombre de pesées, traitements et récoltes est libre — c'est la
+//  différence de fond avec le tableur d'origine.
+// =============================================================================
+
+model Cycle {
+  id               String         @id @default(ulid())
+  infrastructureId String
+  infrastructure   Infrastructure @relation(fields: [infrastructureId], references: [id], onDelete: Cascade)
+  numero           Int
+  dateMiseEnCharge DateTime       @db.Date
+  dateCloture      DateTime?      @db.Date
+  statut           StatutCycle    @default(EN_COURS)
+
+  /// Espèce dominante, facultative. En polyculture, l'espèce qui fait foi
+  /// est celle du lot ; ce champ ne sert qu'au filtrage et à l'affichage.
+  especeId String?
+  espece   Espece? @relation(fields: [especeId], references: [id], onDelete: SetNull)
+
+  observation String?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  lots          Lot[]
+  pesees        Pesee[]
+  distributions Distribution[]
+  traitements   Traitement[]
+  recoltes      Recolte[]
+  depenses      Depense[]
+  mesures       MesureEau[]
+
+  @@unique([infrastructureId, numero])
+  @@index([infrastructureId, statut])
+  @@index([updatedAt])
+}
+
+/// Un lot = une espèce mise en charge dans un cycle. Plusieurs lots par
+/// cycle rendent la polyculture possible, ce que l'ancien modèle interdisait.
+model Lot {
+  id       String @id @default(ulid())
+  cycleId  String
+  cycle    Cycle  @relation(fields: [cycleId], references: [id], onDelete: Cascade)
+  especeId String
+  espece   Espece @relation(fields: [especeId], references: [id], onDelete: Restrict)
+
+  nombre           Int
+  poidsMoyenG      Decimal     @db.Decimal(8, 2)
+  coutUnitaire     Decimal     @default(0) @db.Decimal(10, 2)
+  dateMiseEnCharge DateTime    @db.Date
+  origine          OrigineLot?
+  souche           String?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  mortalites   Mortalite[]
+  echantillons Echantillon[]
+  recoltes     Recolte[]
+
+  @@index([cycleId])
+  @@index([updatedAt])
+}
+
+/// Mortalité datée. Sur l'ancien modèle elle était portée par la pêche de
+/// contrôle, donc impossible à situer entre deux pesées.
+model Mortalite {
+  id           String   @id @default(ulid())
+  lotId        String
+  lot          Lot      @relation(fields: [lotId], references: [id], onDelete: Cascade)
+  dateConstat  DateTime @db.Date
+  nombre       Int
+  remplacement Int      @default(0)
+  coutUnitaire Decimal? @db.Decimal(10, 2)
+  cause        String?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@index([lotId, dateConstat])
+  @@index([updatedAt])
+}
+
+/// Pêche de contrôle.
+model Pesee {
+  id            String   @id @default(ulid())
+  cycleId       String
+  cycle         Cycle    @relation(fields: [cycleId], references: [id], onDelete: Cascade)
+  numero        Int
+  dateOperation DateTime @db.Date
+  /// Taux retenu par l'opérateur, qui peut s'écarter du palier conseillé.
+  tauxRationPct Decimal? @db.Decimal(5, 2)
+  observation   String?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  echantillons  Echantillon[]
+  distributions Distribution[]
+  mesures       MesureEau[]
+
+  @@unique([cycleId, numero])
+  @@index([cycleId, dateOperation])
+  @@index([updatedAt])
+  /// Pull de synchronisation (migration contraintes_metier).
+  @@index([updatedAt, cycleId], map: "pesee_sync")
+}
+
+/// Pesée individuelle. Conserver les échantillons plutôt que leur moyenne
+/// coûte quatre colonnes et donne le coefficient de variation, donc la
+/// décision de tri — et chez le clarias, l'alerte au cannibalisme.
+model Echantillon {
+  id          String  @id @default(ulid())
+  peseeId     String
+  pesee       Pesee   @relation(fields: [peseeId], references: [id], onDelete: Cascade)
+  /// En polyculture, l'échantillon se rattache au lot pesé.
+  lotId       String?
+  lot         Lot?    @relation(fields: [lotId], references: [id], onDelete: SetNull)
+  numero      Int
+  nombre      Int
+  poidsTotalG Decimal @db.Decimal(10, 2)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@unique([peseeId, lotId, numero])
+  @@index([peseeId])
+  @@index([updatedAt])
+}
+
+/// Aliment réellement distribué sur une période. On enregistre le distribué,
+/// pas le planifié : l'indice de consommation n'a de sens que sur du réel.
+model Distribution {
+  id        String  @id @default(ulid())
+  cycleId   String
+  cycle     Cycle   @relation(fields: [cycleId], references: [id], onDelete: Cascade)
+  /// Pesée qui a fixé la ration de la période, quand elle est connue.
+  peseeId   String?
+  pesee     Pesee?  @relation(fields: [peseeId], references: [id], onDelete: SetNull)
+  alimentId String
+  aliment   Aliment @relation(fields: [alimentId], references: [id], onDelete: Restrict)
+
+  dateDebut        DateTime  @db.Date
+  dateFin          DateTime? @db.Date
+  rationKgJour     Decimal?  @db.Decimal(10, 3)
+  quantiteTotaleKg Decimal   @db.Decimal(10, 3)
+  /// Prix au moment de l'achat : le référentiel évolue, les charges passées non.
+  prixKgApplique   Decimal?  @db.Decimal(10, 2)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@index([cycleId, dateDebut])
+  @@index([updatedAt])
+  /// Pull de synchronisation (migration contraintes_metier).
+  @@index([updatedAt, cycleId], map: "distribution_sync")
+}
+
+model Traitement {
+  id                 String            @id @default(ulid())
+  cycleId            String
+  cycle              Cycle             @relation(fields: [cycleId], references: [id], onDelete: Cascade)
+  produitSanitaireId String?
+  produitSanitaire   ProduitSanitaire? @relation(fields: [produitSanitaireId], references: [id], onDelete: SetNull)
+
+  dateOperation   DateTime  @db.Date
+  quantite        Decimal?  @db.Decimal(10, 3)
+  prixUnitaire    Decimal?  @db.Decimal(10, 2)
+  motif           String?
+  /// dateOperation + délai d'attente du produit. Toute récolte antérieure
+  /// à cette date est signalée non conforme.
+  finDelaiAttente DateTime? @db.Date
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@index([cycleId, dateOperation])
+  @@index([updatedAt])
+}
+
+/// Vente, don ou autoconsommation. Autant de lignes que de jours de sortie —
+/// le besoin que le tableur ne savait pas exprimer.
+model Recolte {
+  id       String  @id @default(ulid())
+  cycleId  String
+  cycle    Cycle   @relation(fields: [cycleId], references: [id], onDelete: Cascade)
+  lotId    String?
+  lot      Lot?    @relation(fields: [lotId], references: [id], onDelete: SetNull)
+  especeId String?
+  espece   Espece? @relation(fields: [especeId], references: [id], onDelete: SetNull)
+
+  dateOperation DateTime    @db.Date
+  type          TypeRecolte
+  poidsKg       Decimal     @db.Decimal(10, 3)
+  /// Facultatif, mais donne le poids moyen réel à la récolte — une mesure
+  /// qui vaut mieux que l'estimation issue de la dernière pesée.
+  nombre        Int?
+  prixKg        Decimal     @default(0) @db.Decimal(10, 2)
+  destination   String?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@index([cycleId, dateOperation])
+  @@index([updatedAt])
+  /// Pull de synchronisation (migration contraintes_metier).
+  @@index([updatedAt, cycleId], map: "recolte_sync")
+}
+
+model Depense {
+  id            String           @id @default(ulid())
+  cycleId       String
+  cycle         Cycle            @relation(fields: [cycleId], references: [id], onDelete: Cascade)
+  categorie     CategorieDepense @default(AUTRE)
+  description   String?
+  montant       Decimal          @db.Decimal(12, 2)
+  dateOperation DateTime         @db.Date
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@index([cycleId, dateOperation])
+  @@index([updatedAt])
+}
+
+/// Relevé de qualité d'eau. Deux niveaux d'exigence : température et
+/// transparence pour toute exploitation, paramètres de laboratoire pour les
+/// fermes équipées. Rien n'est obligatoire au-delà de la date — une mesure
+/// partielle vaut mieux qu'un relevé abandonné.
+model MesureEau {
+  id               String         @id @default(ulid())
+  infrastructureId String
+  infrastructure   Infrastructure @relation(fields: [infrastructureId], references: [id], onDelete: Cascade)
+  cycleId          String?
+  cycle            Cycle?         @relation(fields: [cycleId], references: [id], onDelete: SetNull)
+  peseeId          String?
+  pesee            Pesee?         @relation(fields: [peseeId], references: [id], onDelete: SetNull)
+
+  dateMesure DateTime @db.Date
+  /// L'oxygène varie fortement dans la journée : 6 mg/L à seize heures ne
+  /// dit rien du minimum atteint à l'aube.
+  heure      String?  @db.VarChar(5)
+
+  temperature        Decimal? @db.Decimal(4, 1)
+  transparenceSecchi Int?
+  oxygeneDissous     Decimal? @db.Decimal(5, 2)
+  ph                 Decimal? @db.Decimal(4, 2)
+  ammoniacNh3        Decimal? @db.Decimal(6, 3)
+  nitrites           Decimal? @db.Decimal(6, 3)
+  alcalinite         Decimal? @db.Decimal(6, 1)
+  salinite           Decimal? @db.Decimal(6, 2)
+
+  observation String?
+  auteurId    String?
+  auteur      User?   @relation(fields: [auteurId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@index([infrastructureId, dateMesure])
+  @@index([cycleId, dateMesure])
+  @@index([updatedAt])
+}
+
+// =============================================================================
+//  SIMULATION
+//  L'objectif annoncé du projet : à partir d'une somme, projeter un cycle
+//  avec ou sans ferme existante. Mêmes formules que le suivi réel, appliquées
+//  à des paramètres du référentiel plutôt qu'à des données de terrain.
+// =============================================================================
+
+model Simulation {
+  id         String  @id @default(ulid())
+  userId     String?
+  user       User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+  nom        String
+  /// Capital, espèce, type d'infrastructure, surface, prix visés.
+  parametres Json
+  /// Production, charges, prix de revient et seuil de rentabilité projetés.
+  resultats  Json?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+// =============================================================================
+//  SYNCHRONISATION
+//  Deux profils peuvent écrire le même enregistrement hors ligne. La règle
+//  est « dernière écriture gagne », mais rien n'est perdu silencieusement :
+//  la valeur écartée est journalisée et consultable.
+// =============================================================================
+
+model ConflitSync {
+  id             String   @id @default(ulid())
+  tableCible     String
+  enregistrement String
+  appareilId     String?
+  userId         String?
+  valeurRejetee  Json
+  valeurRetenue  Json
+  raison         String
+  resolu         Boolean  @default(false)
+  createdAt      DateTime @default(now())
+
+  @@index([tableCible, enregistrement])
+  @@index([resolu])
+}

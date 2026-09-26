@@ -1,0 +1,39 @@
+{
+  "name": "@aqua/api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "postinstall": "prisma generate",
+    "typecheck": "tsc -p tsconfig.typecheck.json --noEmit",
+    "build": "nest build",
+    "start:dev": "nest start --watch",
+    "prisma": "prisma"
+  },
+  "dependencies": {
+    "@aqua/shared": "workspace:*",
+    "@nestjs/common": "^12.0.4",
+    "@nestjs/core": "^12.0.4",
+    "@nestjs/jwt": "^11.0.0",
+    "@nestjs/platform-express": "^12.0.4",
+    "@prisma/adapter-pg": "^7.10.0",
+    "@prisma/client": "^7.10.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.2",
+    "pg": "^8.13.1",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.2",
+    "ulid": "^3.0.2",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^12.0.0",
+    "@prisma/config": "^7.10.0",
+    "@types/express": "^5.0.0",
+    "@types/node": "^24.0.0",
+    "@types/pg": "^8.11.10",
+    "prisma": "^7.10.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.0"
+  }
+}

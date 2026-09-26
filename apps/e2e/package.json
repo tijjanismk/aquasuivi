@@ -1,0 +1,25 @@
+{
+  "name": "@aqua/e2e",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "tsx test/parcours-auth.ts && tsx test/parcours-controles.ts && tsx test/parcours-sync.ts && tsx test/parcours-cycle.ts && tsx test/parcours-mcp.ts && tsx test/parcours-admin.ts && tsx test/parcours-saisie.ts && tsx test/parcours-pwa.ts",
+    "test:auth": "tsx test/parcours-auth.ts",
+    "test:controles": "tsx test/parcours-controles.ts",
+    "test:sync": "tsx test/parcours-sync.ts",
+    "test:pwa": "tsx test/parcours-pwa.ts",
+    "test:cycle": "tsx test/parcours-cycle.ts",
+    "test:admin": "tsx test/parcours-admin.ts",
+    "typecheck": "tsc --noEmit",
+    "test:mcp": "tsx test/parcours-mcp.ts",
+    "test:saisie": "tsx test/parcours-saisie.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "pg": "^8.13.1",
+    "@types/pg": "^8.11.10",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.0"
+  }
+}

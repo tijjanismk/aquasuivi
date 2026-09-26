@@ -1,0 +1,220 @@
+{
+ "racine": "/home/claude/aquasuivi",
+ "avertissement": null,
+ "nb_fichiers": 8,
+ "fichiers": {
+  "packages/shared/src/index.ts": {
+   "fichier": "packages/shared/src/index.ts",
+   "langage": "ts",
+   "lignes": 6,
+   "exporte": [],
+   "importe": []
+  },
+  "packages/shared/src/geometrie.ts": {
+   "fichier": "packages/shared/src/geometrie.ts",
+   "langage": "ts",
+   "lignes": 39,
+   "exporte": [
+    "dimensionsCalculees",
+    "superficie",
+    "volume"
+   ],
+   "importe": [
+    {
+     "source": "./types",
+     "symboles": [
+      "InfrastructureDim"
+     ]
+    }
+   ]
+  },
+  "packages/shared/src/dates.ts": {
+   "fichier": "packages/shared/src/dates.ts",
+   "langage": "ts",
+   "lignes": 35,
+   "exporte": [
+    "ajouterJours",
+    "aujourdhui",
+    "estAvant",
+    "joursEntre",
+    "parDate"
+   ],
+   "importe": [
+    {
+     "source": "./types",
+     "symboles": [
+      "DateISO"
+     ]
+    }
+   ]
+  },
+  "packages/shared/src/indicateurs.ts": {
+   "fichier": "packages/shared/src/indicateurs.ts",
+   "langage": "ts",
+   "lignes": 309,
+   "exporte": [
+    "EtatLot",
+    "Indicateurs",
+    "calculerIndicateurs"
+   ],
+   "importe": [
+    {
+     "source": "./dates",
+     "symboles": [
+      "joursEntre",
+      "parDate"
+     ]
+    },
+    {
+     "source": "./types",
+     "symboles": [
+      "CycleComplet",
+      "DateISO",
+      "Lot"
+     ]
+    }
+   ]
+  },
+  "packages/shared/src/rationnement.ts": {
+   "fichier": "packages/shared/src/rationnement.ts",
+   "langage": "ts",
+   "lignes": 68,
+   "exporte": [
+    "palierApplicable",
+    "ration",
+    "rationConseillee"
+   ],
+   "importe": [
+    {
+     "source": "./types",
+     "symboles": [
+      "PalierRationnement"
+     ]
+    }
+   ]
+  },
+  "packages/shared/src/types.ts": {
+   "fichier": "packages/shared/src/types.ts",
+   "langage": "ts",
+   "lignes": 165,
+   "exporte": [
+    "Cycle",
+    "CycleComplet",
+    "DateISO",
+    "Depense",
+    "Distribution",
+    "Echantillon",
+    "Espece",
+    "FormeInfrastructure",
+    "Infrastructure",
+    "InfrastructureDim",
+    "Lot",
+    "MesureBase",
+    "Mortalite",
+    "PalierRationnement",
+    "Pesee",
+    "Recolte",
+    "StatutCycle",
+    "Traitement",
+    "TypeRecolte"
+   ],
+   "importe": []
+  },
+  "packages/shared/test/b4.ts": {
+   "fichier": "packages/shared/test/b4.ts",
+   "langage": "ts",
+   "lignes": 99,
+   "exporte": [],
+   "importe": [
+    {
+     "source": "../src/indicateurs",
+     "symboles": [
+      "calculerIndicateurs"
+     ]
+    },
+    {
+     "source": "../src/types",
+     "symboles": [
+      "CycleComplet"
+     ]
+    }
+   ]
+  },
+  "apps/api/prisma/seed.ts": {
+   "fichier": "apps/api/prisma/seed.ts",
+   "langage": "ts",
+   "lignes": 205,
+   "exporte": [],
+   "importe": [
+    {
+     "source": "@prisma/client",
+     "symboles": [
+      "Prisma",
+      "PrismaClient"
+     ]
+    }
+   ]
+  }
+ },
+ "importe_par": {
+  "packages/shared/src/types.ts": [
+   {
+    "par": "packages/shared/src/geometrie.ts",
+    "symboles": [
+     "InfrastructureDim"
+    ]
+   },
+   {
+    "par": "packages/shared/src/dates.ts",
+    "symboles": [
+     "DateISO"
+    ]
+   },
+   {
+    "par": "packages/shared/src/indicateurs.ts",
+    "symboles": [
+     "CycleComplet",
+     "DateISO",
+     "Lot"
+    ]
+   },
+   {
+    "par": "packages/shared/src/rationnement.ts",
+    "symboles": [
+     "PalierRationnement"
+    ]
+   },
+   {
+    "par": "packages/shared/test/b4.ts",
+    "symboles": [
+     "CycleComplet"
+    ]
+   }
+  ],
+  "packages/shared/src/dates.ts": [
+   {
+    "par": "packages/shared/src/indicateurs.ts",
+    "symboles": [
+     "joursEntre",
+     "parDate"
+    ]
+   }
+  ],
+  "packages/shared/src/indicateurs.ts": [
+   {
+    "par": "packages/shared/test/b4.ts",
+    "symboles": [
+     "calculerIndicateurs"
+    ]
+   }
+  ]
+ },
+ "orphelins": [
+  "packages/shared/src/geometrie.ts",
+  "packages/shared/src/rationnement.ts"
+ ],
+ "symboles_dupliques": {},
+ "dependances_externes": {
+  "@prisma": 1
+ }
+}
