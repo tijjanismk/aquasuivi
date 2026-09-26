@@ -26,7 +26,7 @@ interface Reponse {
   tronque: boolean;
 }
 
-const NIVEAUX = { region: 'Région', cercle: 'Cercle', commune: 'Commune' } as const;
+const NIVEAUX = { region: 'Région / district', cercle: 'Cercle', commune: 'Commune' } as const;
 
 /// Consolidation territoriale (étape 6) : ce que produisent les fermes que
 /// l'on peut lire, par région, cercle ou commune. Chaque cycle est chiffré

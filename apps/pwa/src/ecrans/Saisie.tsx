@@ -148,7 +148,7 @@ export function Saisie() {
         initiales[champ.nom] = versTexte(existante ? existante[champ.nom] : champ.defaut?.(c));
       }
       const choix: Record<string, Option[]> = {};
-      for (const champ of f.champs) if (champ.charger) choix[champ.nom] = await champ.charger(c);
+      for (const champ of f.champs) if (champ.charger) choix[champ.nom] = await champ.charger(c, initiales);
       setCtx(c);
       setLigne(existante);
       setValeurs(initiales);
@@ -191,6 +191,33 @@ export function Saisie() {
     naviguer(ressource === 'fermes' ? '/' : destination(ressource, ligne ?? { id }, ctx), { replace: true });
   };
 
+  /// Change un champ ; ceux qui en dépendent (cercle, puis commune) sont vidés
+  /// et leurs choix relus pour la nouvelle valeur. Un seul choix possible — le
+  /// cercle technique du district de Bamako — est pris d’office.
+  const changer = async (nom: string, v: string) => {
+    const suivantes = { ...valeurs, [nom]: v };
+    const aRecharger: Champ[] = [];
+    const aVider = [nom];
+    while (aVider.length > 0) {
+      const parent = aVider.pop();
+      for (const c of f.champs) {
+        if (c.dependDe === parent) {
+          suivantes[c.nom] = '';
+          aRecharger.push(c);
+          aVider.push(c.nom);
+        }
+      }
+    }
+    const choix: Record<string, Option[]> = {};
+    // Dans l’ordre de la cascade : la commune se lit avec le cercle déjà choisi.
+    for (const c of aRecharger) {
+      choix[c.nom] = c.charger ? await c.charger(ctx, suivantes) : [];
+      if (choix[c.nom]!.length === 1) suivantes[c.nom] = choix[c.nom]![0]!.valeur;
+    }
+    setValeurs(suivantes);
+    setOptions((o) => ({ ...o, ...choix }));
+  };
+
   const parChamp = new Map(violations.filter((v) => v.champ).map((v) => [v.champ!, v.message]));
   const generales = violations.filter((v) => !v.champ || !f.champs.some((c) => c.nom === v.champ));
 
@@ -205,7 +232,7 @@ export function Saisie() {
             valeur={valeurs[champ.nom] ?? ''}
             options={options[champ.nom]}
             erreur={parChamp.get(champ.nom)}
-            onChange={(v) => setValeurs((x) => ({ ...x, [champ.nom]: v }))}
+            onChange={(v) => void changer(champ.nom, v)}
           />
         ))}
         {generales.length > 0 && (

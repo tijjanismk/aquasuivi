@@ -7,7 +7,7 @@ import { Input, Label } from '@/composants/ui/champ';
 import { Alerte, Card } from '@/composants/ui/divers';
 
 export function Connexion() {
-  const { mutate: connecter, isLoading } = useLogin<{ identifiant: string; motDePasse: string }>();
+  const { mutate: connecter, isPending: isLoading } = useLogin<{ identifiant: string; motDePasse: string }>();
   const [identifiant, setIdentifiant] = useState('');
   const [motDePasse, setMotDePasse] = useState('');
   const [erreur, setErreur] = useState<string | null>(null);

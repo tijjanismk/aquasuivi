@@ -3,79 +3,112 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* Jetons de couleur façon shadcn/ui. La teinte principale est un vert d'eau :
-   le projet suit des bassins, pas des tableaux de bord financiers. Changer une
-   couleur ici la change partout — rien n'est écrit en dur dans un écran. */
+/* Thème shadcn/ui, teinte verte. Une seule gamme (`--vert-50` à `--vert-950`)
+   alimente tous les jetons sémantiques : changer une couleur ici la change
+   partout — rien n'est écrit en dur dans un écran. Ce fichier est identique
+   dans l'admin et dans la PWA. */
 :root {
   --radius: 0.625rem;
 
-  --background: oklch(0.99 0.004 145);
-  --foreground: oklch(0.21 0.02 160);
+  /* Gamme verte (valeurs de la palette `green` de Tailwind 4). */
+  --vert-50: oklch(0.982 0.018 155.826);
+  --vert-100: oklch(0.962 0.044 156.743);
+  --vert-200: oklch(0.925 0.084 155.995);
+  --vert-300: oklch(0.871 0.15 154.449);
+  --vert-400: oklch(0.792 0.209 151.711);
+  --vert-500: oklch(0.723 0.219 149.579);
+  --vert-600: oklch(0.627 0.194 149.214);
+  --vert-700: oklch(0.527 0.154 150.069);
+  --vert-800: oklch(0.448 0.119 151.328);
+  --vert-900: oklch(0.393 0.095 152.535);
+  --vert-950: oklch(0.266 0.065 152.934);
+
+  --background: oklch(0.992 0.004 155);
+  --foreground: oklch(0.2 0.025 155);
 
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.21 0.02 160);
+  --card-foreground: oklch(0.2 0.025 155);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.21 0.02 160);
+  --popover-foreground: oklch(0.2 0.025 155);
 
-  --primary: oklch(0.48 0.09 168);
-  --primary-foreground: oklch(0.99 0.01 160);
+  --primary: var(--vert-700);
+  --primary-foreground: var(--vert-50);
 
-  --secondary: oklch(0.96 0.012 165);
-  --secondary-foreground: oklch(0.3 0.03 165);
+  --secondary: var(--vert-50);
+  --secondary-foreground: var(--vert-900);
 
-  --muted: oklch(0.96 0.008 160);
-  --muted-foreground: oklch(0.52 0.02 160);
+  --muted: oklch(0.965 0.008 155);
+  --muted-foreground: oklch(0.5 0.02 155);
 
-  --accent: oklch(0.94 0.025 168);
-  --accent-foreground: oklch(0.3 0.04 168);
+  --accent: var(--vert-100);
+  --accent-foreground: var(--vert-900);
 
-  --destructive: oklch(0.55 0.19 27);
-  --destructive-foreground: oklch(0.99 0.01 20);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
 
-  --border: oklch(0.91 0.01 160);
-  --input: oklch(0.91 0.01 160);
-  --ring: oklch(0.48 0.09 168);
+  --border: oklch(0.915 0.015 155);
+  --input: oklch(0.915 0.015 155);
+  --ring: var(--vert-600);
 
-  --sidebar: oklch(0.985 0.006 160);
-  --sidebar-foreground: oklch(0.21 0.02 160);
-  --sidebar-accent: oklch(0.94 0.025 168);
-  --sidebar-accent-foreground: oklch(0.3 0.04 168);
-  --sidebar-border: oklch(0.91 0.01 160);
+  /* Graphiques et carte : du plus clair au plus soutenu. */
+  --chart-1: var(--vert-700);
+  --chart-2: var(--vert-500);
+  --chart-3: var(--vert-300);
+  --chart-4: var(--vert-900);
+  --chart-5: var(--vert-200);
+
+  --sidebar: var(--vert-50);
+  --sidebar-foreground: oklch(0.2 0.025 155);
+  --sidebar-primary: var(--vert-700);
+  --sidebar-primary-foreground: var(--vert-50);
+  --sidebar-accent: var(--vert-100);
+  --sidebar-accent-foreground: var(--vert-900);
+  --sidebar-border: oklch(0.915 0.02 155);
+  --sidebar-ring: var(--vert-600);
 }
 
 .dark {
-  --background: oklch(0.17 0.015 165);
-  --foreground: oklch(0.97 0.006 160);
+  --background: oklch(0.165 0.02 155);
+  --foreground: oklch(0.97 0.008 155);
 
-  --card: oklch(0.21 0.018 165);
-  --card-foreground: oklch(0.97 0.006 160);
-  --popover: oklch(0.21 0.018 165);
-  --popover-foreground: oklch(0.97 0.006 160);
+  --card: oklch(0.205 0.025 155);
+  --card-foreground: oklch(0.97 0.008 155);
+  --popover: oklch(0.205 0.025 155);
+  --popover-foreground: oklch(0.97 0.008 155);
 
-  --primary: oklch(0.68 0.11 168);
-  --primary-foreground: oklch(0.18 0.02 165);
+  --primary: var(--vert-500);
+  --primary-foreground: var(--vert-950);
 
-  --secondary: oklch(0.27 0.02 165);
-  --secondary-foreground: oklch(0.97 0.006 160);
+  --secondary: oklch(0.26 0.03 155);
+  --secondary-foreground: oklch(0.97 0.008 155);
 
-  --muted: oklch(0.27 0.02 165);
-  --muted-foreground: oklch(0.71 0.02 160);
+  --muted: oklch(0.26 0.025 155);
+  --muted-foreground: oklch(0.72 0.02 155);
 
-  --accent: oklch(0.3 0.035 168);
-  --accent-foreground: oklch(0.97 0.006 160);
+  --accent: var(--vert-900);
+  --accent-foreground: var(--vert-50);
 
-  --destructive: oklch(0.65 0.17 25);
-  --destructive-foreground: oklch(0.98 0.01 20);
+  --destructive: oklch(0.704 0.191 22.216);
+  --destructive-foreground: oklch(0.985 0 0);
 
   --border: oklch(1 0 0 / 12%);
   --input: oklch(1 0 0 / 16%);
-  --ring: oklch(0.68 0.11 168);
+  --ring: var(--vert-500);
 
-  --sidebar: oklch(0.21 0.018 165);
-  --sidebar-foreground: oklch(0.97 0.006 160);
-  --sidebar-accent: oklch(0.3 0.035 168);
-  --sidebar-accent-foreground: oklch(0.97 0.006 160);
+  --chart-1: var(--vert-400);
+  --chart-2: var(--vert-600);
+  --chart-3: var(--vert-300);
+  --chart-4: var(--vert-800);
+  --chart-5: var(--vert-200);
+
+  --sidebar: oklch(0.205 0.025 155);
+  --sidebar-foreground: oklch(0.97 0.008 155);
+  --sidebar-primary: var(--vert-500);
+  --sidebar-primary-foreground: var(--vert-950);
+  --sidebar-accent: var(--vert-900);
+  --sidebar-accent-foreground: var(--vert-50);
   --sidebar-border: oklch(1 0 0 / 12%);
+  --sidebar-ring: var(--vert-500);
 }
 
 @theme inline {
@@ -98,11 +131,32 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
   --color-sidebar-accent: var(--sidebar-accent);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Nuances directement utilisables : `bg-vert-100`, `text-vert-800`… */
+  --color-vert-50: var(--vert-50);
+  --color-vert-100: var(--vert-100);
+  --color-vert-200: var(--vert-200);
+  --color-vert-300: var(--vert-300);
+  --color-vert-400: var(--vert-400);
+  --color-vert-500: var(--vert-500);
+  --color-vert-600: var(--vert-600);
+  --color-vert-700: var(--vert-700);
+  --color-vert-800: var(--vert-800);
+  --color-vert-900: var(--vert-900);
+  --color-vert-950: var(--vert-950);
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);

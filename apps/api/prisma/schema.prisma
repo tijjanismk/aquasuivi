@@ -236,10 +236,19 @@ model PalierRationnement {
 //  sur une comparaison de chaînes ("Sikasso" contre "sikasso").
 // =============================================================================
 
+/// Premier niveau du découpage : les régions, et le district de Bamako, qui
+/// n'est pas une région et n'a pas de cercle (un cercle technique porte ses
+/// communes, pour garder une seule hiérarchie).
+enum TypeTerritoire {
+  REGION
+  DISTRICT
+}
+
 model Region {
-  id        String   @id @default(ulid())
-  code      String?  @unique
-  nom       String   @unique
+  id        String         @id @default(ulid())
+  code      String?        @unique
+  nom       String         @unique
+  type      TypeTerritoire @default(REGION)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -250,6 +259,7 @@ model Region {
 
 model Cercle {
   id        String   @id @default(ulid())
+  code      String?  @unique
   nom       String
   regionId  String
   region    Region   @relation(fields: [regionId], references: [id], onDelete: Restrict)
@@ -265,6 +275,7 @@ model Cercle {
 
 model Commune {
   id        String   @id @default(ulid())
+  code      String?  @unique
   nom       String
   cercleId  String
   cercle    Cercle   @relation(fields: [cercleId], references: [id], onDelete: Restrict)

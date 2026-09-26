@@ -1,29 +1,4896 @@
 {
- "racine": "/home/claude/aquasuivi",
+ "racine": "C:\\Users\\USER\\Downloads\\aqua-suivi-socle\\aquasuivi",
  "avertissement": null,
- "nb_fichiers": 8,
+ "nb_fichiers": 119,
  "fichiers": {
-  "packages/shared/src/index.ts": {
-   "fichier": "packages/shared/src/index.ts",
+  "apps/admin/vite.config.ts": {
+   "fichier": "apps/admin/vite.config.ts",
    "langage": "ts",
-   "lignes": 6,
+   "lignes": 16,
    "exporte": [],
-   "importe": []
+   "importe": [
+    {
+     "source": "node:path",
+     "symboles": [
+      "path"
+     ]
+    },
+    {
+     "source": "node:url",
+     "symboles": [
+      "fileURLToPath"
+     ]
+    },
+    {
+     "source": "vite",
+     "symboles": [
+      "defineConfig"
+     ]
+    },
+    {
+     "source": "@vitejs/plugin-react",
+     "symboles": [
+      "react"
+     ]
+    },
+    {
+     "source": "@tailwindcss/vite",
+     "symboles": [
+      "tailwindcss"
+     ]
+    }
+   ]
   },
-  "packages/shared/src/geometrie.ts": {
-   "fichier": "packages/shared/src/geometrie.ts",
+  "apps/admin/src/administration.ts": {
+   "fichier": "apps/admin/src/administration.ts",
    "langage": "ts",
-   "lignes": 39,
+   "lignes": 59,
    "exporte": [
-    "dimensionsCalculees",
-    "superficie",
-    "volume"
+    "ACCES",
+    "ADMINISTRATION",
+    "ROLES",
+    "UTILISATEURS"
    ],
    "importe": [
     {
-     "source": "./types",
+     "source": "./description",
      "symboles": [
-      "InfrastructureDim"
+      "Ressource"
+     ]
+    }
+   ]
+  },
+  "apps/admin/src/App.tsx": {
+   "fichier": "apps/admin/src/App.tsx",
+   "langage": "ts",
+   "lignes": 283,
+   "exporte": [
+    "App"
+   ],
+   "importe": [
+    {
+     "source": "react",
+     "symboles": [
+      "Fragment",
+      "Suspense",
+      "lazy"
+     ]
+    },
+    {
+     "source": "@refinedev/core",
+     "symboles": [
+      "Authenticated",
+      "Refine",
+      "useGetIdentity",
+      "useLogout"
+     ]
+    },
+    {
+     "source": "@refinedev/react-router",
+     "symboles": [
+      "routerProvider"
+     ]
+    },
+    {
+     "source": "@refinedev/simple-rest",
+     "symboles": [
+      "dataProvider"
+     ]
+    },
+    {
+     "source": "react-router",
+     "symboles": [
+      "BrowserRouter",
+      "NavLink",
+      "Navigate",
+      "Outlet",
+      "Route",
+      "Routes",
+      "useParams"
+     ]
+    },
+    {
+     "source": "lucide-react",
+     "symboles": [
+      "Calculator",
+      "Fish",
+      "FlaskConical",
+      "GitMerge",
+      "IconeCarte",
+      "KeyRound",
+      "LayoutDashboard",
+      "LogOut",
+      "LucideIcon",
+      "MapPinned",
+      "Scale",
+      "Sprout",
+      "UsersRound",
+      "Waves",
+      "Wheat"
+     ]
+    },
+    {
+     "source": "./config",
+     "symboles": [
+      "API_URL"
+     ]
+    },
+    {
+     "source": "./lib/utils",
+     "symboles": [
+      "cn"
+     ]
+    },
+    {
+     "source": "./i18n",
+     "symboles": [
+      "t"
+     ]
+    },
+    {
+     "source": "./referentiels",
+     "symboles": [
+      "REFERENTIELS"
+     ]
+    },
+    {
+     "source": "./saisie",
+     "symboles": [
+      "FERMES"
+     ]
+    },
+    {
+     "source": "./ressources",
+     "symboles": [
+      "TOUTES"
+     ]
+    },
+    {
+     "source": "./pages/Accueil",
+     "symboles": [
+      "Accueil"
+     ]
+    },
+    {
+     "source": "./pages/ListeRessource",
+     "symboles": [
+      "ListeRessource"
+     ]
+    },
+    {
+     "source": "./pages/PageFormulaire",
+     "symboles": [
+      "PageFormulaire"
+     ]
+    },
+    {
+     "source": "./pages/FicheParent",
+     "symboles": [
+      "FicheParent"
+     ]
+    },
+    {
+     "source": "./pages/FicheCycle",
+     "symboles": [
+      "FicheCycle"
+     ]
+    },
+    {
+     "source": "./pages/Connexion",
+     "symboles": [
+      "Connexion"
+     ]
+    },
+    {
+     "source": "./pages/Simulation",
+     "symboles": [
+      "Simulation"
+     ]
+    },
+    {
+     "source": "./pages/Conflits",
+     "symboles": [
+      "Conflits"
+     ]
+    },
+    {
+     "source": "./pages/Consolidation",
+     "symboles": [
+      "Consolidation"
+     ]
+    },
+    {
+     "source": "./administration",
+     "symboles": [
+      "ADMINISTRATION"
+     ]
+    },
+    {
+     "source": "./session",
+     "symboles": [
+      "Utilisateur",
+      "authProvider",
+      "utilisateurCourant"
+     ]
+    },
+    {
+     "source": "./pages/Carte",
+     "symboles": [
+      "(dynamique)"
+     ]
+    }
+   ]
+  },
+  "apps/admin/src/config.ts": {
+   "fichier": "apps/admin/src/config.ts",
+   "langage": "ts",
+   "lignes": 2,
+   "exporte": [
+    "API_URL"
+   ],
+   "importe": []
+  },
+  "apps/admin/src/description.ts": {
+   "fichier": "apps/admin/src/description.ts",
+   "langage": "ts",
+   "lignes": 69,
+   "exporte": [
+    "Champ",
+    "Ressource",
+    "TypeChamp",
+    "champsEnListe",
+    "champsSaisissables"
+   ],
+   "importe": []
+  },
+  "apps/admin/src/erreurs.ts": {
+   "fichier": "apps/admin/src/erreurs.ts",
+   "langage": "ts",
+   "lignes": 10,
+   "exporte": [
+    "messageErreur"
+   ],
+   "importe": []
+  },
+  "apps/admin/src/i18n.ts": {
+   "fichier": "apps/admin/src/i18n.ts",
+   "langage": "ts",
+   "lignes": 109,
+   "exporte": [
+    "CleTexte",
+    "DEVISE_PAR_DEFAUT",
+    "Devise",
+    "LANGUE_PAR_DEFAUT",
+    "Langue",
+    "configurer",
+    "formaterDate",
+    "formaterMontant",
+    "formaterNombre",
+    "langue",
+    "t"
+   ],
+   "importe": []
+  },
+  "apps/admin/src/main.tsx": {
+   "fichier": "apps/admin/src/main.tsx",
+   "langage": "ts",
+   "lignes": 41,
+   "exporte": [],
+   "importe": [
+    {
+     "source": "react",
+     "symboles": [
+      "React"
+     ]
+    },
+    {
+     "source": "react-dom/client",
+     "symboles": [
+      "ReactDOM"
+     ]
+    },
+    {
+     "source": "./App",
+     "symboles": [
+      "App"
+     ]
+    },
+    {
+     "source": "./config",
+     "symboles": [
+      "API_URL"
+     ]
+    },
+    {
+     "source": "./i18n",
+     "symboles": [
+      "DEVISE_PAR_DEFAUT",
+      "Devise",
+      "LANGUE_PAR_DEFAUT",
+      "Langue",
+      "configurer"
+     ]
+    }
+   ]
+  },
+  "apps/admin/src/referentiels.ts": {
+   "fichier": "apps/admin/src/referentiels.ts",
+   "langage": "ts",
+   "lignes": 182,
+   "exporte": [
+    "REFERENTIELS",
+    "referentielParChemin"
+   ],
+   "importe": [
+    {
+     "source": "./description",
+     "symboles": [
+      "Ressource"
+     ]
+    }
+   ]
+  },
+  "apps/admin/src/ressources.ts": {
+   "fichier": "apps/admin/src/ressources.ts",
+   "langage": "ts",
+   "lignes": 28,
+   "exporte": [
+    "TOUTES",
+    "libelleLigne",
+    "parChemin",
+    "parNom"
+   ],
+   "importe": [
+    {
+     "source": "./description",
+     "symboles": [
+      "Ressource"
+     ]
+    },
+    {
+     "source": "./referentiels",
+     "symboles": [
+      "REFERENTIELS"
+     ]
+    },
+    {
+     "source": "./saisie",
+     "symboles": [
+      "RESSOURCES_SAISIE"
+     ]
+    },
+    {
+     "source": "./administration",
+     "symboles": [
+      "ADMINISTRATION"
+     ]
+    }
+   ]
+  },
+  "apps/admin/src/saisie.ts": {
+   "fichier": "apps/admin/src/saisie.ts",
+   "langage": "ts",
+   "lignes": 410,
+   "exporte": [
+    "CYCLES",
+    "DEPENSES",
+    "DISTRIBUTIONS",
+    "ECHANTILLONS",
+    "FERMES",
+    "INFRASTRUCTURES",
+    "LOTS",
+    "MESURES_EAU",
+    "MORTALITES",
+    "PESEES",
+    "RECOLTES",
+    "RESSOURCES_SAISIE",
+    "SECTIONS_CYCLE",
+    "TRAITEMENTS"
+   ],
+   "importe": [
+    {
+     "source": "./description",
+     "symboles": [
+      "Ressource"
+     ]
+    }
+   ]
+  },
+  "apps/admin/src/session.ts": {
+   "fichier": "apps/admin/src/session.ts",
+   "langage": "ts",
+   "lignes": 150,
+   "exporte": [
+    "Utilisateur",
+    "appelApi",
+    "authProvider",
+    "utilisateurCourant"
+   ],
+   "importe": [
+    {
+     "source": "@refinedev/core",
+     "symboles": [
+      "AuthProvider"
+     ]
+    },
+    {
+     "source": "@refinedev/simple-rest",
+     "symboles": [
+      "axiosInstance"
+     ]
+    },
+    {
+     "source": "./config",
+     "symboles": [
+      "API_URL"
+     ]
+    }
+   ]
+  },
+  "apps/admin/src/composants/Alertes.tsx": {
+   "fichier": "apps/admin/src/composants/Alertes.tsx",
+   "langage": "ts",
+   "lignes": 32,
+   "exporte": [
+    "ListeAlertes"
+   ],
+   "importe": [
+    {
+     "source": "lucide-react",
+     "symboles": [
+      "Info",
+      "TriangleAlert"
+     ]
+    },
+    {
+     "source": "@aqua/shared",
+     "symboles": [
+      "Alerte"
+     ]
+    },
+    {
+     "source": "@/lib/utils",
+     "symboles": [
+      "cn"
+     ]
+    }
+   ]
+  },
+  "apps/admin/src/composants/FormulaireRessource.tsx": {
+   "fichier": "apps/admin/src/composants/FormulaireRessource.tsx",
+   "langage": "ts",
+   "lignes": 304,
+   "exporte": [
+    "FormulaireRessource",
+    "ProprietesFormulaire"
+   ],
+   "importe": [
+    {
+     "source": "react",
+     "symboles": [
+      "useEffect",
+      "useState"
+     ]
+    },
+    {
+     "source": "@refinedev/core",
+     "symboles": [
+      "useCreate",
+      "useList",
+      "useOne",
+      "useUpdate"
+     ]
+    },
+    {
+     "source": "@/description",
+     "symboles": [
+      "Champ",
+      "Ressource"
+     ]
+    },
+    {
+     "source": "@/description",
+     "symboles": [
+      "champsSaisissables"
+     ]
+    },
+    {
+     "source": "@/ressources",
+     "symboles": [
+      "libelleLigne",
+      "parNom"
+     ]
+    },
+    {
+     "source": "@/erreurs",
+     "symboles": [
+      "messageErreur"
+     ]
+    },
+    {
+     "source": "@/i18n",
+     "symboles": [
+      "t"
+     ]
+    },
+    {
+     "source": "@/composants/ui/button",
+     "symboles": [
+      "Button"
+     ]
+    },
+    {
+     "source": "@/composants/ui/champ",
+     "symboles": [
+      "Checkbox",
+      "Input",
+      "Label",
+      "Select"
+     ]
+    },
+    {
+     "source": "@/composants/ui/divers",
+     "symboles": [
+      "Alerte",
+      "Card"
+     ]
+    }
+   ]
+  },
+  "apps/admin/src/composants/TableauRessource.tsx": {
+   "fichier": "apps/admin/src/composants/TableauRessource.tsx",
+   "langage": "ts",
+   "lignes": 276,
+   "exporte": [
+    "ProprietesTableau",
+    "TableauRessource"
+   ],
+   "importe": [
+    {
+     "source": "react",
+     "symboles": [
+      "useState"
+     ]
+    },
+    {
+     "source": "@refinedev/core",
+     "symboles": [
+      "CrudFilter",
+      "useDelete",
+      "useList"
+     ]
+    },
+    {
+     "source": "react-router",
+     "symboles": [
+      "Link"
+     ]
+    },
+    {
+     "source": "lucide-react",
+     "symboles": [
+      "ArrowDown",
+      "ArrowUp",
+      "Plus",
+      "Search"
+     ]
+    },
+    {
+     "source": "@/description",
+     "symboles": [
+      "Champ",
+      "Ressource"
+     ]
+    },
+    {
+     "source": "@/description",
+     "symboles": [
+      "champsEnListe"
+     ]
+    },
+    {
+     "source": "@/ressources",
+     "symboles": [
+      "libelleLigne"
+     ]
+    },
+    {
+     "source": "@/erreurs",
+     "symboles": [
+      "messageErreur"
+     ]
+    },
+    {
+     "source": "@/i18n",
+     "symboles": [
+      "formaterDate",
+      "formaterMontant",
+      "formaterNombre",
+      "t"
+     ]
+    },
+    {
+     "source": "@/lib/utils",
+     "symboles": [
+      "cn"
+     ]
+    },
+    {
+     "source": "@/composants/ui/button",
+     "symboles": [
+      "Button"
+     ]
+    },
+    {
+     "source": "@/composants/ui/champ",
+     "symboles": [
+      "Input"
+     ]
+    },
+    {
+     "source": "@/composants/ui/divers",
+     "symboles": [
+      "Alerte",
+      "Badge",
+      "Card"
+     ]
+    },
+    {
+     "source": "@/composants/ui/table",
+     "symboles": [
+      "Table",
+      "TableBody",
+      "TableCell",
+      "TableHead",
+      "TableHeader",
+      "TableRow"
+     ]
+    }
+   ]
+  },
+  "apps/admin/src/composants/ui/button.tsx": {
+   "fichier": "apps/admin/src/composants/ui/button.tsx",
+   "langage": "ts",
+   "lignes": 43,
+   "exporte": [
+    "Button",
+    "ProprietesBouton",
+    "stylesBouton"
+   ],
+   "importe": [
+    {
+     "source": "class-variance-authority",
+     "symboles": [
+      "VariantProps",
+      "cva"
+     ]
+    },
+    {
+     "source": "react",
+     "symboles": [
+      "ButtonHTMLAttributes"
+     ]
+    },
+    {
+     "source": "radix-ui",
+     "symboles": [
+      "Slot"
+     ]
+    },
+    {
+     "source": "@/lib/utils",
+     "symboles": [
+      "cn"
+     ]
+    }
+   ]
+  },
+  "apps/admin/src/composants/ui/champ.tsx": {
+   "fichier": "apps/admin/src/composants/ui/champ.tsx",
+   "langage": "ts",
+   "lignes": 60,
+   "exporte": [
+    "Checkbox",
+    "Input",
+    "Label",
+    "Select"
+   ],
+   "importe": [
+    {
+     "source": "react",
+     "symboles": [
+      "ComponentProps",
+      "InputHTMLAttributes",
+      "SelectHTMLAttributes"
+     ]
+    },
+    {
+     "source": "radix-ui",
+     "symboles": [
+      "CheckboxRadix",
+      "LabelRadix"
+     ]
+    },
+    {
+     "source": "lucide-react",
+     "symboles": [
+      "Check"
+     ]
+    },
+    {
+     "source": "@/lib/utils",
+     "symboles": [
+      "cn"
+     ]
+    }
+   ]
+  },
+  "apps/admin/src/composants/ui/divers.tsx": {
+   "fichier": "apps/admin/src/composants/ui/divers.tsx",
+   "langage": "ts",
+   "lignes": 51,
+   "exporte": [
+    "Alerte",
+    "Badge",
+    "Card"
+   ],
+   "importe": [
+    {
+     "source": "class-variance-authority",
+     "symboles": [
+      "VariantProps",
+      "cva"
+     ]
+    },
+    {
+     "source": "react",
+     "symboles": [
+      "HTMLAttributes"
+     ]
+    },
+    {
+     "source": "@/lib/utils",
+     "symboles": [
+      "cn"
+     ]
+    }
+   ]
+  },
+  "apps/admin/src/composants/ui/table.tsx": {
+   "fichier": "apps/admin/src/composants/ui/table.tsx",
+   "langage": "ts",
+   "lignes": 52,
+   "exporte": [
+    "Table",
+    "TableBody",
+    "TableCell",
+    "TableHead",
+    "TableHeader",
+    "TableRow"
+   ],
+   "importe": [
+    {
+     "source": "react",
+     "symboles": [
+      "HTMLAttributes",
+      "TdHTMLAttributes",
+      "ThHTMLAttributes"
+     ]
+    },
+    {
+     "source": "@/lib/utils",
+     "symboles": [
+      "cn"
+     ]
+    }
+   ]
+  },
+  "apps/admin/src/lib/utils.ts": {
+   "fichier": "apps/admin/src/lib/utils.ts",
+   "langage": "ts",
+   "lignes": 10,
+   "exporte": [
+    "cn"
+   ],
+   "importe": [
+    {
+     "source": "clsx",
+     "symboles": [
+      "ClassValue",
+      "clsx"
+     ]
+    },
+    {
+     "source": "tailwind-merge",
+     "symboles": [
+      "twMerge"
+     ]
+    }
+   ]
+  },
+  "apps/admin/src/pages/Accueil.tsx": {
+   "fichier": "apps/admin/src/pages/Accueil.tsx",
+   "langage": "ts",
+   "lignes": 119,
+   "exporte": [
+    "Accueil"
+   ],
+   "importe": [
+    {
+     "source": "react",
+     "symboles": [
+      "useEffect",
+      "useState"
+     ]
+    },
+    {
+     "source": "react-router",
+     "symboles": [
+      "Link"
+     ]
+    },
+    {
+     "source": "lucide-react",
+     "symboles": [
+      "ChevronRight"
+     ]
+    },
+    {
+     "source": "../config",
+     "symboles": [
+      "API_URL"
+     ]
+    },
+    {
+     "source": "../session",
+     "symboles": [
+      "appelApi"
+     ]
+    },
+    {
+     "source": "@/composants/Alertes",
+     "symboles": [
+      "ListeAlertes"
+     ]
+    },
+    {
+     "source": "@aqua/shared",
+     "symboles": [
+      "AlerteCycle"
+     ]
+    },
+    {
+     "source": "../referentiels",
+     "symboles": [
+      "REFERENTIELS"
+     ]
+    },
+    {
+     "source": "../i18n",
+     "symboles": [
+      "formaterNombre"
+     ]
+    },
+    {
+     "source": "@/composants/ui/divers",
+     "symboles": [
+      "Alerte",
+      "Card"
+     ]
+    }
+   ]
+  },
+  "apps/admin/src/pages/Carte.tsx": {
+   "fichier": "apps/admin/src/pages/Carte.tsx",
+   "langage": "ts",
+   "lignes": 171,
+   "exporte": [
+    "Carte"
+   ],
+   "importe": [
+    {
+     "source": "react",
+     "symboles": [
+      "useEffect",
+      "useMemo",
+      "useState"
+     ]
+    },
+    {
+     "source": "react-router",
+     "symboles": [
+      "Link"
+     ]
+    },
+    {
+     "source": "react-leaflet",
+     "symboles": [
+      "CircleMarker",
+      "MapContainer",
+      "Popup",
+      "TileLayer",
+      "useMap"
+     ]
+    },
+    {
+     "source": "leaflet",
+     "symboles": [
+      "latLngBounds"
+     ]
+    },
+    {
+     "source": "@/session",
+     "symboles": [
+      "appelApi"
+     ]
+    },
+    {
+     "source": "@/composants/ui/divers",
+     "symboles": [
+      "Alerte",
+      "Badge",
+      "Card"
+     ]
+    }
+   ]
+  },
+  "apps/admin/src/pages/Conflits.tsx": {
+   "fichier": "apps/admin/src/pages/Conflits.tsx",
+   "langage": "ts",
+   "lignes": 124,
+   "exporte": [
+    "Conflits"
+   ],
+   "importe": [
+    {
+     "source": "react",
+     "symboles": [
+      "useEffect",
+      "useState"
+     ]
+    },
+    {
+     "source": "@/session",
+     "symboles": [
+      "appelApi"
+     ]
+    },
+    {
+     "source": "@/i18n",
+     "symboles": [
+      "formaterDate"
+     ]
+    },
+    {
+     "source": "@/lib/utils",
+     "symboles": [
+      "cn"
+     ]
+    },
+    {
+     "source": "@/composants/ui/button",
+     "symboles": [
+      "Button"
+     ]
+    },
+    {
+     "source": "@/composants/ui/divers",
+     "symboles": [
+      "Alerte",
+      "Badge",
+      "Card"
+     ]
+    }
+   ]
+  },
+  "apps/admin/src/pages/Connexion.tsx": {
+   "fichier": "apps/admin/src/pages/Connexion.tsx",
+   "langage": "ts",
+   "lignes": 76,
+   "exporte": [
+    "Connexion"
+   ],
+   "importe": [
+    {
+     "source": "react",
+     "symboles": [
+      "FormEvent",
+      "useState"
+     ]
+    },
+    {
+     "source": "@refinedev/core",
+     "symboles": [
+      "useLogin"
+     ]
+    },
+    {
+     "source": "lucide-react",
+     "symboles": [
+      "Fish"
+     ]
+    },
+    {
+     "source": "../i18n",
+     "symboles": [
+      "t"
+     ]
+    },
+    {
+     "source": "@/composants/ui/button",
+     "symboles": [
+      "Button"
+     ]
+    },
+    {
+     "source": "@/composants/ui/champ",
+     "symboles": [
+      "Input",
+      "Label"
+     ]
+    },
+    {
+     "source": "@/composants/ui/divers",
+     "symboles": [
+      "Alerte",
+      "Card"
+     ]
+    }
+   ]
+  },
+  "apps/admin/src/pages/Consolidation.tsx": {
+   "fichier": "apps/admin/src/pages/Consolidation.tsx",
+   "langage": "ts",
+   "lignes": 154,
+   "exporte": [
+    "Consolidation"
+   ],
+   "importe": [
+    {
+     "source": "react",
+     "symboles": [
+      "useEffect",
+      "useState"
+     ]
+    },
+    {
+     "source": "@/session",
+     "symboles": [
+      "appelApi"
+     ]
+    },
+    {
+     "source": "@/i18n",
+     "symboles": [
+      "formaterMontant",
+      "formaterNombre"
+     ]
+    },
+    {
+     "source": "@/lib/utils",
+     "symboles": [
+      "cn"
+     ]
+    },
+    {
+     "source": "@/composants/ui/champ",
+     "symboles": [
+      "Input",
+      "Label",
+      "Select"
+     ]
+    },
+    {
+     "source": "@/composants/ui/divers",
+     "symboles": [
+      "Alerte",
+      "Card"
+     ]
+    },
+    {
+     "source": "@/composants/ui/table",
+     "symboles": [
+      "Table",
+      "TableBody",
+      "TableCell",
+      "TableHead",
+      "TableHeader",
+      "TableRow"
+     ]
+    }
+   ]
+  },
+  "apps/admin/src/pages/FicheCycle.tsx": {
+   "fichier": "apps/admin/src/pages/FicheCycle.tsx",
+   "langage": "ts",
+   "lignes": 282,
+   "exporte": [
+    "FicheCycle"
+   ],
+   "importe": [
+    {
+     "source": "react",
+     "symboles": [
+      "useEffect",
+      "useState"
+     ]
+    },
+    {
+     "source": "@refinedev/core",
+     "symboles": [
+      "useOne"
+     ]
+    },
+    {
+     "source": "react-router",
+     "symboles": [
+      "Link",
+      "useParams"
+     ]
+    },
+    {
+     "source": "lucide-react",
+     "symboles": [
+      "ArrowLeft"
+     ]
+    },
+    {
+     "source": "@/session",
+     "symboles": [
+      "appelApi"
+     ]
+    },
+    {
+     "source": "@/saisie",
+     "symboles": [
+      "CYCLES",
+      "SECTIONS_CYCLE"
+     ]
+    },
+    {
+     "source": "@/i18n",
+     "symboles": [
+      "formaterDate",
+      "formaterMontant",
+      "formaterNombre",
+      "t"
+     ]
+    },
+    {
+     "source": "@/composants/ui/divers",
+     "symboles": [
+      "Alerte",
+      "Badge",
+      "Card"
+     ]
+    },
+    {
+     "source": "@/composants/ui/button",
+     "symboles": [
+      "Button"
+     ]
+    },
+    {
+     "source": "@/composants/TableauRessource",
+     "symboles": [
+      "TableauRessource"
+     ]
+    },
+    {
+     "source": "@/composants/Alertes",
+     "symboles": [
+      "ListeAlertes"
+     ]
+    },
+    {
+     "source": "@aqua/shared",
+     "symboles": [
+      "AlerteCycle"
+     ]
+    }
+   ]
+  },
+  "apps/admin/src/pages/FicheParent.tsx": {
+   "fichier": "apps/admin/src/pages/FicheParent.tsx",
+   "langage": "ts",
+   "lignes": 156,
+   "exporte": [
+    "FicheParent"
+   ],
+   "importe": [
+    {
+     "source": "@refinedev/core",
+     "symboles": [
+      "useOne"
+     ]
+    },
+    {
+     "source": "react-router",
+     "symboles": [
+      "Link",
+      "useParams"
+     ]
+    },
+    {
+     "source": "lucide-react",
+     "symboles": [
+      "ArrowLeft"
+     ]
+    },
+    {
+     "source": "@/description",
+     "symboles": [
+      "Ressource"
+     ]
+    },
+    {
+     "source": "@/description",
+     "symboles": [
+      "champsEnListe"
+     ]
+    },
+    {
+     "source": "@/saisie",
+     "symboles": [
+      "CYCLES",
+      "ECHANTILLONS",
+      "FERMES",
+      "INFRASTRUCTURES",
+      "LOTS",
+      "MORTALITES",
+      "PESEES"
+     ]
+    },
+    {
+     "source": "@/i18n",
+     "symboles": [
+      "formaterDate",
+      "formaterMontant",
+      "formaterNombre",
+      "t"
+     ]
+    },
+    {
+     "source": "@/composants/ui/button",
+     "symboles": [
+      "Button"
+     ]
+    },
+    {
+     "source": "@/composants/ui/divers",
+     "symboles": [
+      "Card"
+     ]
+    },
+    {
+     "source": "@/composants/TableauRessource",
+     "symboles": [
+      "TableauRessource"
+     ]
+    }
+   ]
+  },
+  "apps/admin/src/pages/ListeRessource.tsx": {
+   "fichier": "apps/admin/src/pages/ListeRessource.tsx",
+   "langage": "ts",
+   "lignes": 34,
+   "exporte": [
+    "ListeRessource"
+   ],
+   "importe": [
+    {
+     "source": "react-router",
+     "symboles": [
+      "useParams"
+     ]
+    },
+    {
+     "source": "@/ressources",
+     "symboles": [
+      "parChemin"
+     ]
+    },
+    {
+     "source": "@/composants/TableauRessource",
+     "symboles": [
+      "TableauRessource"
+     ]
+    }
+   ]
+  },
+  "apps/admin/src/pages/PageFormulaire.tsx": {
+   "fichier": "apps/admin/src/pages/PageFormulaire.tsx",
+   "langage": "ts",
+   "lignes": 66,
+   "exporte": [
+    "PageFormulaire"
+   ],
+   "importe": [
+    {
+     "source": "react-router",
+     "symboles": [
+      "useNavigate",
+      "useParams",
+      "useSearchParams"
+     ]
+    },
+    {
+     "source": "lucide-react",
+     "symboles": [
+      "ArrowLeft"
+     ]
+    },
+    {
+     "source": "@/ressources",
+     "symboles": [
+      "parChemin"
+     ]
+    },
+    {
+     "source": "@/i18n",
+     "symboles": [
+      "t"
+     ]
+    },
+    {
+     "source": "@/composants/FormulaireRessource",
+     "symboles": [
+      "FormulaireRessource"
+     ]
+    }
+   ]
+  },
+  "apps/admin/src/pages/Simulation.tsx": {
+   "fichier": "apps/admin/src/pages/Simulation.tsx",
+   "langage": "ts",
+   "lignes": 192,
+   "exporte": [
+    "Simulation"
+   ],
+   "importe": [
+    {
+     "source": "react",
+     "symboles": [
+      "FormEvent",
+      "useEffect",
+      "useState"
+     ]
+    },
+    {
+     "source": "@refinedev/core",
+     "symboles": [
+      "useList"
+     ]
+    },
+    {
+     "source": "@aqua/shared",
+     "symboles": [
+      "ResultatSimulation"
+     ]
+    },
+    {
+     "source": "@/session",
+     "symboles": [
+      "appelApi"
+     ]
+    },
+    {
+     "source": "@/i18n",
+     "symboles": [
+      "formaterDate",
+      "formaterMontant",
+      "formaterNombre"
+     ]
+    },
+    {
+     "source": "@/lib/utils",
+     "symboles": [
+      "cn"
+     ]
+    },
+    {
+     "source": "@/composants/ui/button",
+     "symboles": [
+      "Button"
+     ]
+    },
+    {
+     "source": "@/composants/ui/champ",
+     "symboles": [
+      "Input",
+      "Label",
+      "Select"
+     ]
+    },
+    {
+     "source": "@/composants/ui/divers",
+     "symboles": [
+      "Alerte",
+      "Card"
+     ]
+    }
+   ]
+  },
+  "apps/api/prisma.config.ts": {
+   "fichier": "apps/api/prisma.config.ts",
+   "langage": "ts",
+   "lignes": 21,
+   "exporte": [],
+   "importe": [
+    {
+     "source": "node:url",
+     "symboles": [
+      "fileURLToPath"
+     ]
+    },
+    {
+     "source": "node:path",
+     "symboles": [
+      "path"
+     ]
+    },
+    {
+     "source": "@prisma/config",
+     "symboles": [
+      "defineConfig",
+      "env"
+     ]
+    }
+   ]
+  },
+  "apps/api/prisma/seed.ts": {
+   "fichier": "apps/api/prisma/seed.ts",
+   "langage": "ts",
+   "lignes": 639,
+   "exporte": [],
+   "importe": [
+    {
+     "source": "node:fs",
+     "symboles": [
+      "readFileSync"
+     ]
+    },
+    {
+     "source": "node:url",
+     "symboles": [
+      "fileURLToPath"
+     ]
+    },
+    {
+     "source": "node:path",
+     "symboles": [
+      "path"
+     ]
+    },
+    {
+     "source": "@prisma/client",
+     "symboles": [
+      "PrismaClient"
+     ]
+    },
+    {
+     "source": "@prisma/adapter-pg",
+     "symboles": [
+      "PrismaPg"
+     ]
+    },
+    {
+     "source": "pg",
+     "symboles": [
+      "Pool"
+     ]
+    },
+    {
+     "source": "@prisma/client",
+     "symboles": [
+      "Prisma"
+     ]
+    },
+    {
+     "source": "../src/auth/mot-de-passe.js",
+     "symboles": [
+      "hacher"
+     ]
+    }
+   ]
+  },
+  "apps/api/src/app.module.ts": {
+   "fichier": "apps/api/src/app.module.ts",
+   "langage": "ts",
+   "lignes": 67,
+   "exporte": [
+    "AppModule"
+   ],
+   "importe": [
+    {
+     "source": "@nestjs/common",
+     "symboles": [
+      "Module"
+     ]
+    },
+    {
+     "source": "@nestjs/core",
+     "symboles": [
+      "APP_GUARD"
+     ]
+    },
+    {
+     "source": "@nestjs/jwt",
+     "symboles": [
+      "JwtModule"
+     ]
+    },
+    {
+     "source": "./prisma/prisma.module.js",
+     "symboles": [
+      "PrismaModule"
+     ]
+    },
+    {
+     "source": "./referentiels/referentiels.controller.js",
+     "symboles": [
+      "ReferentielsController"
+     ]
+    },
+    {
+     "source": "./referentiels/referentiels.service.js",
+     "symboles": [
+      "ReferentielsService"
+     ]
+    },
+    {
+     "source": "./geographie/geographie.controller.js",
+     "symboles": [
+      "GeographieController"
+     ]
+    },
+    {
+     "source": "./saisie/saisie.controller.js",
+     "symboles": [
+      "SaisieController"
+     ]
+    },
+    {
+     "source": "./saisie/saisie.service.js",
+     "symboles": [
+      "SaisieService"
+     ]
+    },
+    {
+     "source": "./saisie/controles.service.js",
+     "symboles": [
+      "ControlesService"
+     ]
+    },
+    {
+     "source": "./sync/sync.controller.js",
+     "symboles": [
+      "SyncController"
+     ]
+    },
+    {
+     "source": "./sync/sync.service.js",
+     "symboles": [
+      "SyncService"
+     ]
+    },
+    {
+     "source": "./simulations/simulations.controller.js",
+     "symboles": [
+      "SimulationsController"
+     ]
+    },
+    {
+     "source": "./simulations/simulations.service.js",
+     "symboles": [
+      "SimulationsService"
+     ]
+    },
+    {
+     "source": "./administration/administration.controller.js",
+     "symboles": [
+      "AdministrationController"
+     ]
+    },
+    {
+     "source": "./administration/administration.service.js",
+     "symboles": [
+      "AdministrationService"
+     ]
+    },
+    {
+     "source": "./cycles/cycles.controller.js",
+     "symboles": [
+      "CyclesController"
+     ]
+    },
+    {
+     "source": "./cycles/cycles.service.js",
+     "symboles": [
+      "CyclesService"
+     ]
+    },
+    {
+     "source": "./sante.controller.js",
+     "symboles": [
+      "SanteController"
+     ]
+    },
+    {
+     "source": "./config.controller.js",
+     "symboles": [
+      "ConfigController"
+     ]
+    },
+    {
+     "source": "./auth/auth.controller.js",
+     "symboles": [
+      "AuthController"
+     ]
+    },
+    {
+     "source": "./auth/auth.service.js",
+     "symboles": [
+      "AuthService"
+     ]
+    },
+    {
+     "source": "./auth/garde.js",
+     "symboles": [
+      "GardeJwt"
+     ]
+    }
+   ]
+  },
+  "apps/api/src/config.controller.ts": {
+   "fichier": "apps/api/src/config.controller.ts",
+   "langage": "ts",
+   "lignes": 25,
+   "exporte": [
+    "ConfigController"
+   ],
+   "importe": [
+    {
+     "source": "@nestjs/common",
+     "symboles": [
+      "Controller",
+      "Get"
+     ]
+    },
+    {
+     "source": "./auth/garde.js",
+     "symboles": [
+      "Publique"
+     ]
+    }
+   ]
+  },
+  "apps/api/src/main.ts": {
+   "fichier": "apps/api/src/main.ts",
+   "langage": "ts",
+   "lignes": 41,
+   "exporte": [],
+   "importe": [
+    {
+     "source": "node:url",
+     "symboles": [
+      "fileURLToPath"
+     ]
+    },
+    {
+     "source": "node:path",
+     "symboles": [
+      "path"
+     ]
+    },
+    {
+     "source": "@nestjs/core",
+     "symboles": [
+      "NestFactory"
+     ]
+    },
+    {
+     "source": "@nestjs/platform-express",
+     "symboles": [
+      "NestExpressApplication"
+     ]
+    },
+    {
+     "source": "./app.module.js",
+     "symboles": [
+      "AppModule"
+     ]
+    },
+    {
+     "source": "./common/frontiere.interceptor.js",
+     "symboles": [
+      "FrontiereInterceptor"
+     ]
+    },
+    {
+     "source": "./common/prisma-exception.filter.js",
+     "symboles": [
+      "PrismaExceptionFilter"
+     ]
+    }
+   ]
+  },
+  "apps/api/src/sante.controller.ts": {
+   "fichier": "apps/api/src/sante.controller.ts",
+   "langage": "ts",
+   "lignes": 26,
+   "exporte": [
+    "SanteController"
+   ],
+   "importe": [
+    {
+     "source": "@nestjs/common",
+     "symboles": [
+      "Controller",
+      "Get"
+     ]
+    },
+    {
+     "source": "./auth/garde.js",
+     "symboles": [
+      "Publique"
+     ]
+    },
+    {
+     "source": "./prisma/prisma.service.js",
+     "symboles": [
+      "PrismaService"
+     ]
+    }
+   ]
+  },
+  "apps/api/src/administration/administration.controller.ts": {
+   "fichier": "apps/api/src/administration/administration.controller.ts",
+   "langage": "ts",
+   "lignes": 111,
+   "exporte": [
+    "AdministrationController"
+   ],
+   "importe": [
+    {
+     "source": "@nestjs/common",
+     "symboles": [
+      "Body",
+      "Controller",
+      "Delete",
+      "Get",
+      "Param",
+      "Patch",
+      "Post",
+      "Query",
+      "Res"
+     ]
+    },
+    {
+     "source": "express",
+     "symboles": [
+      "Response"
+     ]
+    },
+    {
+     "source": "../auth/garde.js",
+     "symboles": [
+      "Roles"
+     ]
+    },
+    {
+     "source": "./administration.service.js",
+     "symboles": [
+      "AdministrationService",
+      "Pagination"
+     ]
+    }
+   ]
+  },
+  "apps/api/src/administration/administration.service.ts": {
+   "fichier": "apps/api/src/administration/administration.service.ts",
+   "langage": "ts",
+   "lignes": 287,
+   "exporte": [
+    "AdministrationService",
+    "Pagination"
+   ],
+   "importe": [
+    {
+     "source": "@nestjs/common",
+     "symboles": [
+      "BadRequestException",
+      "ConflictException",
+      "Injectable",
+      "NotFoundException"
+     ]
+    },
+    {
+     "source": "zod",
+     "symboles": [
+      "z"
+     ]
+    },
+    {
+     "source": "../prisma/prisma.service.js",
+     "symboles": [
+      "PrismaService"
+     ]
+    },
+    {
+     "source": "../auth/mot-de-passe.js",
+     "symboles": [
+      "hacher"
+     ]
+    },
+    {
+     "source": "../common/domaine.js",
+     "symboles": [
+      "versDateStockee"
+     ]
+    }
+   ]
+  },
+  "apps/api/src/auth/auth.controller.ts": {
+   "fichier": "apps/api/src/auth/auth.controller.ts",
+   "langage": "ts",
+   "lignes": 42,
+   "exporte": [
+    "AuthController"
+   ],
+   "importe": [
+    {
+     "source": "@nestjs/common",
+     "symboles": [
+      "Body",
+      "Controller",
+      "Get",
+      "HttpCode",
+      "Ip",
+      "Post"
+     ]
+    },
+    {
+     "source": "./auth.service.js",
+     "symboles": [
+      "AuthService"
+     ]
+    },
+    {
+     "source": "./garde.js",
+     "symboles": [
+      "Publique",
+      "Utilisateur",
+      "UtilisateurConnecte"
+     ]
+    }
+   ]
+  },
+  "apps/api/src/auth/auth.service.ts": {
+   "fichier": "apps/api/src/auth/auth.service.ts",
+   "langage": "ts",
+   "lignes": 242,
+   "exporte": [
+    "AuthService"
+   ],
+   "importe": [
+    {
+     "source": "@nestjs/common",
+     "symboles": [
+      "BadRequestException",
+      "ConflictException",
+      "Injectable",
+      "UnauthorizedException"
+     ]
+    },
+    {
+     "source": "@nestjs/jwt",
+     "symboles": [
+      "JwtService"
+     ]
+    },
+    {
+     "source": "node:crypto",
+     "symboles": [
+      "createHash",
+      "randomBytes"
+     ]
+    },
+    {
+     "source": "ulid",
+     "symboles": [
+      "ulid"
+     ]
+    },
+    {
+     "source": "zod",
+     "symboles": [
+      "z"
+     ]
+    },
+    {
+     "source": "@prisma/client",
+     "symboles": [
+      "User"
+     ]
+    },
+    {
+     "source": "../prisma/prisma.service.js",
+     "symboles": [
+      "PrismaService"
+     ]
+    },
+    {
+     "source": "./garde.js",
+     "symboles": [
+      "ContenuJeton"
+     ]
+    },
+    {
+     "source": "./mot-de-passe.js",
+     "symboles": [
+      "EMPREINTE_LEURRE",
+      "hacher",
+      "verifier"
+     ]
+    },
+    {
+     "source": "./limiteur.js",
+     "symboles": [
+      "lesLimiteurs"
+     ]
+    }
+   ]
+  },
+  "apps/api/src/auth/garde.ts": {
+   "fichier": "apps/api/src/auth/garde.ts",
+   "langage": "ts",
+   "lignes": 80,
+   "exporte": [
+    "ContenuJeton",
+    "GardeJwt",
+    "Publique",
+    "Roles",
+    "Utilisateur",
+    "UtilisateurConnecte"
+   ],
+   "importe": [
+    {
+     "source": "@nestjs/common",
+     "symboles": [
+      "CanActivate",
+      "ExecutionContext",
+      "ForbiddenException",
+      "Injectable",
+      "SetMetadata",
+      "UnauthorizedException",
+      "createParamDecorator"
+     ]
+    },
+    {
+     "source": "@nestjs/core",
+     "symboles": [
+      "Reflector"
+     ]
+    },
+    {
+     "source": "@nestjs/jwt",
+     "symboles": [
+      "JwtService"
+     ]
+    },
+    {
+     "source": "express",
+     "symboles": [
+      "Request"
+     ]
+    },
+    {
+     "source": "@prisma/client",
+     "symboles": [
+      "RoleUtilisateur"
+     ]
+    }
+   ]
+  },
+  "apps/api/src/auth/limiteur.ts": {
+   "fichier": "apps/api/src/auth/limiteur.ts",
+   "langage": "ts",
+   "lignes": 76,
+   "exporte": [
+    "Limiteur",
+    "lesLimiteurs"
+   ],
+   "importe": [
+    {
+     "source": "@nestjs/common",
+     "symboles": [
+      "HttpException",
+      "HttpStatus"
+     ]
+    }
+   ]
+  },
+  "apps/api/src/auth/mot-de-passe.ts": {
+   "fichier": "apps/api/src/auth/mot-de-passe.ts",
+   "langage": "ts",
+   "lignes": 41,
+   "exporte": [
+    "EMPREINTE_LEURRE",
+    "hacher",
+    "verifier"
+   ],
+   "importe": [
+    {
+     "source": "node:crypto",
+     "symboles": [
+      "randomBytes",
+      "scrypt",
+      "timingSafeEqual"
+     ]
+    },
+    {
+     "source": "node:util",
+     "symboles": [
+      "promisify"
+     ]
+    }
+   ]
+  },
+  "apps/api/src/auth/portee.ts": {
+   "fichier": "apps/api/src/auth/portee.ts",
+   "langage": "ts",
+   "lignes": 55,
+   "exporte": [
+    "PorteeFerme",
+    "fermesLisibles",
+    "fermesModifiables",
+    "niveauCreateur"
+   ],
+   "importe": [
+    {
+     "source": "@prisma/client",
+     "symboles": [
+      "NiveauAcces",
+      "Prisma"
+     ]
+    },
+    {
+     "source": "./garde.js",
+     "symboles": [
+      "UtilisateurConnecte"
+     ]
+    }
+   ]
+  },
+  "apps/api/src/common/domaine.ts": {
+   "fichier": "apps/api/src/common/domaine.ts",
+   "langage": "ts",
+   "lignes": 70,
+   "exporte": [
+    "estDateSansHeure",
+    "versDateStockee",
+    "versEntree",
+    "versSortie"
+   ],
+   "importe": [
+    {
+     "source": "@prisma/client",
+     "symboles": [
+      "Prisma"
+     ]
+    }
+   ]
+  },
+  "apps/api/src/common/frontiere.interceptor.ts": {
+   "fichier": "apps/api/src/common/frontiere.interceptor.ts",
+   "langage": "ts",
+   "lignes": 14,
+   "exporte": [
+    "FrontiereInterceptor"
+   ],
+   "importe": [
+    {
+     "source": "@nestjs/common",
+     "symboles": [
+      "CallHandler",
+      "ExecutionContext",
+      "Injectable",
+      "NestInterceptor"
+     ]
+    },
+    {
+     "source": "rxjs",
+     "symboles": [
+      "Observable"
+     ]
+    },
+    {
+     "source": "rxjs/operators",
+     "symboles": [
+      "map"
+     ]
+    },
+    {
+     "source": "./domaine.js",
+     "symboles": [
+      "versSortie"
+     ]
+    }
+   ]
+  },
+  "apps/api/src/common/prisma-exception.filter.ts": {
+   "fichier": "apps/api/src/common/prisma-exception.filter.ts",
+   "langage": "ts",
+   "lignes": 141,
+   "exporte": [
+    "ErreurTraduite",
+    "PrismaExceptionFilter",
+    "traduireErreurPrisma"
+   ],
+   "importe": [
+    {
+     "source": "@nestjs/common",
+     "symboles": [
+      "ArgumentsHost",
+      "Catch",
+      "ExceptionFilter",
+      "HttpStatus",
+      "Logger"
+     ]
+    },
+    {
+     "source": "@prisma/client",
+     "symboles": [
+      "Prisma"
+     ]
+    },
+    {
+     "source": "express",
+     "symboles": [
+      "Response"
+     ]
+    }
+   ]
+  },
+  "apps/api/src/cycles/cycles.controller.ts": {
+   "fichier": "apps/api/src/cycles/cycles.controller.ts",
+   "langage": "ts",
+   "lignes": 44,
+   "exporte": [
+    "CyclesController"
+   ],
+   "importe": [
+    {
+     "source": "@nestjs/common",
+     "symboles": [
+      "BadRequestException",
+      "Controller",
+      "Get",
+      "Param",
+      "Query"
+     ]
+    },
+    {
+     "source": "./cycles.service.js",
+     "symboles": [
+      "CyclesService"
+     ]
+    },
+    {
+     "source": "../auth/garde.js",
+     "symboles": [
+      "Utilisateur",
+      "UtilisateurConnecte"
+     ]
+    }
+   ]
+  },
+  "apps/api/src/cycles/cycles.service.ts": {
+   "fichier": "apps/api/src/cycles/cycles.service.ts",
+   "langage": "ts",
+   "lignes": 314,
+   "exporte": [
+    "CyclesService"
+   ],
+   "importe": [
+    {
+     "source": "@nestjs/common",
+     "symboles": [
+      "Injectable",
+      "NotFoundException"
+     ]
+    },
+    {
+     "source": "@prisma/client",
+     "symboles": [
+      "Prisma"
+     ]
+    },
+    {
+     "source": "@aqua/shared",
+     "symboles": [
+      "CycleComplet",
+      "aujourdhui",
+      "calculerAlertes",
+      "calculerIndicateurs"
+     ]
+    },
+    {
+     "source": "../prisma/prisma.service.js",
+     "symboles": [
+      "PrismaService"
+     ]
+    },
+    {
+     "source": "../auth/garde.js",
+     "symboles": [
+      "UtilisateurConnecte"
+     ]
+    },
+    {
+     "source": "../auth/portee.js",
+     "symboles": [
+      "fermesLisibles"
+     ]
+    }
+   ]
+  },
+  "apps/api/src/geographie/geographie.controller.ts": {
+   "fichier": "apps/api/src/geographie/geographie.controller.ts",
+   "langage": "ts",
+   "lignes": 31,
+   "exporte": [
+    "GeographieController"
+   ],
+   "importe": [
+    {
+     "source": "@nestjs/common",
+     "symboles": [
+      "Controller",
+      "Get",
+      "Query"
+     ]
+    },
+    {
+     "source": "../prisma/prisma.service.js",
+     "symboles": [
+      "PrismaService"
+     ]
+    }
+   ]
+  },
+  "apps/api/src/prisma/prisma.module.ts": {
+   "fichier": "apps/api/src/prisma/prisma.module.ts",
+   "langage": "ts",
+   "lignes": 10,
+   "exporte": [
+    "PrismaModule"
+   ],
+   "importe": [
+    {
+     "source": "@nestjs/common",
+     "symboles": [
+      "Global",
+      "Module"
+     ]
+    },
+    {
+     "source": "./prisma.service.js",
+     "symboles": [
+      "PrismaService"
+     ]
+    }
+   ]
+  },
+  "apps/api/src/prisma/prisma.service.ts": {
+   "fichier": "apps/api/src/prisma/prisma.service.ts",
+   "langage": "ts",
+   "lignes": 63,
+   "exporte": [
+    "PrismaService"
+   ],
+   "importe": [
+    {
+     "source": "@nestjs/common",
+     "symboles": [
+      "Injectable",
+      "OnModuleDestroy",
+      "OnModuleInit"
+     ]
+    },
+    {
+     "source": "@prisma/client",
+     "symboles": [
+      "PrismaClient"
+     ]
+    },
+    {
+     "source": "@prisma/adapter-pg",
+     "symboles": [
+      "PrismaPg"
+     ]
+    },
+    {
+     "source": "pg",
+     "symboles": [
+      "Pool"
+     ]
+    }
+   ]
+  },
+  "apps/api/src/referentiels/referentiels.controller.ts": {
+   "fichier": "apps/api/src/referentiels/referentiels.controller.ts",
+   "langage": "ts",
+   "lignes": 89,
+   "exporte": [
+    "ReferentielsController"
+   ],
+   "importe": [
+    {
+     "source": "@nestjs/common",
+     "symboles": [
+      "BadRequestException",
+      "Body",
+      "Controller",
+      "Delete",
+      "Get",
+      "Param",
+      "Patch",
+      "Post",
+      "Query",
+      "Res"
+     ]
+    },
+    {
+     "source": "express",
+     "symboles": [
+      "Response"
+     ]
+    },
+    {
+     "source": "./referentiels.service.js",
+     "symboles": [
+      "ReferentielsService",
+      "SegmentRessource",
+      "estRessource"
+     ]
+    },
+    {
+     "source": "../auth/garde.js",
+     "symboles": [
+      "Roles"
+     ]
+    }
+   ]
+  },
+  "apps/api/src/referentiels/referentiels.service.ts": {
+   "fichier": "apps/api/src/referentiels/referentiels.service.ts",
+   "langage": "ts",
+   "lignes": 102,
+   "exporte": [
+    "OptionsListe",
+    "RESSOURCES",
+    "ReferentielsService",
+    "SegmentRessource",
+    "estRessource"
+   ],
+   "importe": [
+    {
+     "source": "@nestjs/common",
+     "symboles": [
+      "Injectable",
+      "NotFoundException"
+     ]
+    },
+    {
+     "source": "../prisma/prisma.service.js",
+     "symboles": [
+      "PrismaService"
+     ]
+    }
+   ]
+  },
+  "apps/api/src/saisie/controles.service.ts": {
+   "fichier": "apps/api/src/saisie/controles.service.ts",
+   "langage": "ts",
+   "lignes": 331,
+   "exporte": [
+    "ControlesService"
+   ],
+   "importe": [
+    {
+     "source": "@nestjs/common",
+     "symboles": [
+      "Injectable",
+      "NotFoundException",
+      "UnprocessableEntityException"
+     ]
+    },
+    {
+     "source": "@aqua/shared",
+     "symboles": [
+      "BornesCycle",
+      "Violation",
+      "aujourdhui",
+      "controlerCycle",
+      "controlerDepense",
+      "controlerDistribution",
+      "controlerEchantillon",
+      "controlerInfrastructure",
+      "controlerLot",
+      "controlerMesureEau",
+      "controlerMortalite",
+      "controlerPesee",
+      "controlerRecolte",
+      "controlerTraitement"
+     ]
+    },
+    {
+     "source": "../prisma/prisma.service.js",
+     "symboles": [
+      "PrismaService"
+     ]
+    },
+    {
+     "source": "../common/domaine.js",
+     "symboles": [
+      "versSortie"
+     ]
+    },
+    {
+     "source": "./saisie.config.js",
+     "symboles": [
+      "SegmentSaisie"
+     ]
+    }
+   ]
+  },
+  "apps/api/src/saisie/saisie.config.ts": {
+   "fichier": "apps/api/src/saisie/saisie.config.ts",
+   "langage": "ts",
+   "lignes": 147,
+   "exporte": [
+    "ConfigRessource",
+    "PARENTS",
+    "PARENT_DE",
+    "RESSOURCES",
+    "SegmentSaisie",
+    "estRessourceSaisie",
+    "versAncetre",
+    "versFerme"
+   ],
+   "importe": []
+  },
+  "apps/api/src/saisie/saisie.controller.ts": {
+   "fichier": "apps/api/src/saisie/saisie.controller.ts",
+   "langage": "ts",
+   "lignes": 100,
+   "exporte": [
+    "RESSOURCES_SAISIE",
+    "SaisieController"
+   ],
+   "importe": [
+    {
+     "source": "@nestjs/common",
+     "symboles": [
+      "BadRequestException",
+      "Body",
+      "Controller",
+      "Delete",
+      "Get",
+      "Param",
+      "Patch",
+      "Post",
+      "Query",
+      "Res"
+     ]
+    },
+    {
+     "source": "express",
+     "symboles": [
+      "Response"
+     ]
+    },
+    {
+     "source": "./saisie.service.js",
+     "symboles": [
+      "SaisieService"
+     ]
+    },
+    {
+     "source": "../auth/garde.js",
+     "symboles": [
+      "Utilisateur",
+      "UtilisateurConnecte"
+     ]
+    },
+    {
+     "source": "./saisie.config.js",
+     "symboles": [
+      "RESSOURCES",
+      "SegmentSaisie",
+      "estRessourceSaisie"
+     ]
+    }
+   ]
+  },
+  "apps/api/src/saisie/saisie.service.ts": {
+   "fichier": "apps/api/src/saisie/saisie.service.ts",
+   "langage": "ts",
+   "lignes": 370,
+   "exporte": [
+    "OptionsListe",
+    "SaisieService"
+   ],
+   "importe": [
+    {
+     "source": "@nestjs/common",
+     "symboles": [
+      "BadRequestException",
+      "ForbiddenException",
+      "Injectable",
+      "NotFoundException"
+     ]
+    },
+    {
+     "source": "@aqua/shared",
+     "symboles": [
+      "ajouterJours",
+      "dimensionsCalculees"
+     ]
+    },
+    {
+     "source": "../prisma/prisma.service.js",
+     "symboles": [
+      "PrismaService"
+     ]
+    },
+    {
+     "source": "../common/domaine.js",
+     "symboles": [
+      "versEntree"
+     ]
+    },
+    {
+     "source": "./saisie.config.js",
+     "symboles": [
+      "PARENTS",
+      "RESSOURCES",
+      "SegmentSaisie",
+      "versAncetre",
+      "versFerme"
+     ]
+    },
+    {
+     "source": "./controles.service.js",
+     "symboles": [
+      "ControlesService"
+     ]
+    },
+    {
+     "source": "../auth/garde.js",
+     "symboles": [
+      "UtilisateurConnecte"
+     ]
+    },
+    {
+     "source": "../auth/portee.js",
+     "symboles": [
+      "PorteeFerme",
+      "fermesLisibles",
+      "fermesModifiables",
+      "niveauCreateur"
+     ]
+    }
+   ]
+  },
+  "apps/api/src/simulations/simulations.controller.ts": {
+   "fichier": "apps/api/src/simulations/simulations.controller.ts",
+   "langage": "ts",
+   "lignes": 36,
+   "exporte": [
+    "SimulationsController"
+   ],
+   "importe": [
+    {
+     "source": "@nestjs/common",
+     "symboles": [
+      "Body",
+      "Controller",
+      "Delete",
+      "Get",
+      "HttpCode",
+      "Param",
+      "Post"
+     ]
+    },
+    {
+     "source": "./simulations.service.js",
+     "symboles": [
+      "SimulationsService"
+     ]
+    },
+    {
+     "source": "../auth/garde.js",
+     "symboles": [
+      "Utilisateur",
+      "UtilisateurConnecte"
+     ]
+    }
+   ]
+  },
+  "apps/api/src/simulations/simulations.service.ts": {
+   "fichier": "apps/api/src/simulations/simulations.service.ts",
+   "langage": "ts",
+   "lignes": 99,
+   "exporte": [
+    "SimulationsService"
+   ],
+   "importe": [
+    {
+     "source": "@nestjs/common",
+     "symboles": [
+      "BadRequestException",
+      "Injectable",
+      "NotFoundException"
+     ]
+    },
+    {
+     "source": "zod",
+     "symboles": [
+      "z"
+     ]
+    },
+    {
+     "source": "@aqua/shared",
+     "symboles": [
+      "ErreurSimulation",
+      "ParametresSimulation",
+      "aujourdhui",
+      "simuler"
+     ]
+    },
+    {
+     "source": "../prisma/prisma.service.js",
+     "symboles": [
+      "PrismaService"
+     ]
+    },
+    {
+     "source": "../common/domaine.js",
+     "symboles": [
+      "versSortie"
+     ]
+    },
+    {
+     "source": "../auth/garde.js",
+     "symboles": [
+      "UtilisateurConnecte"
+     ]
+    }
+   ]
+  },
+  "apps/api/src/sync/sync.controller.ts": {
+   "fichier": "apps/api/src/sync/sync.controller.ts",
+   "langage": "ts",
+   "lignes": 26,
+   "exporte": [
+    "SyncController"
+   ],
+   "importe": [
+    {
+     "source": "@nestjs/common",
+     "symboles": [
+      "Body",
+      "Controller",
+      "Get",
+      "HttpCode",
+      "Post",
+      "Query"
+     ]
+    },
+    {
+     "source": "./sync.service.js",
+     "symboles": [
+      "SyncService"
+     ]
+    },
+    {
+     "source": "../auth/garde.js",
+     "symboles": [
+      "Utilisateur",
+      "UtilisateurConnecte"
+     ]
+    }
+   ]
+  },
+  "apps/api/src/sync/sync.service.ts": {
+   "fichier": "apps/api/src/sync/sync.service.ts",
+   "langage": "ts",
+   "lignes": 314,
+   "exporte": [
+    "Resultat",
+    "SyncService"
+   ],
+   "importe": [
+    {
+     "source": "@nestjs/common",
+     "symboles": [
+      "BadRequestException",
+      "HttpException",
+      "Injectable"
+     ]
+    },
+    {
+     "source": "zod",
+     "symboles": [
+      "z"
+     ]
+    },
+    {
+     "source": "../prisma/prisma.service.js",
+     "symboles": [
+      "PrismaService"
+     ]
+    },
+    {
+     "source": "../saisie/saisie.service.js",
+     "symboles": [
+      "SaisieService"
+     ]
+    },
+    {
+     "source": "../saisie/saisie.config.js",
+     "symboles": [
+      "RESSOURCES",
+      "SegmentSaisie",
+      "estRessourceSaisie",
+      "versFerme"
+     ]
+    },
+    {
+     "source": "../referentiels/referentiels.service.js",
+     "symboles": [
+      "REFERENTIELS"
+     ]
+    },
+    {
+     "source": "../common/prisma-exception.filter.js",
+     "symboles": [
+      "traduireErreurPrisma"
+     ]
+    },
+    {
+     "source": "../common/domaine.js",
+     "symboles": [
+      "versSortie"
+     ]
+    },
+    {
+     "source": "../auth/garde.js",
+     "symboles": [
+      "UtilisateurConnecte"
+     ]
+    }
+   ]
+  },
+  "apps/e2e/donnees/donnees-test.ts": {
+   "fichier": "apps/e2e/donnees/donnees-test.ts",
+   "langage": "ts",
+   "lignes": 382,
+   "exporte": [],
+   "importe": [
+    {
+     "source": "node:path",
+     "symboles": [
+      "path"
+     ]
+    },
+    {
+     "source": "node:url",
+     "symboles": [
+      "fileURLToPath"
+     ]
+    },
+    {
+     "source": "pg",
+     "symboles": [
+      "Pool"
+     ]
+    },
+    {
+     "source": "../test/session.js",
+     "symboles": [
+      "authentifierEnAdmin"
+     ]
+    }
+   ]
+  },
+  "apps/e2e/test/navigateur.ts": {
+   "fichier": "apps/e2e/test/navigateur.ts",
+   "langage": "ts",
+   "lignes": 186,
+   "exporte": [
+    "Navigateur",
+    "OUTILS_SAISIE",
+    "ouvrirNavigateur",
+    "trouverNavigateur"
+   ],
+   "importe": [
+    {
+     "source": "node:child_process",
+     "symboles": [
+      "spawn"
+     ]
+    },
+    {
+     "source": "node:fs",
+     "symboles": [
+      "existsSync",
+      "rmSync"
+     ]
+    },
+    {
+     "source": "node:fs",
+     "symboles": [
+      "mkdtempSync"
+     ]
+    },
+    {
+     "source": "node:os",
+     "symboles": [
+      "tmpdir"
+     ]
+    },
+    {
+     "source": "node:path",
+     "symboles": [
+      "path"
+     ]
+    }
+   ]
+  },
+  "apps/e2e/test/parcours-admin.ts": {
+   "fichier": "apps/e2e/test/parcours-admin.ts",
+   "langage": "ts",
+   "lignes": 240,
+   "exporte": [],
+   "importe": [
+    {
+     "source": "pg",
+     "symboles": [
+      "Pool"
+     ]
+    },
+    {
+     "source": "node:url",
+     "symboles": [
+      "fileURLToPath"
+     ]
+    },
+    {
+     "source": "node:path",
+     "symboles": [
+      "path"
+     ]
+    },
+    {
+     "source": "./navigateur.ts",
+     "symboles": [
+      "Navigateur",
+      "OUTILS_SAISIE",
+      "ouvrirNavigateur"
+     ]
+    },
+    {
+     "source": "./session.js",
+     "symboles": [
+      "authentifierEnAdmin",
+      "connecterNavigateur"
+     ]
+    }
+   ]
+  },
+  "apps/e2e/test/parcours-administration.ts": {
+   "fichier": "apps/e2e/test/parcours-administration.ts",
+   "langage": "ts",
+   "lignes": 209,
+   "exporte": [],
+   "importe": [
+    {
+     "source": "pg",
+     "symboles": [
+      "Pool"
+     ]
+    },
+    {
+     "source": "node:url",
+     "symboles": [
+      "fileURLToPath"
+     ]
+    },
+    {
+     "source": "node:path",
+     "symboles": [
+      "path"
+     ]
+    },
+    {
+     "source": "./navigateur.ts",
+     "symboles": [
+      "Navigateur",
+      "OUTILS_SAISIE",
+      "ouvrirNavigateur"
+     ]
+    },
+    {
+     "source": "./session.js",
+     "symboles": [
+      "connecterNavigateur",
+      "connexion"
+     ]
+    }
+   ]
+  },
+  "apps/e2e/test/parcours-alertes.ts": {
+   "fichier": "apps/e2e/test/parcours-alertes.ts",
+   "langage": "ts",
+   "lignes": 147,
+   "exporte": [],
+   "importe": [
+    {
+     "source": "pg",
+     "symboles": [
+      "Pool"
+     ]
+    },
+    {
+     "source": "node:url",
+     "symboles": [
+      "fileURLToPath"
+     ]
+    },
+    {
+     "source": "node:path",
+     "symboles": [
+      "path"
+     ]
+    },
+    {
+     "source": "./navigateur.ts",
+     "symboles": [
+      "Navigateur",
+      "OUTILS_SAISIE",
+      "ouvrirNavigateur"
+     ]
+    },
+    {
+     "source": "./session.js",
+     "symboles": [
+      "connecterNavigateur"
+     ]
+    }
+   ]
+  },
+  "apps/e2e/test/parcours-auth.ts": {
+   "fichier": "apps/e2e/test/parcours-auth.ts",
+   "langage": "ts",
+   "lignes": 228,
+   "exporte": [],
+   "importe": [
+    {
+     "source": "pg",
+     "symboles": [
+      "Pool"
+     ]
+    },
+    {
+     "source": "node:url",
+     "symboles": [
+      "fileURLToPath"
+     ]
+    },
+    {
+     "source": "node:path",
+     "symboles": [
+      "path"
+     ]
+    },
+    {
+     "source": "./session.js",
+     "symboles": [
+      "connexion"
+     ]
+    },
+    {
+     "source": "node:crypto",
+     "symboles": [
+      "(dynamique)"
+     ]
+    }
+   ]
+  },
+  "apps/e2e/test/parcours-controles.ts": {
+   "fichier": "apps/e2e/test/parcours-controles.ts",
+   "langage": "ts",
+   "lignes": 175,
+   "exporte": [],
+   "importe": [
+    {
+     "source": "pg",
+     "symboles": [
+      "Pool"
+     ]
+    },
+    {
+     "source": "node:url",
+     "symboles": [
+      "fileURLToPath"
+     ]
+    },
+    {
+     "source": "node:path",
+     "symboles": [
+      "path"
+     ]
+    },
+    {
+     "source": "./session.js",
+     "symboles": [
+      "authentifierEnAdmin"
+     ]
+    }
+   ]
+  },
+  "apps/e2e/test/parcours-cycle.ts": {
+   "fichier": "apps/e2e/test/parcours-cycle.ts",
+   "langage": "ts",
+   "lignes": 321,
+   "exporte": [],
+   "importe": [
+    {
+     "source": "pg",
+     "symboles": [
+      "Pool"
+     ]
+    },
+    {
+     "source": "node:url",
+     "symboles": [
+      "fileURLToPath"
+     ]
+    },
+    {
+     "source": "node:path",
+     "symboles": [
+      "path"
+     ]
+    },
+    {
+     "source": "./session.js",
+     "symboles": [
+      "authentifierEnAdmin"
+     ]
+    }
+   ]
+  },
+  "apps/e2e/test/parcours-mcp.ts": {
+   "fichier": "apps/e2e/test/parcours-mcp.ts",
+   "langage": "ts",
+   "lignes": 225,
+   "exporte": [],
+   "importe": [
+    {
+     "source": "node:child_process",
+     "symboles": [
+      "spawn"
+     ]
+    },
+    {
+     "source": "node:fs",
+     "symboles": [
+      "existsSync"
+     ]
+    },
+    {
+     "source": "pg",
+     "symboles": [
+      "Pool"
+     ]
+    },
+    {
+     "source": "node:url",
+     "symboles": [
+      "fileURLToPath"
+     ]
+    },
+    {
+     "source": "node:path",
+     "symboles": [
+      "path"
+     ]
+    },
+    {
+     "source": "./session.js",
+     "symboles": [
+      "authentifierEnAdmin"
+     ]
+    }
+   ]
+  },
+  "apps/e2e/test/parcours-pwa.ts": {
+   "fichier": "apps/e2e/test/parcours-pwa.ts",
+   "langage": "ts",
+   "lignes": 307,
+   "exporte": [],
+   "importe": [
+    {
+     "source": "pg",
+     "symboles": [
+      "Pool"
+     ]
+    },
+    {
+     "source": "node:url",
+     "symboles": [
+      "fileURLToPath"
+     ]
+    },
+    {
+     "source": "node:path",
+     "symboles": [
+      "path"
+     ]
+    },
+    {
+     "source": "./navigateur.ts",
+     "symboles": [
+      "Navigateur",
+      "OUTILS_SAISIE",
+      "ouvrirNavigateur"
+     ]
+    }
+   ]
+  },
+  "apps/e2e/test/parcours-saisie.ts": {
+   "fichier": "apps/e2e/test/parcours-saisie.ts",
+   "langage": "ts",
+   "lignes": 288,
+   "exporte": [],
+   "importe": [
+    {
+     "source": "pg",
+     "symboles": [
+      "Pool"
+     ]
+    },
+    {
+     "source": "node:url",
+     "symboles": [
+      "fileURLToPath"
+     ]
+    },
+    {
+     "source": "node:path",
+     "symboles": [
+      "path"
+     ]
+    },
+    {
+     "source": "./navigateur.ts",
+     "symboles": [
+      "Navigateur",
+      "OUTILS_SAISIE",
+      "ouvrirNavigateur"
+     ]
+    },
+    {
+     "source": "./session.js",
+     "symboles": [
+      "authentifierEnAdmin",
+      "connecterNavigateur"
+     ]
+    }
+   ]
+  },
+  "apps/e2e/test/parcours-simulation.ts": {
+   "fichier": "apps/e2e/test/parcours-simulation.ts",
+   "langage": "ts",
+   "lignes": 164,
+   "exporte": [],
+   "importe": [
+    {
+     "source": "pg",
+     "symboles": [
+      "Pool"
+     ]
+    },
+    {
+     "source": "node:url",
+     "symboles": [
+      "fileURLToPath"
+     ]
+    },
+    {
+     "source": "node:path",
+     "symboles": [
+      "path"
+     ]
+    },
+    {
+     "source": "./navigateur.ts",
+     "symboles": [
+      "Navigateur",
+      "OUTILS_SAISIE",
+      "ouvrirNavigateur"
+     ]
+    },
+    {
+     "source": "./session.js",
+     "symboles": [
+      "connecterNavigateur"
+     ]
+    }
+   ]
+  },
+  "apps/e2e/test/parcours-sync.ts": {
+   "fichier": "apps/e2e/test/parcours-sync.ts",
+   "langage": "ts",
+   "lignes": 233,
+   "exporte": [],
+   "importe": [
+    {
+     "source": "pg",
+     "symboles": [
+      "Pool"
+     ]
+    },
+    {
+     "source": "node:url",
+     "symboles": [
+      "fileURLToPath"
+     ]
+    },
+    {
+     "source": "node:path",
+     "symboles": [
+      "path"
+     ]
+    }
+   ]
+  },
+  "apps/e2e/test/session.ts": {
+   "fichier": "apps/e2e/test/session.ts",
+   "langage": "ts",
+   "lignes": 53,
+   "exporte": [
+    "authentifierEnAdmin",
+    "connecterNavigateur",
+    "connexion"
+   ],
+   "importe": [
+    {
+     "source": "./navigateur.ts",
+     "symboles": [
+      "(dynamique)"
+     ]
+    }
+   ]
+  },
+  "apps/mcp/src/api.ts": {
+   "fichier": "apps/mcp/src/api.ts",
+   "langage": "ts",
+   "lignes": 162,
+   "exporte": [
+    "API_URL",
+    "Cycle",
+    "Ferme",
+    "Infrastructure",
+    "api"
+   ],
+   "importe": [
+    {
+     "source": "node:url",
+     "symboles": [
+      "fileURLToPath"
+     ]
+    },
+    {
+     "source": "node:path",
+     "symboles": [
+      "path"
+     ]
+    }
+   ]
+  },
+  "apps/mcp/src/serveur.ts": {
+   "fichier": "apps/mcp/src/serveur.ts",
+   "langage": "ts",
+   "lignes": 296,
+   "exporte": [],
+   "importe": [
+    {
+     "source": "@modelcontextprotocol/sdk/server/mcp.js",
+     "symboles": [
+      "McpServer"
+     ]
+    },
+    {
+     "source": "@modelcontextprotocol/sdk/server/stdio.js",
+     "symboles": [
+      "StdioServerTransport"
+     ]
+    },
+    {
+     "source": "zod",
+     "symboles": [
+      "z"
+     ]
+    },
+    {
+     "source": "./api.js",
+     "symboles": [
+      "API_URL",
+      "api"
+     ]
+    }
+   ]
+  },
+  "apps/pwa/vite.config.ts": {
+   "fichier": "apps/pwa/vite.config.ts",
+   "langage": "ts",
+   "lignes": 55,
+   "exporte": [],
+   "importe": [
+    {
+     "source": "node:path",
+     "symboles": [
+      "path"
+     ]
+    },
+    {
+     "source": "node:url",
+     "symboles": [
+      "fileURLToPath"
+     ]
+    },
+    {
+     "source": "vite",
+     "symboles": [
+      "defineConfig"
+     ]
+    },
+    {
+     "source": "@vitejs/plugin-react",
+     "symboles": [
+      "react"
+     ]
+    },
+    {
+     "source": "@tailwindcss/vite",
+     "symboles": [
+      "tailwindcss"
+     ]
+    },
+    {
+     "source": "vite-plugin-pwa",
+     "symboles": [
+      "VitePWA"
+     ]
+    }
+   ]
+  },
+  "apps/pwa/scripts/icones.mjs": {
+   "fichier": "apps/pwa/scripts/icones.mjs",
+   "langage": "ts",
+   "lignes": 101,
+   "exporte": [],
+   "importe": [
+    {
+     "source": "node:fs",
+     "symboles": [
+      "writeFileSync"
+     ]
+    },
+    {
+     "source": "node:zlib",
+     "symboles": [
+      "deflateSync"
+     ]
+    },
+    {
+     "source": "node:path",
+     "symboles": [
+      "path"
+     ]
+    },
+    {
+     "source": "node:url",
+     "symboles": [
+      "fileURLToPath"
+     ]
+    }
+   ]
+  },
+  "apps/pwa/src/App.tsx": {
+   "fichier": "apps/pwa/src/App.tsx",
+   "langage": "ts",
+   "lignes": 158,
+   "exporte": [
+    "App",
+    "Entete"
+   ],
+   "importe": [
+    {
+     "source": "react",
+     "symboles": [
+      "ReactNode",
+      "useEffect",
+      "useState"
+     ]
+    },
+    {
+     "source": "react-router",
+     "symboles": [
+      "BrowserRouter",
+      "Link",
+      "Navigate",
+      "Route",
+      "Routes",
+      "useNavigate"
+     ]
+    },
+    {
+     "source": "lucide-react",
+     "symboles": [
+      "ArrowLeft",
+      "CloudOff",
+      "RefreshCw",
+      "TriangleAlert"
+     ]
+    },
+    {
+     "source": "./db",
+     "symboles": [
+      "db",
+      "lireMeta"
+     ]
+    },
+    {
+     "source": "./donnees",
+     "symboles": [
+      "useRequete"
+     ]
+    },
+    {
+     "source": "./format",
+     "symboles": [
+      "depuis"
+     ]
+    },
+    {
+     "source": "./session",
+     "symboles": [
+      "utilisateur"
+     ]
+    },
+    {
+     "source": "./sync",
+     "symboles": [
+      "synchroniser"
+     ]
+    },
+    {
+     "source": "@/lib/utils",
+     "symboles": [
+      "cn"
+     ]
+    },
+    {
+     "source": "./ecrans/Connexion",
+     "symboles": [
+      "Connexion"
+     ]
+    },
+    {
+     "source": "./ecrans/Fermes",
+     "symboles": [
+      "Fermes"
+     ]
+    },
+    {
+     "source": "./ecrans/Ferme",
+     "symboles": [
+      "Ferme"
+     ]
+    },
+    {
+     "source": "./ecrans/Bassin",
+     "symboles": [
+      "Bassin"
+     ]
+    },
+    {
+     "source": "./ecrans/Cycle",
+     "symboles": [
+      "Cycle"
+     ]
+    },
+    {
+     "source": "./ecrans/Saisie",
+     "symboles": [
+      "Saisie"
+     ]
+    },
+    {
+     "source": "./ecrans/Pesee",
+     "symboles": [
+      "Pesee"
+     ]
+    },
+    {
+     "source": "./ecrans/Corrections",
+     "symboles": [
+      "Corrections"
+     ]
+    },
+    {
+     "source": "./ecrans/Compte",
+     "symboles": [
+      "Compte"
+     ]
+    },
+    {
+     "source": "./ecrans/Simuler",
+     "symboles": [
+      "Simuler"
+     ]
+    }
+   ]
+  },
+  "apps/pwa/src/db.ts": {
+   "fichier": "apps/pwa/src/db.ts",
+   "langage": "ts",
+   "lignes": 157,
+   "exporte": [
+    "EntreeJournal",
+    "Ligne",
+    "PARENT",
+    "REFERENTIELS",
+    "Segment",
+    "SegmentReferentiel",
+    "TABLES",
+    "db",
+    "ecrireMeta",
+    "lireMeta"
+   ],
+   "importe": [
+    {
+     "source": "dexie",
+     "symboles": [
+      "Dexie",
+      "Table"
+     ]
+    }
+   ]
+  },
+  "apps/pwa/src/donnees.ts": {
+   "fichier": "apps/pwa/src/donnees.ts",
+   "langage": "ts",
+   "lignes": 212,
+   "exporte": [
+    "EtatCycle",
+    "cycleComplet",
+    "etatCycle",
+    "useRequete"
+   ],
+   "importe": [
+    {
+     "source": "react",
+     "symboles": [
+      "useEffect",
+      "useState"
+     ]
+    },
+    {
+     "source": "dexie",
+     "symboles": [
+      "liveQuery"
+     ]
+    },
+    {
+     "source": "@aqua/shared",
+     "symboles": [
+      "Alerte",
+      "CycleComplet",
+      "Indicateurs",
+      "aujourdhui",
+      "calculerAlertes",
+      "calculerIndicateurs",
+      "rationConseillee"
+     ]
+    },
+    {
+     "source": "./db",
+     "symboles": [
+      "Ligne",
+      "db"
+     ]
+    }
+   ]
+  },
+  "apps/pwa/src/format.ts": {
+   "fichier": "apps/pwa/src/format.ts",
+   "langage": "ts",
+   "lignes": 32,
+   "exporte": [
+    "date",
+    "depuis",
+    "montant",
+    "nombre"
+   ],
+   "importe": []
+  },
+  "apps/pwa/src/formulaires.ts": {
+   "fichier": "apps/pwa/src/formulaires.ts",
+   "langage": "ts",
+   "lignes": 240,
+   "exporte": [
+    "Champ",
+    "Contexte",
+    "FORMULAIRES",
+    "Formulaire",
+    "Option",
+    "TypeChamp"
+   ],
+   "importe": [
+    {
+     "source": "@aqua/shared",
+     "symboles": [
+      "aujourdhui"
+     ]
+    },
+    {
+     "source": "./db",
+     "symboles": [
+      "Ligne",
+      "Segment",
+      "db"
+     ]
+    }
+   ]
+  },
+  "apps/pwa/src/main.tsx": {
+   "fichier": "apps/pwa/src/main.tsx",
+   "langage": "ts",
+   "lignes": 37,
+   "exporte": [],
+   "importe": [
+    {
+     "source": "react",
+     "symboles": [
+      "React"
+     ]
+    },
+    {
+     "source": "react-dom/client",
+     "symboles": [
+      "ReactDOM"
+     ]
+    },
+    {
+     "source": "virtual:pwa-register",
+     "symboles": [
+      "registerSW"
+     ]
+    },
+    {
+     "source": "./App",
+     "symboles": [
+      "App"
+     ]
+    },
+    {
+     "source": "./session",
+     "symboles": [
+      "chargerSession"
+     ]
+    },
+    {
+     "source": "./sync",
+     "symboles": [
+      "demarrerSynchronisation"
+     ]
+    }
+   ]
+  },
+  "apps/pwa/src/saisie.ts": {
+   "fichier": "apps/pwa/src/saisie.ts",
+   "langage": "ts",
+   "lignes": 356,
+   "exporte": [
+    "ErreurSaisie",
+    "abandonner",
+    "enregistrer",
+    "reessayer",
+    "supprimer"
+   ],
+   "importe": [
+    {
+     "source": "ulid",
+     "symboles": [
+      "ulid"
+     ]
+    },
+    {
+     "source": "@aqua/shared",
+     "symboles": [
+      "BornesCycle",
+      "Violation",
+      "ajouterJours",
+      "aujourdhui",
+      "controlerCycle",
+      "controlerDepense",
+      "controlerDistribution",
+      "controlerEchantillon",
+      "controlerInfrastructure",
+      "controlerLot",
+      "controlerMesureEau",
+      "controlerMortalite",
+      "controlerPesee",
+      "controlerRecolte",
+      "controlerTraitement",
+      "dimensionsCalculees"
+     ]
+    },
+    {
+     "source": "./db",
+     "symboles": [
+      "EntreeJournal",
+      "Ligne",
+      "PARENT",
+      "Segment",
+      "TABLES",
+      "db"
+     ]
+    },
+    {
+     "source": "./sync",
+     "symboles": [
+      "demanderSync"
+     ]
+    }
+   ]
+  },
+  "apps/pwa/src/session.ts": {
+   "fichier": "apps/pwa/src/session.ts",
+   "langage": "ts",
+   "lignes": 180,
+   "exporte": [
+    "API_URL",
+    "ErreurApi",
+    "Utilisateur",
+    "appareilId",
+    "appelApi",
+    "chargerSession",
+    "connecter",
+    "deconnecter",
+    "inscrire",
+    "utilisateur"
+   ],
+   "importe": [
+    {
+     "source": "ulid",
+     "symboles": [
+      "ulid"
+     ]
+    },
+    {
+     "source": "./db",
+     "symboles": [
+      "db",
+      "ecrireMeta",
+      "lireMeta"
+     ]
+    }
+   ]
+  },
+  "apps/pwa/src/sync.ts": {
+   "fichier": "apps/pwa/src/sync.ts",
+   "langage": "ts",
+   "lignes": 193,
+   "exporte": [
+    "Bilan",
+    "demanderSync",
+    "demarrerSynchronisation",
+    "synchroniser"
+   ],
+   "importe": [
+    {
+     "source": "./db",
+     "symboles": [
+      "Ligne",
+      "REFERENTIELS",
+      "Segment",
+      "SegmentReferentiel",
+      "TABLES",
+      "db",
+      "ecrireMeta",
+      "lireMeta"
+     ]
+    },
+    {
+     "source": "./session",
+     "symboles": [
+      "ErreurApi",
+      "appareilId",
+      "appelApi",
+      "chargerSession"
+     ]
+    }
+   ]
+  },
+  "apps/pwa/src/ecrans/Bassin.tsx": {
+   "fichier": "apps/pwa/src/ecrans/Bassin.tsx",
+   "langage": "ts",
+   "lignes": 62,
+   "exporte": [
+    "Bassin"
+   ],
+   "importe": [
+    {
+     "source": "react-router",
+     "symboles": [
+      "Link",
+      "useParams"
+     ]
+    },
+    {
+     "source": "lucide-react",
+     "symboles": [
+      "Pencil",
+      "Plus"
+     ]
+    },
+    {
+     "source": "../db",
+     "symboles": [
+      "db"
+     ]
+    },
+    {
+     "source": "../donnees",
+     "symboles": [
+      "useRequete"
+     ]
+    },
+    {
+     "source": "../format",
+     "symboles": [
+      "date"
+     ]
+    },
+    {
+     "source": "../App",
+     "symboles": [
+      "Entete"
+     ]
+    },
+    {
+     "source": "@/ui/button",
+     "symboles": [
+      "stylesBouton"
+     ]
+    },
+    {
+     "source": "@/ui/divers",
+     "symboles": [
+      "Badge"
+     ]
+    },
+    {
+     "source": "./liste",
+     "symboles": [
+      "Carte",
+      "Section",
+      "Vide"
+     ]
+    },
+    {
+     "source": "./Fermes",
+     "symboles": [
+      "useEnAttente"
+     ]
+    }
+   ]
+  },
+  "apps/pwa/src/ecrans/Compte.tsx": {
+   "fichier": "apps/pwa/src/ecrans/Compte.tsx",
+   "langage": "ts",
+   "lignes": 41,
+   "exporte": [
+    "Compte"
+   ],
+   "importe": [
+    {
+     "source": "react-router",
+     "symboles": [
+      "useNavigate"
+     ]
+    },
+    {
+     "source": "lucide-react",
+     "symboles": [
+      "LogOut"
+     ]
+    },
+    {
+     "source": "../db",
+     "symboles": [
+      "db"
+     ]
+    },
+    {
+     "source": "../donnees",
+     "symboles": [
+      "useRequete"
+     ]
+    },
+    {
+     "source": "../session",
+     "symboles": [
+      "deconnecter",
+      "utilisateur"
+     ]
+    },
+    {
+     "source": "../App",
+     "symboles": [
+      "Entete"
+     ]
+    },
+    {
+     "source": "@/ui/button",
+     "symboles": [
+      "Button"
+     ]
+    },
+    {
+     "source": "@/ui/divers",
+     "symboles": [
+      "Alerte",
+      "Card"
+     ]
+    }
+   ]
+  },
+  "apps/pwa/src/ecrans/Connexion.tsx": {
+   "fichier": "apps/pwa/src/ecrans/Connexion.tsx",
+   "langage": "ts",
+   "lignes": 124,
+   "exporte": [
+    "Connexion"
+   ],
+   "importe": [
+    {
+     "source": "react",
+     "symboles": [
+      "FormEvent",
+      "useState"
+     ]
+    },
+    {
+     "source": "react-router",
+     "symboles": [
+      "Navigate",
+      "useNavigate"
+     ]
+    },
+    {
+     "source": "lucide-react",
+     "symboles": [
+      "Fish"
+     ]
+    },
+    {
+     "source": "../session",
+     "symboles": [
+      "ErreurApi",
+      "connecter",
+      "inscrire",
+      "utilisateur"
+     ]
+    },
+    {
+     "source": "../sync",
+     "symboles": [
+      "synchroniser"
+     ]
+    },
+    {
+     "source": "@/ui/button",
+     "symboles": [
+      "Button"
+     ]
+    },
+    {
+     "source": "@/ui/champ",
+     "symboles": [
+      "Input",
+      "Label"
+     ]
+    },
+    {
+     "source": "@/ui/divers",
+     "symboles": [
+      "Alerte"
+     ]
+    }
+   ]
+  },
+  "apps/pwa/src/ecrans/Corrections.tsx": {
+   "fichier": "apps/pwa/src/ecrans/Corrections.tsx",
+   "langage": "ts",
+   "lignes": 70,
+   "exporte": [
+    "Corrections"
+   ],
+   "importe": [
+    {
+     "source": "react-router",
+     "symboles": [
+      "Link"
+     ]
+    },
+    {
+     "source": "lucide-react",
+     "symboles": [
+      "RotateCcw"
+     ]
+    },
+    {
+     "source": "../db",
+     "symboles": [
+      "EntreeJournal",
+      "db"
+     ]
+    },
+    {
+     "source": "../donnees",
+     "symboles": [
+      "useRequete"
+     ]
+    },
+    {
+     "source": "../formulaires",
+     "symboles": [
+      "FORMULAIRES"
+     ]
+    },
+    {
+     "source": "../saisie",
+     "symboles": [
+      "abandonner",
+      "reessayer"
+     ]
+    },
+    {
+     "source": "../App",
+     "symboles": [
+      "Entete"
+     ]
+    },
+    {
+     "source": "@/ui/button",
+     "symboles": [
+      "Button",
+      "stylesBouton"
+     ]
+    },
+    {
+     "source": "@/ui/divers",
+     "symboles": [
+      "Card"
+     ]
+    },
+    {
+     "source": "./liste",
+     "symboles": [
+      "Vide"
+     ]
+    }
+   ]
+  },
+  "apps/pwa/src/ecrans/Cycle.tsx": {
+   "fichier": "apps/pwa/src/ecrans/Cycle.tsx",
+   "langage": "ts",
+   "lignes": 203,
+   "exporte": [
+    "Cycle"
+   ],
+   "importe": [
+    {
+     "source": "react",
+     "symboles": [
+      "useState"
+     ]
+    },
+    {
+     "source": "react-router",
+     "symboles": [
+      "Link",
+      "useNavigate",
+      "useParams"
+     ]
+    },
+    {
+     "source": "lucide-react",
+     "symboles": [
+      "Banknote",
+      "Droplets",
+      "Fish",
+      "FlaskConical",
+      "Info",
+      "LucideIcon",
+      "Pencil",
+      "Scale",
+      "Skull",
+      "Trash2",
+      "TriangleAlert",
+      "Warehouse",
+      "Wheat"
+     ]
+    },
+    {
+     "source": "../db",
+     "symboles": [
+      "Ligne",
+      "Segment",
+      "TABLES",
+      "db"
+     ]
+    },
+    {
+     "source": "../donnees",
+     "symboles": [
+      "etatCycle",
+      "useRequete"
+     ]
+    },
+    {
+     "source": "../format",
+     "symboles": [
+      "date",
+      "montant",
+      "nombre"
+     ]
+    },
+    {
+     "source": "../saisie",
+     "symboles": [
+      "supprimer"
+     ]
+    },
+    {
+     "source": "../App",
+     "symboles": [
+      "Entete"
+     ]
+    },
+    {
+     "source": "@/ui/divers",
+     "symboles": [
+      "Alerte",
+      "Badge",
+      "Card"
+     ]
+    },
+    {
+     "source": "./liste",
+     "symboles": [
+      "EnAttente",
+      "Section",
+      "Vide"
+     ]
+    },
+    {
+     "source": "@/lib/utils",
+     "symboles": [
+      "cn"
+     ]
+    },
+    {
+     "source": "./Fermes",
+     "symboles": [
+      "useEnAttente"
+     ]
+    }
+   ]
+  },
+  "apps/pwa/src/ecrans/Ferme.tsx": {
+   "fichier": "apps/pwa/src/ecrans/Ferme.tsx",
+   "langage": "ts",
+   "lignes": 68,
+   "exporte": [
+    "Ferme"
+   ],
+   "importe": [
+    {
+     "source": "react-router",
+     "symboles": [
+      "Link",
+      "useParams"
+     ]
+    },
+    {
+     "source": "lucide-react",
+     "symboles": [
+      "Pencil",
+      "Plus"
+     ]
+    },
+    {
+     "source": "../db",
+     "symboles": [
+      "db"
+     ]
+    },
+    {
+     "source": "../donnees",
+     "symboles": [
+      "useRequete"
+     ]
+    },
+    {
+     "source": "../format",
+     "symboles": [
+      "nombre"
+     ]
+    },
+    {
+     "source": "../App",
+     "symboles": [
+      "Entete"
+     ]
+    },
+    {
+     "source": "@/ui/button",
+     "symboles": [
+      "stylesBouton"
+     ]
+    },
+    {
+     "source": "@/ui/divers",
+     "symboles": [
+      "Badge"
+     ]
+    },
+    {
+     "source": "./liste",
+     "symboles": [
+      "Carte",
+      "Section",
+      "Vide"
+     ]
+    },
+    {
+     "source": "./Fermes",
+     "symboles": [
+      "useEnAttente"
+     ]
+    }
+   ]
+  },
+  "apps/pwa/src/ecrans/Fermes.tsx": {
+   "fichier": "apps/pwa/src/ecrans/Fermes.tsx",
+   "langage": "ts",
+   "lignes": 63,
+   "exporte": [
+    "Fermes",
+    "useEnAttente"
+   ],
+   "importe": [
+    {
+     "source": "react-router",
+     "symboles": [
+      "Link"
+     ]
+    },
+    {
+     "source": "lucide-react",
+     "symboles": [
+      "Calculator",
+      "Plus",
+      "UserRound"
+     ]
+    },
+    {
+     "source": "../db",
+     "symboles": [
+      "db"
+     ]
+    },
+    {
+     "source": "../donnees",
+     "symboles": [
+      "useRequete"
+     ]
+    },
+    {
+     "source": "../session",
+     "symboles": [
+      "utilisateur"
+     ]
+    },
+    {
+     "source": "../App",
+     "symboles": [
+      "Entete"
+     ]
+    },
+    {
+     "source": "@/ui/button",
+     "symboles": [
+      "stylesBouton"
+     ]
+    },
+    {
+     "source": "./liste",
+     "symboles": [
+      "Carte",
+      "Section",
+      "Vide"
+     ]
+    }
+   ]
+  },
+  "apps/pwa/src/ecrans/liste.tsx": {
+   "fichier": "apps/pwa/src/ecrans/liste.tsx",
+   "langage": "ts",
+   "lignes": 64,
+   "exporte": [
+    "Carte",
+    "EnAttente",
+    "Section",
+    "Vide"
+   ],
+   "importe": [
+    {
+     "source": "react",
+     "symboles": [
+      "ReactNode"
+     ]
+    },
+    {
+     "source": "react-router",
+     "symboles": [
+      "Link"
+     ]
+    },
+    {
+     "source": "lucide-react",
+     "symboles": [
+      "ChevronRight",
+      "CloudUpload"
+     ]
+    }
+   ]
+  },
+  "apps/pwa/src/ecrans/Pesee.tsx": {
+   "fichier": "apps/pwa/src/ecrans/Pesee.tsx",
+   "langage": "ts",
+   "lignes": 185,
+   "exporte": [
+    "Pesee"
+   ],
+   "importe": [
+    {
+     "source": "react",
+     "symboles": [
+      "FormEvent",
+      "useEffect",
+      "useState"
+     ]
+    },
+    {
+     "source": "react-router",
+     "symboles": [
+      "useNavigate",
+      "useParams"
+     ]
+    },
+    {
+     "source": "lucide-react",
+     "symboles": [
+      "Plus",
+      "Trash2",
+      "X"
+     ]
+    },
+    {
+     "source": "@aqua/shared",
+     "symboles": [
+      "Violation"
+     ]
+    },
+    {
+     "source": "../db",
+     "symboles": [
+      "Ligne",
+      "db"
+     ]
+    },
+    {
+     "source": "../formulaires",
+     "symboles": [
+      "FORMULAIRES",
+      "Option"
+     ]
+    },
+    {
+     "source": "../saisie",
+     "symboles": [
+      "ErreurSaisie",
+      "enregistrer",
+      "supprimer"
+     ]
+    },
+    {
+     "source": "../format",
+     "symboles": [
+      "nombre"
+     ]
+    },
+    {
+     "source": "../App",
+     "symboles": [
+      "Entete"
+     ]
+    },
+    {
+     "source": "@/ui/button",
+     "symboles": [
+      "Button"
+     ]
+    },
+    {
+     "source": "@/ui/champ",
+     "symboles": [
+      "Input",
+      "Select"
+     ]
+    },
+    {
+     "source": "@/ui/divers",
+     "symboles": [
+      "Alerte",
+      "Card"
+     ]
+    },
+    {
+     "source": "./liste",
+     "symboles": [
+      "Vide"
+     ]
+    },
+    {
+     "source": "./Saisie",
+     "symboles": [
+      "ChampSaisie"
+     ]
+    }
+   ]
+  },
+  "apps/pwa/src/ecrans/Saisie.tsx": {
+   "fichier": "apps/pwa/src/ecrans/Saisie.tsx",
+   "langage": "ts",
+   "lignes": 253,
+   "exporte": [
+    "ChampSaisie",
+    "Saisie"
+   ],
+   "importe": [
+    {
+     "source": "react",
+     "symboles": [
+      "FormEvent",
+      "useEffect",
+      "useState"
+     ]
+    },
+    {
+     "source": "react-router",
+     "symboles": [
+      "useNavigate",
+      "useParams",
+      "useSearchParams"
+     ]
+    },
+    {
+     "source": "lucide-react",
+     "symboles": [
+      "Trash2"
+     ]
+    },
+    {
+     "source": "@aqua/shared",
+     "symboles": [
+      "Violation"
+     ]
+    },
+    {
+     "source": "../db",
+     "symboles": [
+      "Ligne",
+      "Segment",
+      "TABLES",
+      "db"
+     ]
+    },
+    {
+     "source": "../formulaires",
+     "symboles": [
+      "Champ",
+      "Contexte",
+      "FORMULAIRES",
+      "Formulaire",
+      "Option"
+     ]
+    },
+    {
+     "source": "../saisie",
+     "symboles": [
+      "ErreurSaisie",
+      "enregistrer",
+      "supprimer"
+     ]
+    },
+    {
+     "source": "../App",
+     "symboles": [
+      "Entete"
+     ]
+    },
+    {
+     "source": "@/ui/button",
+     "symboles": [
+      "Button"
+     ]
+    },
+    {
+     "source": "@/ui/champ",
+     "symboles": [
+      "Input",
+      "Label",
+      "Select"
+     ]
+    },
+    {
+     "source": "@/ui/divers",
+     "symboles": [
+      "Alerte"
+     ]
+    },
+    {
+     "source": "./liste",
+     "symboles": [
+      "Vide"
+     ]
+    }
+   ]
+  },
+  "apps/pwa/src/ecrans/Simuler.tsx": {
+   "fichier": "apps/pwa/src/ecrans/Simuler.tsx",
+   "langage": "ts",
+   "lignes": 171,
+   "exporte": [
+    "Simuler"
+   ],
+   "importe": [
+    {
+     "source": "react",
+     "symboles": [
+      "FormEvent",
+      "useEffect",
+      "useState"
+     ]
+    },
+    {
+     "source": "@aqua/shared",
+     "symboles": [
+      "ErreurSimulation",
+      "ParametresSimulation",
+      "Simulation",
+      "aujourdhui",
+      "simuler"
+     ]
+    },
+    {
+     "source": "../db",
+     "symboles": [
+      "db"
+     ]
+    },
+    {
+     "source": "../format",
+     "symboles": [
+      "date",
+      "montant",
+      "nombre"
+     ]
+    },
+    {
+     "source": "../session",
+     "symboles": [
+      "ErreurApi",
+      "appelApi"
+     ]
+    },
+    {
+     "source": "../formulaires",
+     "symboles": [
+      "Champ",
+      "Option"
+     ]
+    },
+    {
+     "source": "../App",
+     "symboles": [
+      "Entete"
+     ]
+    },
+    {
+     "source": "@/ui/button",
+     "symboles": [
+      "Button"
+     ]
+    },
+    {
+     "source": "@/ui/divers",
+     "symboles": [
+      "Alerte",
+      "Card"
+     ]
+    },
+    {
+     "source": "./Saisie",
+     "symboles": [
+      "ChampSaisie"
+     ]
+    },
+    {
+     "source": "@/lib/utils",
+     "symboles": [
+      "cn"
+     ]
+    }
+   ]
+  },
+  "apps/pwa/src/lib/utils.ts": {
+   "fichier": "apps/pwa/src/lib/utils.ts",
+   "langage": "ts",
+   "lignes": 10,
+   "exporte": [
+    "cn"
+   ],
+   "importe": [
+    {
+     "source": "clsx",
+     "symboles": [
+      "ClassValue",
+      "clsx"
+     ]
+    },
+    {
+     "source": "tailwind-merge",
+     "symboles": [
+      "twMerge"
+     ]
+    }
+   ]
+  },
+  "apps/pwa/src/ui/button.tsx": {
+   "fichier": "apps/pwa/src/ui/button.tsx",
+   "langage": "ts",
+   "lignes": 43,
+   "exporte": [
+    "Button",
+    "ProprietesBouton",
+    "stylesBouton"
+   ],
+   "importe": [
+    {
+     "source": "class-variance-authority",
+     "symboles": [
+      "VariantProps",
+      "cva"
+     ]
+    },
+    {
+     "source": "react",
+     "symboles": [
+      "ButtonHTMLAttributes"
+     ]
+    },
+    {
+     "source": "radix-ui",
+     "symboles": [
+      "Slot"
+     ]
+    },
+    {
+     "source": "@/lib/utils",
+     "symboles": [
+      "cn"
+     ]
+    }
+   ]
+  },
+  "apps/pwa/src/ui/champ.tsx": {
+   "fichier": "apps/pwa/src/ui/champ.tsx",
+   "langage": "ts",
+   "lignes": 60,
+   "exporte": [
+    "Checkbox",
+    "Input",
+    "Label",
+    "Select"
+   ],
+   "importe": [
+    {
+     "source": "react",
+     "symboles": [
+      "ComponentProps",
+      "InputHTMLAttributes",
+      "SelectHTMLAttributes"
+     ]
+    },
+    {
+     "source": "radix-ui",
+     "symboles": [
+      "CheckboxRadix",
+      "LabelRadix"
+     ]
+    },
+    {
+     "source": "lucide-react",
+     "symboles": [
+      "Check"
+     ]
+    },
+    {
+     "source": "@/lib/utils",
+     "symboles": [
+      "cn"
+     ]
+    }
+   ]
+  },
+  "apps/pwa/src/ui/divers.tsx": {
+   "fichier": "apps/pwa/src/ui/divers.tsx",
+   "langage": "ts",
+   "lignes": 51,
+   "exporte": [
+    "Alerte",
+    "Badge",
+    "Card"
+   ],
+   "importe": [
+    {
+     "source": "class-variance-authority",
+     "symboles": [
+      "VariantProps",
+      "cva"
+     ]
+    },
+    {
+     "source": "react",
+     "symboles": [
+      "HTMLAttributes"
+     ]
+    },
+    {
+     "source": "@/lib/utils",
+     "symboles": [
+      "cn"
+     ]
+    }
+   ]
+  },
+  "packages/shared/src/alertes.ts": {
+   "fichier": "packages/shared/src/alertes.ts",
+   "langage": "ts",
+   "lignes": 212,
+   "exporte": [
+    "Alerte",
+    "ContexteAlertes",
+    "DELAI_PESEE_JOURS",
+    "MesureEauAlerte",
+    "NiveauAlerte",
+    "PH_MAX",
+    "PH_MIN",
+    "SEUIL_HETEROGENEITE_DEFAUT",
+    "calculerAlertes"
+   ],
+   "importe": [
+    {
+     "source": "./types.js",
+     "symboles": [
+      "CycleComplet",
+      "DateISO",
+      "Espece"
+     ]
+    },
+    {
+     "source": "./indicateurs.js",
+     "symboles": [
+      "Indicateurs",
+      "calculerIndicateurs"
+     ]
+    },
+    {
+     "source": "./dates.js",
+     "symboles": [
+      "joursEntre"
+     ]
+    }
+   ]
+  },
+  "packages/shared/src/controles.ts": {
+   "fichier": "packages/shared/src/controles.ts",
+   "langage": "ts",
+   "lignes": 462,
+   "exporte": [
+    "BornesCycle",
+    "ContexteCycle",
+    "ContexteMortalite",
+    "ContexteRecolte",
+    "Violation",
+    "controlerCycle",
+    "controlerDepense",
+    "controlerDistribution",
+    "controlerEchantillon",
+    "controlerInfrastructure",
+    "controlerLot",
+    "controlerMesureEau",
+    "controlerMortalite",
+    "controlerPesee",
+    "controlerRecolte",
+    "controlerTraitement"
+   ],
+   "importe": [
+    {
+     "source": "./types.js",
+     "symboles": [
+      "DateISO"
+     ]
+    },
+    {
+     "source": "./dates.js",
+     "symboles": [
+      "ajouterJours",
+      "estAvant"
      ]
     }
    ]
@@ -41,12 +4908,37 @@
    ],
    "importe": [
     {
-     "source": "./types",
+     "source": "./types.js",
      "symboles": [
       "DateISO"
      ]
     }
    ]
+  },
+  "packages/shared/src/geometrie.ts": {
+   "fichier": "packages/shared/src/geometrie.ts",
+   "langage": "ts",
+   "lignes": 39,
+   "exporte": [
+    "dimensionsCalculees",
+    "superficie",
+    "volume"
+   ],
+   "importe": [
+    {
+     "source": "./types.js",
+     "symboles": [
+      "InfrastructureDim"
+     ]
+    }
+   ]
+  },
+  "packages/shared/src/index.ts": {
+   "fichier": "packages/shared/src/index.ts",
+   "langage": "ts",
+   "lignes": 9,
+   "exporte": [],
+   "importe": []
   },
   "packages/shared/src/indicateurs.ts": {
    "fichier": "packages/shared/src/indicateurs.ts",
@@ -59,14 +4951,14 @@
    ],
    "importe": [
     {
-     "source": "./dates",
+     "source": "./dates.js",
      "symboles": [
       "joursEntre",
       "parDate"
      ]
     },
     {
-     "source": "./types",
+     "source": "./types.js",
      "symboles": [
       "CycleComplet",
       "DateISO",
@@ -86,9 +4978,47 @@
    ],
    "importe": [
     {
-     "source": "./types",
+     "source": "./types.js",
      "symboles": [
       "PalierRationnement"
+     ]
+    }
+   ]
+  },
+  "packages/shared/src/simulation.ts": {
+   "fichier": "packages/shared/src/simulation.ts",
+   "langage": "ts",
+   "lignes": 205,
+   "exporte": [
+    "ErreurSimulation",
+    "EspeceSimulation",
+    "ParametresSimulation",
+    "Simulation",
+    "TypeSimulation",
+    "simuler"
+   ],
+   "importe": [
+    {
+     "source": "./types.js",
+     "symboles": [
+      "CycleComplet",
+      "DateISO",
+      "Espece",
+      "FormeInfrastructure",
+      "MesureBase"
+     ]
+    },
+    {
+     "source": "./indicateurs.js",
+     "symboles": [
+      "Indicateurs",
+      "calculerIndicateurs"
+     ]
+    },
+    {
+     "source": "./dates.js",
+     "symboles": [
+      "ajouterJours"
      ]
     }
    ]
@@ -96,7 +5026,7 @@
   "packages/shared/src/types.ts": {
    "fichier": "packages/shared/src/types.ts",
    "langage": "ts",
-   "lignes": 165,
+   "lignes": 167,
    "exporte": [
     "Cycle",
     "CycleComplet",
@@ -120,6 +5050,27 @@
    ],
    "importe": []
   },
+  "packages/shared/test/alertes.ts": {
+   "fichier": "packages/shared/test/alertes.ts",
+   "langage": "ts",
+   "lignes": 86,
+   "exporte": [],
+   "importe": [
+    {
+     "source": "../src/alertes.js",
+     "symboles": [
+      "SEUIL_HETEROGENEITE_DEFAUT",
+      "calculerAlertes"
+     ]
+    },
+    {
+     "source": "../src/types.js",
+     "symboles": [
+      "CycleComplet"
+     ]
+    }
+   ]
+  },
   "packages/shared/test/b4.ts": {
    "fichier": "packages/shared/test/b4.ts",
    "langage": "ts",
@@ -127,47 +5078,2395 @@
    "exporte": [],
    "importe": [
     {
-     "source": "../src/indicateurs",
+     "source": "../src/indicateurs.js",
      "symboles": [
       "calculerIndicateurs"
      ]
     },
     {
-     "source": "../src/types",
+     "source": "../src/types.js",
      "symboles": [
       "CycleComplet"
      ]
     }
    ]
   },
-  "apps/api/prisma/seed.ts": {
-   "fichier": "apps/api/prisma/seed.ts",
+  "packages/shared/test/controles.ts": {
+   "fichier": "packages/shared/test/controles.ts",
    "langage": "ts",
-   "lignes": 205,
+   "lignes": 113,
    "exporte": [],
    "importe": [
     {
-     "source": "@prisma/client",
+     "source": "../src/controles.js",
      "symboles": [
-      "Prisma",
-      "PrismaClient"
+      "ContexteCycle",
+      "Violation",
+      "controlerCycle",
+      "controlerDepense",
+      "controlerDistribution",
+      "controlerEchantillon",
+      "controlerInfrastructure",
+      "controlerLot",
+      "controlerMesureEau",
+      "controlerMortalite",
+      "controlerPesee",
+      "controlerRecolte"
+     ]
+    }
+   ]
+  },
+  "packages/shared/test/geometrie.ts": {
+   "fichier": "packages/shared/test/geometrie.ts",
+   "langage": "ts",
+   "lignes": 43,
+   "exporte": [],
+   "importe": [
+    {
+     "source": "../src/geometrie.js",
+     "symboles": [
+      "dimensionsCalculees",
+      "superficie",
+      "volume"
+     ]
+    }
+   ]
+  },
+  "packages/shared/test/rationnement.ts": {
+   "fichier": "packages/shared/test/rationnement.ts",
+   "langage": "ts",
+   "lignes": 71,
+   "exporte": [],
+   "importe": [
+    {
+     "source": "../src/rationnement.js",
+     "symboles": [
+      "palierApplicable",
+      "ration",
+      "rationConseillee"
+     ]
+    },
+    {
+     "source": "../src/types.js",
+     "symboles": [
+      "PalierRationnement"
+     ]
+    }
+   ]
+  },
+  "packages/shared/test/simulation.ts": {
+   "fichier": "packages/shared/test/simulation.ts",
+   "langage": "ts",
+   "lignes": 72,
+   "exporte": [],
+   "importe": [
+    {
+     "source": "../src/simulation.js",
+     "symboles": [
+      "ErreurSimulation",
+      "EspeceSimulation",
+      "TypeSimulation",
+      "simuler"
+     ]
+    },
+    {
+     "source": "../src/indicateurs.js",
+     "symboles": [
+      "calculerIndicateurs"
      ]
     }
    ]
   }
  },
  "importe_par": {
+  "apps/admin/src/description.ts": [
+   {
+    "par": "apps/admin/src/administration.ts",
+    "symboles": [
+     "Ressource"
+    ]
+   },
+   {
+    "par": "apps/admin/src/referentiels.ts",
+    "symboles": [
+     "Ressource"
+    ]
+   },
+   {
+    "par": "apps/admin/src/ressources.ts",
+    "symboles": [
+     "Ressource"
+    ]
+   },
+   {
+    "par": "apps/admin/src/saisie.ts",
+    "symboles": [
+     "Ressource"
+    ]
+   },
+   {
+    "par": "apps/admin/src/composants/FormulaireRessource.tsx",
+    "symboles": [
+     "Champ",
+     "Ressource"
+    ]
+   },
+   {
+    "par": "apps/admin/src/composants/FormulaireRessource.tsx",
+    "symboles": [
+     "champsSaisissables"
+    ]
+   },
+   {
+    "par": "apps/admin/src/composants/TableauRessource.tsx",
+    "symboles": [
+     "Champ",
+     "Ressource"
+    ]
+   },
+   {
+    "par": "apps/admin/src/composants/TableauRessource.tsx",
+    "symboles": [
+     "champsEnListe"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/FicheParent.tsx",
+    "symboles": [
+     "Ressource"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/FicheParent.tsx",
+    "symboles": [
+     "champsEnListe"
+    ]
+   }
+  ],
+  "apps/admin/src/config.ts": [
+   {
+    "par": "apps/admin/src/App.tsx",
+    "symboles": [
+     "API_URL"
+    ]
+   },
+   {
+    "par": "apps/admin/src/main.tsx",
+    "symboles": [
+     "API_URL"
+    ]
+   },
+   {
+    "par": "apps/admin/src/session.ts",
+    "symboles": [
+     "API_URL"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/Accueil.tsx",
+    "symboles": [
+     "API_URL"
+    ]
+   }
+  ],
+  "apps/admin/src/lib/utils.ts": [
+   {
+    "par": "apps/admin/src/App.tsx",
+    "symboles": [
+     "cn"
+    ]
+   },
+   {
+    "par": "apps/admin/src/composants/Alertes.tsx",
+    "symboles": [
+     "cn"
+    ]
+   },
+   {
+    "par": "apps/admin/src/composants/TableauRessource.tsx",
+    "symboles": [
+     "cn"
+    ]
+   },
+   {
+    "par": "apps/admin/src/composants/ui/button.tsx",
+    "symboles": [
+     "cn"
+    ]
+   },
+   {
+    "par": "apps/admin/src/composants/ui/champ.tsx",
+    "symboles": [
+     "cn"
+    ]
+   },
+   {
+    "par": "apps/admin/src/composants/ui/divers.tsx",
+    "symboles": [
+     "cn"
+    ]
+   },
+   {
+    "par": "apps/admin/src/composants/ui/table.tsx",
+    "symboles": [
+     "cn"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/Conflits.tsx",
+    "symboles": [
+     "cn"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/Consolidation.tsx",
+    "symboles": [
+     "cn"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/Simulation.tsx",
+    "symboles": [
+     "cn"
+    ]
+   }
+  ],
+  "apps/admin/src/i18n.ts": [
+   {
+    "par": "apps/admin/src/App.tsx",
+    "symboles": [
+     "t"
+    ]
+   },
+   {
+    "par": "apps/admin/src/main.tsx",
+    "symboles": [
+     "DEVISE_PAR_DEFAUT",
+     "Devise",
+     "LANGUE_PAR_DEFAUT",
+     "Langue",
+     "configurer"
+    ]
+   },
+   {
+    "par": "apps/admin/src/composants/FormulaireRessource.tsx",
+    "symboles": [
+     "t"
+    ]
+   },
+   {
+    "par": "apps/admin/src/composants/TableauRessource.tsx",
+    "symboles": [
+     "formaterDate",
+     "formaterMontant",
+     "formaterNombre",
+     "t"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/Accueil.tsx",
+    "symboles": [
+     "formaterNombre"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/Conflits.tsx",
+    "symboles": [
+     "formaterDate"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/Connexion.tsx",
+    "symboles": [
+     "t"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/Consolidation.tsx",
+    "symboles": [
+     "formaterMontant",
+     "formaterNombre"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/FicheCycle.tsx",
+    "symboles": [
+     "formaterDate",
+     "formaterMontant",
+     "formaterNombre",
+     "t"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/FicheParent.tsx",
+    "symboles": [
+     "formaterDate",
+     "formaterMontant",
+     "formaterNombre",
+     "t"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/PageFormulaire.tsx",
+    "symboles": [
+     "t"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/Simulation.tsx",
+    "symboles": [
+     "formaterDate",
+     "formaterMontant",
+     "formaterNombre"
+    ]
+   }
+  ],
+  "apps/admin/src/referentiels.ts": [
+   {
+    "par": "apps/admin/src/App.tsx",
+    "symboles": [
+     "REFERENTIELS"
+    ]
+   },
+   {
+    "par": "apps/admin/src/ressources.ts",
+    "symboles": [
+     "REFERENTIELS"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/Accueil.tsx",
+    "symboles": [
+     "REFERENTIELS"
+    ]
+   }
+  ],
+  "apps/admin/src/saisie.ts": [
+   {
+    "par": "apps/admin/src/App.tsx",
+    "symboles": [
+     "FERMES"
+    ]
+   },
+   {
+    "par": "apps/admin/src/ressources.ts",
+    "symboles": [
+     "RESSOURCES_SAISIE"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/FicheCycle.tsx",
+    "symboles": [
+     "CYCLES",
+     "SECTIONS_CYCLE"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/FicheParent.tsx",
+    "symboles": [
+     "CYCLES",
+     "ECHANTILLONS",
+     "FERMES",
+     "INFRASTRUCTURES",
+     "LOTS",
+     "MORTALITES",
+     "PESEES"
+    ]
+   }
+  ],
+  "apps/admin/src/ressources.ts": [
+   {
+    "par": "apps/admin/src/App.tsx",
+    "symboles": [
+     "TOUTES"
+    ]
+   },
+   {
+    "par": "apps/admin/src/composants/FormulaireRessource.tsx",
+    "symboles": [
+     "libelleLigne",
+     "parNom"
+    ]
+   },
+   {
+    "par": "apps/admin/src/composants/TableauRessource.tsx",
+    "symboles": [
+     "libelleLigne"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/ListeRessource.tsx",
+    "symboles": [
+     "parChemin"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/PageFormulaire.tsx",
+    "symboles": [
+     "parChemin"
+    ]
+   }
+  ],
+  "apps/admin/src/pages/Accueil.tsx": [
+   {
+    "par": "apps/admin/src/App.tsx",
+    "symboles": [
+     "Accueil"
+    ]
+   }
+  ],
+  "apps/admin/src/pages/ListeRessource.tsx": [
+   {
+    "par": "apps/admin/src/App.tsx",
+    "symboles": [
+     "ListeRessource"
+    ]
+   }
+  ],
+  "apps/admin/src/pages/PageFormulaire.tsx": [
+   {
+    "par": "apps/admin/src/App.tsx",
+    "symboles": [
+     "PageFormulaire"
+    ]
+   }
+  ],
+  "apps/admin/src/pages/FicheParent.tsx": [
+   {
+    "par": "apps/admin/src/App.tsx",
+    "symboles": [
+     "FicheParent"
+    ]
+   }
+  ],
+  "apps/admin/src/pages/FicheCycle.tsx": [
+   {
+    "par": "apps/admin/src/App.tsx",
+    "symboles": [
+     "FicheCycle"
+    ]
+   }
+  ],
+  "apps/admin/src/pages/Connexion.tsx": [
+   {
+    "par": "apps/admin/src/App.tsx",
+    "symboles": [
+     "Connexion"
+    ]
+   }
+  ],
+  "apps/admin/src/pages/Simulation.tsx": [
+   {
+    "par": "apps/admin/src/App.tsx",
+    "symboles": [
+     "Simulation"
+    ]
+   }
+  ],
+  "apps/admin/src/pages/Conflits.tsx": [
+   {
+    "par": "apps/admin/src/App.tsx",
+    "symboles": [
+     "Conflits"
+    ]
+   }
+  ],
+  "apps/admin/src/pages/Consolidation.tsx": [
+   {
+    "par": "apps/admin/src/App.tsx",
+    "symboles": [
+     "Consolidation"
+    ]
+   }
+  ],
+  "apps/admin/src/administration.ts": [
+   {
+    "par": "apps/admin/src/App.tsx",
+    "symboles": [
+     "ADMINISTRATION"
+    ]
+   },
+   {
+    "par": "apps/admin/src/ressources.ts",
+    "symboles": [
+     "ADMINISTRATION"
+    ]
+   }
+  ],
+  "apps/admin/src/session.ts": [
+   {
+    "par": "apps/admin/src/App.tsx",
+    "symboles": [
+     "Utilisateur",
+     "authProvider",
+     "utilisateurCourant"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/Accueil.tsx",
+    "symboles": [
+     "appelApi"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/Carte.tsx",
+    "symboles": [
+     "appelApi"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/Conflits.tsx",
+    "symboles": [
+     "appelApi"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/Consolidation.tsx",
+    "symboles": [
+     "appelApi"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/FicheCycle.tsx",
+    "symboles": [
+     "appelApi"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/Simulation.tsx",
+    "symboles": [
+     "appelApi"
+    ]
+   }
+  ],
+  "apps/admin/src/pages/Carte.tsx": [
+   {
+    "par": "apps/admin/src/App.tsx",
+    "symboles": [
+     "(dynamique)"
+    ]
+   }
+  ],
+  "apps/admin/src/App.tsx": [
+   {
+    "par": "apps/admin/src/main.tsx",
+    "symboles": [
+     "App"
+    ]
+   }
+  ],
+  "packages/shared/src/index.ts": [
+   {
+    "par": "apps/admin/src/composants/Alertes.tsx",
+    "symboles": [
+     "Alerte"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/Accueil.tsx",
+    "symboles": [
+     "AlerteCycle"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/FicheCycle.tsx",
+    "symboles": [
+     "AlerteCycle"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/Simulation.tsx",
+    "symboles": [
+     "ResultatSimulation"
+    ]
+   },
+   {
+    "par": "apps/api/src/cycles/cycles.service.ts",
+    "symboles": [
+     "CycleComplet",
+     "aujourdhui",
+     "calculerAlertes",
+     "calculerIndicateurs"
+    ]
+   },
+   {
+    "par": "apps/api/src/saisie/controles.service.ts",
+    "symboles": [
+     "BornesCycle",
+     "Violation",
+     "aujourdhui",
+     "controlerCycle",
+     "controlerDepense",
+     "controlerDistribution",
+     "controlerEchantillon",
+     "controlerInfrastructure",
+     "controlerLot",
+     "controlerMesureEau",
+     "controlerMortalite",
+     "controlerPesee",
+     "controlerRecolte",
+     "controlerTraitement"
+    ]
+   },
+   {
+    "par": "apps/api/src/saisie/saisie.service.ts",
+    "symboles": [
+     "ajouterJours",
+     "dimensionsCalculees"
+    ]
+   },
+   {
+    "par": "apps/api/src/simulations/simulations.service.ts",
+    "symboles": [
+     "ErreurSimulation",
+     "ParametresSimulation",
+     "aujourdhui",
+     "simuler"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/donnees.ts",
+    "symboles": [
+     "Alerte",
+     "CycleComplet",
+     "Indicateurs",
+     "aujourdhui",
+     "calculerAlertes",
+     "calculerIndicateurs",
+     "rationConseillee"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/formulaires.ts",
+    "symboles": [
+     "aujourdhui"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/saisie.ts",
+    "symboles": [
+     "BornesCycle",
+     "Violation",
+     "ajouterJours",
+     "aujourdhui",
+     "controlerCycle",
+     "controlerDepense",
+     "controlerDistribution",
+     "controlerEchantillon",
+     "controlerInfrastructure",
+     "controlerLot",
+     "controlerMesureEau",
+     "controlerMortalite",
+     "controlerPesee",
+     "controlerRecolte",
+     "controlerTraitement",
+     "dimensionsCalculees"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Pesee.tsx",
+    "symboles": [
+     "Violation"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Saisie.tsx",
+    "symboles": [
+     "Violation"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Simuler.tsx",
+    "symboles": [
+     "ErreurSimulation",
+     "ParametresSimulation",
+     "Simulation",
+     "aujourdhui",
+     "simuler"
+    ]
+   }
+  ],
+  "apps/admin/src/erreurs.ts": [
+   {
+    "par": "apps/admin/src/composants/FormulaireRessource.tsx",
+    "symboles": [
+     "messageErreur"
+    ]
+   },
+   {
+    "par": "apps/admin/src/composants/TableauRessource.tsx",
+    "symboles": [
+     "messageErreur"
+    ]
+   }
+  ],
+  "apps/admin/src/composants/ui/button.tsx": [
+   {
+    "par": "apps/admin/src/composants/FormulaireRessource.tsx",
+    "symboles": [
+     "Button"
+    ]
+   },
+   {
+    "par": "apps/admin/src/composants/TableauRessource.tsx",
+    "symboles": [
+     "Button"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/Conflits.tsx",
+    "symboles": [
+     "Button"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/Connexion.tsx",
+    "symboles": [
+     "Button"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/FicheCycle.tsx",
+    "symboles": [
+     "Button"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/FicheParent.tsx",
+    "symboles": [
+     "Button"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/Simulation.tsx",
+    "symboles": [
+     "Button"
+    ]
+   }
+  ],
+  "apps/admin/src/composants/ui/champ.tsx": [
+   {
+    "par": "apps/admin/src/composants/FormulaireRessource.tsx",
+    "symboles": [
+     "Checkbox",
+     "Input",
+     "Label",
+     "Select"
+    ]
+   },
+   {
+    "par": "apps/admin/src/composants/TableauRessource.tsx",
+    "symboles": [
+     "Input"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/Connexion.tsx",
+    "symboles": [
+     "Input",
+     "Label"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/Consolidation.tsx",
+    "symboles": [
+     "Input",
+     "Label",
+     "Select"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/Simulation.tsx",
+    "symboles": [
+     "Input",
+     "Label",
+     "Select"
+    ]
+   }
+  ],
+  "apps/admin/src/composants/ui/divers.tsx": [
+   {
+    "par": "apps/admin/src/composants/FormulaireRessource.tsx",
+    "symboles": [
+     "Alerte",
+     "Card"
+    ]
+   },
+   {
+    "par": "apps/admin/src/composants/TableauRessource.tsx",
+    "symboles": [
+     "Alerte",
+     "Badge",
+     "Card"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/Accueil.tsx",
+    "symboles": [
+     "Alerte",
+     "Card"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/Carte.tsx",
+    "symboles": [
+     "Alerte",
+     "Badge",
+     "Card"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/Conflits.tsx",
+    "symboles": [
+     "Alerte",
+     "Badge",
+     "Card"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/Connexion.tsx",
+    "symboles": [
+     "Alerte",
+     "Card"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/Consolidation.tsx",
+    "symboles": [
+     "Alerte",
+     "Card"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/FicheCycle.tsx",
+    "symboles": [
+     "Alerte",
+     "Badge",
+     "Card"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/FicheParent.tsx",
+    "symboles": [
+     "Card"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/Simulation.tsx",
+    "symboles": [
+     "Alerte",
+     "Card"
+    ]
+   }
+  ],
+  "apps/admin/src/composants/ui/table.tsx": [
+   {
+    "par": "apps/admin/src/composants/TableauRessource.tsx",
+    "symboles": [
+     "Table",
+     "TableBody",
+     "TableCell",
+     "TableHead",
+     "TableHeader",
+     "TableRow"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/Consolidation.tsx",
+    "symboles": [
+     "Table",
+     "TableBody",
+     "TableCell",
+     "TableHead",
+     "TableHeader",
+     "TableRow"
+    ]
+   }
+  ],
+  "apps/admin/src/composants/Alertes.tsx": [
+   {
+    "par": "apps/admin/src/pages/Accueil.tsx",
+    "symboles": [
+     "ListeAlertes"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/FicheCycle.tsx",
+    "symboles": [
+     "ListeAlertes"
+    ]
+   }
+  ],
+  "apps/admin/src/composants/TableauRessource.tsx": [
+   {
+    "par": "apps/admin/src/pages/FicheCycle.tsx",
+    "symboles": [
+     "TableauRessource"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/FicheParent.tsx",
+    "symboles": [
+     "TableauRessource"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/ListeRessource.tsx",
+    "symboles": [
+     "TableauRessource"
+    ]
+   }
+  ],
+  "apps/admin/src/composants/FormulaireRessource.tsx": [
+   {
+    "par": "apps/admin/src/pages/PageFormulaire.tsx",
+    "symboles": [
+     "FormulaireRessource"
+    ]
+   }
+  ],
+  "apps/api/src/auth/mot-de-passe.ts": [
+   {
+    "par": "apps/api/prisma/seed.ts",
+    "symboles": [
+     "hacher"
+    ]
+   },
+   {
+    "par": "apps/api/src/administration/administration.service.ts",
+    "symboles": [
+     "hacher"
+    ]
+   },
+   {
+    "par": "apps/api/src/auth/auth.service.ts",
+    "symboles": [
+     "EMPREINTE_LEURRE",
+     "hacher",
+     "verifier"
+    ]
+   }
+  ],
+  "apps/api/src/prisma/prisma.module.ts": [
+   {
+    "par": "apps/api/src/app.module.ts",
+    "symboles": [
+     "PrismaModule"
+    ]
+   }
+  ],
+  "apps/api/src/referentiels/referentiels.controller.ts": [
+   {
+    "par": "apps/api/src/app.module.ts",
+    "symboles": [
+     "ReferentielsController"
+    ]
+   }
+  ],
+  "apps/api/src/referentiels/referentiels.service.ts": [
+   {
+    "par": "apps/api/src/app.module.ts",
+    "symboles": [
+     "ReferentielsService"
+    ]
+   },
+   {
+    "par": "apps/api/src/referentiels/referentiels.controller.ts",
+    "symboles": [
+     "ReferentielsService",
+     "SegmentRessource",
+     "estRessource"
+    ]
+   },
+   {
+    "par": "apps/api/src/sync/sync.service.ts",
+    "symboles": [
+     "REFERENTIELS"
+    ]
+   }
+  ],
+  "apps/api/src/geographie/geographie.controller.ts": [
+   {
+    "par": "apps/api/src/app.module.ts",
+    "symboles": [
+     "GeographieController"
+    ]
+   }
+  ],
+  "apps/api/src/saisie/saisie.controller.ts": [
+   {
+    "par": "apps/api/src/app.module.ts",
+    "symboles": [
+     "SaisieController"
+    ]
+   }
+  ],
+  "apps/api/src/saisie/saisie.service.ts": [
+   {
+    "par": "apps/api/src/app.module.ts",
+    "symboles": [
+     "SaisieService"
+    ]
+   },
+   {
+    "par": "apps/api/src/saisie/saisie.controller.ts",
+    "symboles": [
+     "SaisieService"
+    ]
+   },
+   {
+    "par": "apps/api/src/sync/sync.service.ts",
+    "symboles": [
+     "SaisieService"
+    ]
+   }
+  ],
+  "apps/api/src/saisie/controles.service.ts": [
+   {
+    "par": "apps/api/src/app.module.ts",
+    "symboles": [
+     "ControlesService"
+    ]
+   },
+   {
+    "par": "apps/api/src/saisie/saisie.service.ts",
+    "symboles": [
+     "ControlesService"
+    ]
+   }
+  ],
+  "apps/api/src/sync/sync.controller.ts": [
+   {
+    "par": "apps/api/src/app.module.ts",
+    "symboles": [
+     "SyncController"
+    ]
+   }
+  ],
+  "apps/api/src/sync/sync.service.ts": [
+   {
+    "par": "apps/api/src/app.module.ts",
+    "symboles": [
+     "SyncService"
+    ]
+   },
+   {
+    "par": "apps/api/src/sync/sync.controller.ts",
+    "symboles": [
+     "SyncService"
+    ]
+   }
+  ],
+  "apps/api/src/simulations/simulations.controller.ts": [
+   {
+    "par": "apps/api/src/app.module.ts",
+    "symboles": [
+     "SimulationsController"
+    ]
+   }
+  ],
+  "apps/api/src/simulations/simulations.service.ts": [
+   {
+    "par": "apps/api/src/app.module.ts",
+    "symboles": [
+     "SimulationsService"
+    ]
+   },
+   {
+    "par": "apps/api/src/simulations/simulations.controller.ts",
+    "symboles": [
+     "SimulationsService"
+    ]
+   }
+  ],
+  "apps/api/src/administration/administration.controller.ts": [
+   {
+    "par": "apps/api/src/app.module.ts",
+    "symboles": [
+     "AdministrationController"
+    ]
+   }
+  ],
+  "apps/api/src/administration/administration.service.ts": [
+   {
+    "par": "apps/api/src/app.module.ts",
+    "symboles": [
+     "AdministrationService"
+    ]
+   },
+   {
+    "par": "apps/api/src/administration/administration.controller.ts",
+    "symboles": [
+     "AdministrationService",
+     "Pagination"
+    ]
+   }
+  ],
+  "apps/api/src/cycles/cycles.controller.ts": [
+   {
+    "par": "apps/api/src/app.module.ts",
+    "symboles": [
+     "CyclesController"
+    ]
+   }
+  ],
+  "apps/api/src/cycles/cycles.service.ts": [
+   {
+    "par": "apps/api/src/app.module.ts",
+    "symboles": [
+     "CyclesService"
+    ]
+   },
+   {
+    "par": "apps/api/src/cycles/cycles.controller.ts",
+    "symboles": [
+     "CyclesService"
+    ]
+   }
+  ],
+  "apps/api/src/sante.controller.ts": [
+   {
+    "par": "apps/api/src/app.module.ts",
+    "symboles": [
+     "SanteController"
+    ]
+   }
+  ],
+  "apps/api/src/config.controller.ts": [
+   {
+    "par": "apps/api/src/app.module.ts",
+    "symboles": [
+     "ConfigController"
+    ]
+   }
+  ],
+  "apps/api/src/auth/auth.controller.ts": [
+   {
+    "par": "apps/api/src/app.module.ts",
+    "symboles": [
+     "AuthController"
+    ]
+   }
+  ],
+  "apps/api/src/auth/auth.service.ts": [
+   {
+    "par": "apps/api/src/app.module.ts",
+    "symboles": [
+     "AuthService"
+    ]
+   },
+   {
+    "par": "apps/api/src/auth/auth.controller.ts",
+    "symboles": [
+     "AuthService"
+    ]
+   }
+  ],
+  "apps/api/src/auth/garde.ts": [
+   {
+    "par": "apps/api/src/app.module.ts",
+    "symboles": [
+     "GardeJwt"
+    ]
+   },
+   {
+    "par": "apps/api/src/config.controller.ts",
+    "symboles": [
+     "Publique"
+    ]
+   },
+   {
+    "par": "apps/api/src/sante.controller.ts",
+    "symboles": [
+     "Publique"
+    ]
+   },
+   {
+    "par": "apps/api/src/administration/administration.controller.ts",
+    "symboles": [
+     "Roles"
+    ]
+   },
+   {
+    "par": "apps/api/src/auth/auth.controller.ts",
+    "symboles": [
+     "Publique",
+     "Utilisateur",
+     "UtilisateurConnecte"
+    ]
+   },
+   {
+    "par": "apps/api/src/auth/auth.service.ts",
+    "symboles": [
+     "ContenuJeton"
+    ]
+   },
+   {
+    "par": "apps/api/src/auth/portee.ts",
+    "symboles": [
+     "UtilisateurConnecte"
+    ]
+   },
+   {
+    "par": "apps/api/src/cycles/cycles.controller.ts",
+    "symboles": [
+     "Utilisateur",
+     "UtilisateurConnecte"
+    ]
+   },
+   {
+    "par": "apps/api/src/cycles/cycles.service.ts",
+    "symboles": [
+     "UtilisateurConnecte"
+    ]
+   },
+   {
+    "par": "apps/api/src/referentiels/referentiels.controller.ts",
+    "symboles": [
+     "Roles"
+    ]
+   },
+   {
+    "par": "apps/api/src/saisie/saisie.controller.ts",
+    "symboles": [
+     "Utilisateur",
+     "UtilisateurConnecte"
+    ]
+   },
+   {
+    "par": "apps/api/src/saisie/saisie.service.ts",
+    "symboles": [
+     "UtilisateurConnecte"
+    ]
+   },
+   {
+    "par": "apps/api/src/simulations/simulations.controller.ts",
+    "symboles": [
+     "Utilisateur",
+     "UtilisateurConnecte"
+    ]
+   },
+   {
+    "par": "apps/api/src/simulations/simulations.service.ts",
+    "symboles": [
+     "UtilisateurConnecte"
+    ]
+   },
+   {
+    "par": "apps/api/src/sync/sync.controller.ts",
+    "symboles": [
+     "Utilisateur",
+     "UtilisateurConnecte"
+    ]
+   },
+   {
+    "par": "apps/api/src/sync/sync.service.ts",
+    "symboles": [
+     "UtilisateurConnecte"
+    ]
+   }
+  ],
+  "apps/api/src/app.module.ts": [
+   {
+    "par": "apps/api/src/main.ts",
+    "symboles": [
+     "AppModule"
+    ]
+   }
+  ],
+  "apps/api/src/common/frontiere.interceptor.ts": [
+   {
+    "par": "apps/api/src/main.ts",
+    "symboles": [
+     "FrontiereInterceptor"
+    ]
+   }
+  ],
+  "apps/api/src/common/prisma-exception.filter.ts": [
+   {
+    "par": "apps/api/src/main.ts",
+    "symboles": [
+     "PrismaExceptionFilter"
+    ]
+   },
+   {
+    "par": "apps/api/src/sync/sync.service.ts",
+    "symboles": [
+     "traduireErreurPrisma"
+    ]
+   }
+  ],
+  "apps/api/src/prisma/prisma.service.ts": [
+   {
+    "par": "apps/api/src/sante.controller.ts",
+    "symboles": [
+     "PrismaService"
+    ]
+   },
+   {
+    "par": "apps/api/src/administration/administration.service.ts",
+    "symboles": [
+     "PrismaService"
+    ]
+   },
+   {
+    "par": "apps/api/src/auth/auth.service.ts",
+    "symboles": [
+     "PrismaService"
+    ]
+   },
+   {
+    "par": "apps/api/src/cycles/cycles.service.ts",
+    "symboles": [
+     "PrismaService"
+    ]
+   },
+   {
+    "par": "apps/api/src/geographie/geographie.controller.ts",
+    "symboles": [
+     "PrismaService"
+    ]
+   },
+   {
+    "par": "apps/api/src/prisma/prisma.module.ts",
+    "symboles": [
+     "PrismaService"
+    ]
+   },
+   {
+    "par": "apps/api/src/referentiels/referentiels.service.ts",
+    "symboles": [
+     "PrismaService"
+    ]
+   },
+   {
+    "par": "apps/api/src/saisie/controles.service.ts",
+    "symboles": [
+     "PrismaService"
+    ]
+   },
+   {
+    "par": "apps/api/src/saisie/saisie.service.ts",
+    "symboles": [
+     "PrismaService"
+    ]
+   },
+   {
+    "par": "apps/api/src/simulations/simulations.service.ts",
+    "symboles": [
+     "PrismaService"
+    ]
+   },
+   {
+    "par": "apps/api/src/sync/sync.service.ts",
+    "symboles": [
+     "PrismaService"
+    ]
+   }
+  ],
+  "apps/api/src/common/domaine.ts": [
+   {
+    "par": "apps/api/src/administration/administration.service.ts",
+    "symboles": [
+     "versDateStockee"
+    ]
+   },
+   {
+    "par": "apps/api/src/common/frontiere.interceptor.ts",
+    "symboles": [
+     "versSortie"
+    ]
+   },
+   {
+    "par": "apps/api/src/saisie/controles.service.ts",
+    "symboles": [
+     "versSortie"
+    ]
+   },
+   {
+    "par": "apps/api/src/saisie/saisie.service.ts",
+    "symboles": [
+     "versEntree"
+    ]
+   },
+   {
+    "par": "apps/api/src/simulations/simulations.service.ts",
+    "symboles": [
+     "versSortie"
+    ]
+   },
+   {
+    "par": "apps/api/src/sync/sync.service.ts",
+    "symboles": [
+     "versSortie"
+    ]
+   }
+  ],
+  "apps/api/src/auth/limiteur.ts": [
+   {
+    "par": "apps/api/src/auth/auth.service.ts",
+    "symboles": [
+     "lesLimiteurs"
+    ]
+   }
+  ],
+  "apps/api/src/auth/portee.ts": [
+   {
+    "par": "apps/api/src/cycles/cycles.service.ts",
+    "symboles": [
+     "fermesLisibles"
+    ]
+   },
+   {
+    "par": "apps/api/src/saisie/saisie.service.ts",
+    "symboles": [
+     "PorteeFerme",
+     "fermesLisibles",
+     "fermesModifiables",
+     "niveauCreateur"
+    ]
+   }
+  ],
+  "apps/api/src/saisie/saisie.config.ts": [
+   {
+    "par": "apps/api/src/saisie/controles.service.ts",
+    "symboles": [
+     "SegmentSaisie"
+    ]
+   },
+   {
+    "par": "apps/api/src/saisie/saisie.controller.ts",
+    "symboles": [
+     "RESSOURCES",
+     "SegmentSaisie",
+     "estRessourceSaisie"
+    ]
+   },
+   {
+    "par": "apps/api/src/saisie/saisie.service.ts",
+    "symboles": [
+     "PARENTS",
+     "RESSOURCES",
+     "SegmentSaisie",
+     "versAncetre",
+     "versFerme"
+    ]
+   },
+   {
+    "par": "apps/api/src/sync/sync.service.ts",
+    "symboles": [
+     "RESSOURCES",
+     "SegmentSaisie",
+     "estRessourceSaisie",
+     "versFerme"
+    ]
+   }
+  ],
+  "apps/e2e/test/session.ts": [
+   {
+    "par": "apps/e2e/donnees/donnees-test.ts",
+    "symboles": [
+     "authentifierEnAdmin"
+    ]
+   },
+   {
+    "par": "apps/e2e/test/parcours-admin.ts",
+    "symboles": [
+     "authentifierEnAdmin",
+     "connecterNavigateur"
+    ]
+   },
+   {
+    "par": "apps/e2e/test/parcours-administration.ts",
+    "symboles": [
+     "connecterNavigateur",
+     "connexion"
+    ]
+   },
+   {
+    "par": "apps/e2e/test/parcours-alertes.ts",
+    "symboles": [
+     "connecterNavigateur"
+    ]
+   },
+   {
+    "par": "apps/e2e/test/parcours-auth.ts",
+    "symboles": [
+     "connexion"
+    ]
+   },
+   {
+    "par": "apps/e2e/test/parcours-controles.ts",
+    "symboles": [
+     "authentifierEnAdmin"
+    ]
+   },
+   {
+    "par": "apps/e2e/test/parcours-cycle.ts",
+    "symboles": [
+     "authentifierEnAdmin"
+    ]
+   },
+   {
+    "par": "apps/e2e/test/parcours-mcp.ts",
+    "symboles": [
+     "authentifierEnAdmin"
+    ]
+   },
+   {
+    "par": "apps/e2e/test/parcours-saisie.ts",
+    "symboles": [
+     "authentifierEnAdmin",
+     "connecterNavigateur"
+    ]
+   },
+   {
+    "par": "apps/e2e/test/parcours-simulation.ts",
+    "symboles": [
+     "connecterNavigateur"
+    ]
+   }
+  ],
+  "apps/e2e/test/navigateur.ts": [
+   {
+    "par": "apps/e2e/test/parcours-admin.ts",
+    "symboles": [
+     "Navigateur",
+     "OUTILS_SAISIE",
+     "ouvrirNavigateur"
+    ]
+   },
+   {
+    "par": "apps/e2e/test/parcours-administration.ts",
+    "symboles": [
+     "Navigateur",
+     "OUTILS_SAISIE",
+     "ouvrirNavigateur"
+    ]
+   },
+   {
+    "par": "apps/e2e/test/parcours-alertes.ts",
+    "symboles": [
+     "Navigateur",
+     "OUTILS_SAISIE",
+     "ouvrirNavigateur"
+    ]
+   },
+   {
+    "par": "apps/e2e/test/parcours-pwa.ts",
+    "symboles": [
+     "Navigateur",
+     "OUTILS_SAISIE",
+     "ouvrirNavigateur"
+    ]
+   },
+   {
+    "par": "apps/e2e/test/parcours-saisie.ts",
+    "symboles": [
+     "Navigateur",
+     "OUTILS_SAISIE",
+     "ouvrirNavigateur"
+    ]
+   },
+   {
+    "par": "apps/e2e/test/parcours-simulation.ts",
+    "symboles": [
+     "Navigateur",
+     "OUTILS_SAISIE",
+     "ouvrirNavigateur"
+    ]
+   },
+   {
+    "par": "apps/e2e/test/session.ts",
+    "symboles": [
+     "(dynamique)"
+    ]
+   }
+  ],
+  "apps/mcp/src/api.ts": [
+   {
+    "par": "apps/mcp/src/serveur.ts",
+    "symboles": [
+     "API_URL",
+     "api"
+    ]
+   }
+  ],
+  "apps/pwa/src/db.ts": [
+   {
+    "par": "apps/pwa/src/App.tsx",
+    "symboles": [
+     "db",
+     "lireMeta"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/donnees.ts",
+    "symboles": [
+     "Ligne",
+     "db"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/formulaires.ts",
+    "symboles": [
+     "Ligne",
+     "Segment",
+     "db"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/saisie.ts",
+    "symboles": [
+     "EntreeJournal",
+     "Ligne",
+     "PARENT",
+     "Segment",
+     "TABLES",
+     "db"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/session.ts",
+    "symboles": [
+     "db",
+     "ecrireMeta",
+     "lireMeta"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/sync.ts",
+    "symboles": [
+     "Ligne",
+     "REFERENTIELS",
+     "Segment",
+     "SegmentReferentiel",
+     "TABLES",
+     "db",
+     "ecrireMeta",
+     "lireMeta"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Bassin.tsx",
+    "symboles": [
+     "db"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Compte.tsx",
+    "symboles": [
+     "db"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Corrections.tsx",
+    "symboles": [
+     "EntreeJournal",
+     "db"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Cycle.tsx",
+    "symboles": [
+     "Ligne",
+     "Segment",
+     "TABLES",
+     "db"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Ferme.tsx",
+    "symboles": [
+     "db"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Fermes.tsx",
+    "symboles": [
+     "db"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Pesee.tsx",
+    "symboles": [
+     "Ligne",
+     "db"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Saisie.tsx",
+    "symboles": [
+     "Ligne",
+     "Segment",
+     "TABLES",
+     "db"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Simuler.tsx",
+    "symboles": [
+     "db"
+    ]
+   }
+  ],
+  "apps/pwa/src/donnees.ts": [
+   {
+    "par": "apps/pwa/src/App.tsx",
+    "symboles": [
+     "useRequete"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Bassin.tsx",
+    "symboles": [
+     "useRequete"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Compte.tsx",
+    "symboles": [
+     "useRequete"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Corrections.tsx",
+    "symboles": [
+     "useRequete"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Cycle.tsx",
+    "symboles": [
+     "etatCycle",
+     "useRequete"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Ferme.tsx",
+    "symboles": [
+     "useRequete"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Fermes.tsx",
+    "symboles": [
+     "useRequete"
+    ]
+   }
+  ],
+  "apps/pwa/src/format.ts": [
+   {
+    "par": "apps/pwa/src/App.tsx",
+    "symboles": [
+     "depuis"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Bassin.tsx",
+    "symboles": [
+     "date"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Cycle.tsx",
+    "symboles": [
+     "date",
+     "montant",
+     "nombre"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Ferme.tsx",
+    "symboles": [
+     "nombre"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Pesee.tsx",
+    "symboles": [
+     "nombre"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Simuler.tsx",
+    "symboles": [
+     "date",
+     "montant",
+     "nombre"
+    ]
+   }
+  ],
+  "apps/pwa/src/session.ts": [
+   {
+    "par": "apps/pwa/src/App.tsx",
+    "symboles": [
+     "utilisateur"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/main.tsx",
+    "symboles": [
+     "chargerSession"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/sync.ts",
+    "symboles": [
+     "ErreurApi",
+     "appareilId",
+     "appelApi",
+     "chargerSession"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Compte.tsx",
+    "symboles": [
+     "deconnecter",
+     "utilisateur"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Connexion.tsx",
+    "symboles": [
+     "ErreurApi",
+     "connecter",
+     "inscrire",
+     "utilisateur"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Fermes.tsx",
+    "symboles": [
+     "utilisateur"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Simuler.tsx",
+    "symboles": [
+     "ErreurApi",
+     "appelApi"
+    ]
+   }
+  ],
+  "apps/pwa/src/sync.ts": [
+   {
+    "par": "apps/pwa/src/App.tsx",
+    "symboles": [
+     "synchroniser"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/main.tsx",
+    "symboles": [
+     "demarrerSynchronisation"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/saisie.ts",
+    "symboles": [
+     "demanderSync"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Connexion.tsx",
+    "symboles": [
+     "synchroniser"
+    ]
+   }
+  ],
+  "apps/pwa/src/lib/utils.ts": [
+   {
+    "par": "apps/pwa/src/App.tsx",
+    "symboles": [
+     "cn"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Cycle.tsx",
+    "symboles": [
+     "cn"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Simuler.tsx",
+    "symboles": [
+     "cn"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ui/button.tsx",
+    "symboles": [
+     "cn"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ui/champ.tsx",
+    "symboles": [
+     "cn"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ui/divers.tsx",
+    "symboles": [
+     "cn"
+    ]
+   }
+  ],
+  "apps/pwa/src/ecrans/Connexion.tsx": [
+   {
+    "par": "apps/pwa/src/App.tsx",
+    "symboles": [
+     "Connexion"
+    ]
+   }
+  ],
+  "apps/pwa/src/ecrans/Fermes.tsx": [
+   {
+    "par": "apps/pwa/src/App.tsx",
+    "symboles": [
+     "Fermes"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Bassin.tsx",
+    "symboles": [
+     "useEnAttente"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Cycle.tsx",
+    "symboles": [
+     "useEnAttente"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Ferme.tsx",
+    "symboles": [
+     "useEnAttente"
+    ]
+   }
+  ],
+  "apps/pwa/src/ecrans/Ferme.tsx": [
+   {
+    "par": "apps/pwa/src/App.tsx",
+    "symboles": [
+     "Ferme"
+    ]
+   }
+  ],
+  "apps/pwa/src/ecrans/Bassin.tsx": [
+   {
+    "par": "apps/pwa/src/App.tsx",
+    "symboles": [
+     "Bassin"
+    ]
+   }
+  ],
+  "apps/pwa/src/ecrans/Cycle.tsx": [
+   {
+    "par": "apps/pwa/src/App.tsx",
+    "symboles": [
+     "Cycle"
+    ]
+   }
+  ],
+  "apps/pwa/src/ecrans/Saisie.tsx": [
+   {
+    "par": "apps/pwa/src/App.tsx",
+    "symboles": [
+     "Saisie"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Pesee.tsx",
+    "symboles": [
+     "ChampSaisie"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Simuler.tsx",
+    "symboles": [
+     "ChampSaisie"
+    ]
+   }
+  ],
+  "apps/pwa/src/ecrans/Pesee.tsx": [
+   {
+    "par": "apps/pwa/src/App.tsx",
+    "symboles": [
+     "Pesee"
+    ]
+   }
+  ],
+  "apps/pwa/src/ecrans/Corrections.tsx": [
+   {
+    "par": "apps/pwa/src/App.tsx",
+    "symboles": [
+     "Corrections"
+    ]
+   }
+  ],
+  "apps/pwa/src/ecrans/Compte.tsx": [
+   {
+    "par": "apps/pwa/src/App.tsx",
+    "symboles": [
+     "Compte"
+    ]
+   }
+  ],
+  "apps/pwa/src/ecrans/Simuler.tsx": [
+   {
+    "par": "apps/pwa/src/App.tsx",
+    "symboles": [
+     "Simuler"
+    ]
+   }
+  ],
+  "apps/pwa/src/App.tsx": [
+   {
+    "par": "apps/pwa/src/main.tsx",
+    "symboles": [
+     "App"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Bassin.tsx",
+    "symboles": [
+     "Entete"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Compte.tsx",
+    "symboles": [
+     "Entete"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Corrections.tsx",
+    "symboles": [
+     "Entete"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Cycle.tsx",
+    "symboles": [
+     "Entete"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Ferme.tsx",
+    "symboles": [
+     "Entete"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Fermes.tsx",
+    "symboles": [
+     "Entete"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Pesee.tsx",
+    "symboles": [
+     "Entete"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Saisie.tsx",
+    "symboles": [
+     "Entete"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Simuler.tsx",
+    "symboles": [
+     "Entete"
+    ]
+   }
+  ],
+  "apps/pwa/src/ui/button.tsx": [
+   {
+    "par": "apps/pwa/src/ecrans/Bassin.tsx",
+    "symboles": [
+     "stylesBouton"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Compte.tsx",
+    "symboles": [
+     "Button"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Connexion.tsx",
+    "symboles": [
+     "Button"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Corrections.tsx",
+    "symboles": [
+     "Button",
+     "stylesBouton"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Ferme.tsx",
+    "symboles": [
+     "stylesBouton"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Fermes.tsx",
+    "symboles": [
+     "stylesBouton"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Pesee.tsx",
+    "symboles": [
+     "Button"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Saisie.tsx",
+    "symboles": [
+     "Button"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Simuler.tsx",
+    "symboles": [
+     "Button"
+    ]
+   }
+  ],
+  "apps/pwa/src/ui/divers.tsx": [
+   {
+    "par": "apps/pwa/src/ecrans/Bassin.tsx",
+    "symboles": [
+     "Badge"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Compte.tsx",
+    "symboles": [
+     "Alerte",
+     "Card"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Connexion.tsx",
+    "symboles": [
+     "Alerte"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Corrections.tsx",
+    "symboles": [
+     "Card"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Cycle.tsx",
+    "symboles": [
+     "Alerte",
+     "Badge",
+     "Card"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Ferme.tsx",
+    "symboles": [
+     "Badge"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Pesee.tsx",
+    "symboles": [
+     "Alerte",
+     "Card"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Saisie.tsx",
+    "symboles": [
+     "Alerte"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Simuler.tsx",
+    "symboles": [
+     "Alerte",
+     "Card"
+    ]
+   }
+  ],
+  "apps/pwa/src/ecrans/liste.tsx": [
+   {
+    "par": "apps/pwa/src/ecrans/Bassin.tsx",
+    "symboles": [
+     "Carte",
+     "Section",
+     "Vide"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Corrections.tsx",
+    "symboles": [
+     "Vide"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Cycle.tsx",
+    "symboles": [
+     "EnAttente",
+     "Section",
+     "Vide"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Ferme.tsx",
+    "symboles": [
+     "Carte",
+     "Section",
+     "Vide"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Fermes.tsx",
+    "symboles": [
+     "Carte",
+     "Section",
+     "Vide"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Pesee.tsx",
+    "symboles": [
+     "Vide"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Saisie.tsx",
+    "symboles": [
+     "Vide"
+    ]
+   }
+  ],
+  "apps/pwa/src/ui/champ.tsx": [
+   {
+    "par": "apps/pwa/src/ecrans/Connexion.tsx",
+    "symboles": [
+     "Input",
+     "Label"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Pesee.tsx",
+    "symboles": [
+     "Input",
+     "Select"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Saisie.tsx",
+    "symboles": [
+     "Input",
+     "Label",
+     "Select"
+    ]
+   }
+  ],
+  "apps/pwa/src/formulaires.ts": [
+   {
+    "par": "apps/pwa/src/ecrans/Corrections.tsx",
+    "symboles": [
+     "FORMULAIRES"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Pesee.tsx",
+    "symboles": [
+     "FORMULAIRES",
+     "Option"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Saisie.tsx",
+    "symboles": [
+     "Champ",
+     "Contexte",
+     "FORMULAIRES",
+     "Formulaire",
+     "Option"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Simuler.tsx",
+    "symboles": [
+     "Champ",
+     "Option"
+    ]
+   }
+  ],
+  "apps/pwa/src/saisie.ts": [
+   {
+    "par": "apps/pwa/src/ecrans/Corrections.tsx",
+    "symboles": [
+     "abandonner",
+     "reessayer"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Cycle.tsx",
+    "symboles": [
+     "supprimer"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Pesee.tsx",
+    "symboles": [
+     "ErreurSaisie",
+     "enregistrer",
+     "supprimer"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Saisie.tsx",
+    "symboles": [
+     "ErreurSaisie",
+     "enregistrer",
+     "supprimer"
+    ]
+   }
+  ],
   "packages/shared/src/types.ts": [
    {
-    "par": "packages/shared/src/geometrie.ts",
+    "par": "packages/shared/src/alertes.ts",
     "symboles": [
-     "InfrastructureDim"
+     "CycleComplet",
+     "DateISO",
+     "Espece"
+    ]
+   },
+   {
+    "par": "packages/shared/src/controles.ts",
+    "symboles": [
+     "DateISO"
     ]
    },
    {
     "par": "packages/shared/src/dates.ts",
     "symboles": [
      "DateISO"
+    ]
+   },
+   {
+    "par": "packages/shared/src/geometrie.ts",
+    "symboles": [
+     "InfrastructureDim"
     ]
    },
    {
@@ -185,36 +7484,294 @@
     ]
    },
    {
+    "par": "packages/shared/src/simulation.ts",
+    "symboles": [
+     "CycleComplet",
+     "DateISO",
+     "Espece",
+     "FormeInfrastructure",
+     "MesureBase"
+    ]
+   },
+   {
+    "par": "packages/shared/test/alertes.ts",
+    "symboles": [
+     "CycleComplet"
+    ]
+   },
+   {
     "par": "packages/shared/test/b4.ts",
     "symboles": [
      "CycleComplet"
     ]
+   },
+   {
+    "par": "packages/shared/test/rationnement.ts",
+    "symboles": [
+     "PalierRationnement"
+    ]
+   }
+  ],
+  "packages/shared/src/indicateurs.ts": [
+   {
+    "par": "packages/shared/src/alertes.ts",
+    "symboles": [
+     "Indicateurs",
+     "calculerIndicateurs"
+    ]
+   },
+   {
+    "par": "packages/shared/src/simulation.ts",
+    "symboles": [
+     "Indicateurs",
+     "calculerIndicateurs"
+    ]
+   },
+   {
+    "par": "packages/shared/test/b4.ts",
+    "symboles": [
+     "calculerIndicateurs"
+    ]
+   },
+   {
+    "par": "packages/shared/test/simulation.ts",
+    "symboles": [
+     "calculerIndicateurs"
+    ]
    }
   ],
   "packages/shared/src/dates.ts": [
+   {
+    "par": "packages/shared/src/alertes.ts",
+    "symboles": [
+     "joursEntre"
+    ]
+   },
+   {
+    "par": "packages/shared/src/controles.ts",
+    "symboles": [
+     "ajouterJours",
+     "estAvant"
+    ]
+   },
    {
     "par": "packages/shared/src/indicateurs.ts",
     "symboles": [
      "joursEntre",
      "parDate"
     ]
+   },
+   {
+    "par": "packages/shared/src/simulation.ts",
+    "symboles": [
+     "ajouterJours"
+    ]
    }
   ],
-  "packages/shared/src/indicateurs.ts": [
+  "packages/shared/src/alertes.ts": [
    {
-    "par": "packages/shared/test/b4.ts",
+    "par": "packages/shared/test/alertes.ts",
     "symboles": [
-     "calculerIndicateurs"
+     "SEUIL_HETEROGENEITE_DEFAUT",
+     "calculerAlertes"
+    ]
+   }
+  ],
+  "packages/shared/src/controles.ts": [
+   {
+    "par": "packages/shared/test/controles.ts",
+    "symboles": [
+     "ContexteCycle",
+     "Violation",
+     "controlerCycle",
+     "controlerDepense",
+     "controlerDistribution",
+     "controlerEchantillon",
+     "controlerInfrastructure",
+     "controlerLot",
+     "controlerMesureEau",
+     "controlerMortalite",
+     "controlerPesee",
+     "controlerRecolte"
+    ]
+   }
+  ],
+  "packages/shared/src/geometrie.ts": [
+   {
+    "par": "packages/shared/test/geometrie.ts",
+    "symboles": [
+     "dimensionsCalculees",
+     "superficie",
+     "volume"
+    ]
+   }
+  ],
+  "packages/shared/src/rationnement.ts": [
+   {
+    "par": "packages/shared/test/rationnement.ts",
+    "symboles": [
+     "palierApplicable",
+     "ration",
+     "rationConseillee"
+    ]
+   }
+  ],
+  "packages/shared/src/simulation.ts": [
+   {
+    "par": "packages/shared/test/simulation.ts",
+    "symboles": [
+     "ErreurSimulation",
+     "EspeceSimulation",
+     "TypeSimulation",
+     "simuler"
     ]
    }
   ]
  },
- "orphelins": [
-  "packages/shared/src/geometrie.ts",
-  "packages/shared/src/rationnement.ts"
- ],
- "symboles_dupliques": {},
+ "orphelins": [],
+ "symboles_dupliques": {
+  "API_URL": [
+   "apps/admin/src/config.ts",
+   "apps/mcp/src/api.ts",
+   "apps/pwa/src/session.ts"
+  ],
+  "Alerte": [
+   "apps/admin/src/composants/ui/divers.tsx",
+   "apps/pwa/src/ui/divers.tsx",
+   "packages/shared/src/alertes.ts"
+  ],
+  "App": [
+   "apps/admin/src/App.tsx",
+   "apps/pwa/src/App.tsx"
+  ],
+  "Badge": [
+   "apps/admin/src/composants/ui/divers.tsx",
+   "apps/pwa/src/ui/divers.tsx"
+  ],
+  "Button": [
+   "apps/admin/src/composants/ui/button.tsx",
+   "apps/pwa/src/ui/button.tsx"
+  ],
+  "Card": [
+   "apps/admin/src/composants/ui/divers.tsx",
+   "apps/pwa/src/ui/divers.tsx"
+  ],
+  "Carte": [
+   "apps/admin/src/pages/Carte.tsx",
+   "apps/pwa/src/ecrans/liste.tsx"
+  ],
+  "Champ": [
+   "apps/admin/src/description.ts",
+   "apps/pwa/src/formulaires.ts"
+  ],
+  "Checkbox": [
+   "apps/admin/src/composants/ui/champ.tsx",
+   "apps/pwa/src/ui/champ.tsx"
+  ],
+  "Connexion": [
+   "apps/admin/src/pages/Connexion.tsx",
+   "apps/pwa/src/ecrans/Connexion.tsx"
+  ],
+  "Cycle": [
+   "apps/mcp/src/api.ts",
+   "apps/pwa/src/ecrans/Cycle.tsx",
+   "packages/shared/src/types.ts"
+  ],
+  "Ferme": [
+   "apps/mcp/src/api.ts",
+   "apps/pwa/src/ecrans/Ferme.tsx"
+  ],
+  "Infrastructure": [
+   "apps/mcp/src/api.ts",
+   "packages/shared/src/types.ts"
+  ],
+  "Input": [
+   "apps/admin/src/composants/ui/champ.tsx",
+   "apps/pwa/src/ui/champ.tsx"
+  ],
+  "Label": [
+   "apps/admin/src/composants/ui/champ.tsx",
+   "apps/pwa/src/ui/champ.tsx"
+  ],
+  "OptionsListe": [
+   "apps/api/src/referentiels/referentiels.service.ts",
+   "apps/api/src/saisie/saisie.service.ts"
+  ],
+  "Pesee": [
+   "apps/pwa/src/ecrans/Pesee.tsx",
+   "packages/shared/src/types.ts"
+  ],
+  "ProprietesBouton": [
+   "apps/admin/src/composants/ui/button.tsx",
+   "apps/pwa/src/ui/button.tsx"
+  ],
+  "REFERENTIELS": [
+   "apps/admin/src/referentiels.ts",
+   "apps/pwa/src/db.ts"
+  ],
+  "RESSOURCES": [
+   "apps/api/src/referentiels/referentiels.service.ts",
+   "apps/api/src/saisie/saisie.config.ts"
+  ],
+  "RESSOURCES_SAISIE": [
+   "apps/admin/src/saisie.ts",
+   "apps/api/src/saisie/saisie.controller.ts"
+  ],
+  "Select": [
+   "apps/admin/src/composants/ui/champ.tsx",
+   "apps/pwa/src/ui/champ.tsx"
+  ],
+  "Simulation": [
+   "apps/admin/src/pages/Simulation.tsx",
+   "packages/shared/src/simulation.ts"
+  ],
+  "TypeChamp": [
+   "apps/admin/src/description.ts",
+   "apps/pwa/src/formulaires.ts"
+  ],
+  "Utilisateur": [
+   "apps/admin/src/session.ts",
+   "apps/api/src/auth/garde.ts",
+   "apps/pwa/src/session.ts"
+  ],
+  "appelApi": [
+   "apps/admin/src/session.ts",
+   "apps/pwa/src/session.ts"
+  ],
+  "cn": [
+   "apps/admin/src/lib/utils.ts",
+   "apps/pwa/src/lib/utils.ts"
+  ],
+  "stylesBouton": [
+   "apps/admin/src/composants/ui/button.tsx",
+   "apps/pwa/src/ui/button.tsx"
+  ]
+ },
  "dependances_externes": {
-  "@prisma": 1
+  "@nestjs": 32,
+  "react": 27,
+  "lucide-react": 21,
+  "node:path": 20,
+  "node:url": 19,
+  "react-router": 19,
+  "pg": 14,
+  "@prisma": 12,
+  "@refinedev": 11,
+  "node:fs": 5,
+  "express": 5,
+  "zod": 5,
+  "class-variance-authority": 4,
+  "radix-ui": 4,
+  "node:crypto": 3,
+  "ulid": 3,
+  "vite": 2,
+  "@vitejs": 2,
+  "@tailwindcss": 2,
+  "react-dom": 2,
+  "clsx": 2,
+  "tailwind-merge": 2,
+  "rxjs": 2,
+  "node:child_process": 2,
+  "@modelcontextprotocol": 2
  }
 }

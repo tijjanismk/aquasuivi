@@ -1,8 +1,6 @@
-import type {
-  InputHTMLAttributes,
-  LabelHTMLAttributes,
-  SelectHTMLAttributes,
-} from 'react';
+import type { ComponentProps, InputHTMLAttributes, SelectHTMLAttributes } from 'react';
+import { Checkbox as CheckboxRadix, Label as LabelRadix } from 'radix-ui';
+import { Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const base =
@@ -21,30 +19,38 @@ export function Input({ className, ...reste }: InputHTMLAttributes<HTMLInputElem
   );
 }
 
-/// `select` natif, volontairement : un composant sur mesure serait plus joli
-/// mais moins utilisable au clavier, et les référentiels ont beaucoup d'options.
+/// `select` natif, volontairement, là où shadcn prendrait le Select de Radix :
+/// 800 communes se parcourent mieux au clavier et au doigt dans la liste du
+/// système, et les parcours e2e pilotent un vrai `select`.
 export function Select({ className, ...reste }: SelectHTMLAttributes<HTMLSelectElement>) {
   return <select className={cn(base, 'cursor-pointer pr-8', className)} {...reste} />;
 }
 
-export function Checkbox({ className, ...reste }: InputHTMLAttributes<HTMLInputElement>) {
+/// Case à cocher Radix (`role="checkbox"`, clavier et lecteurs d'écran).
+/// `onCheckedChange` reçoit `true`, `false` ou `"indeterminate"`.
+export function Checkbox({ className, ...reste }: ComponentProps<typeof CheckboxRadix.Root>) {
   return (
-    <input
-      type="checkbox"
+    <CheckboxRadix.Root
+      data-slot="checkbox"
       className={cn(
-        'size-4 shrink-0 cursor-pointer rounded-[4px] border border-input accent-primary shadow-xs outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50',
+        'peer size-4 shrink-0 cursor-pointer rounded-[4px] border border-input shadow-xs transition-shadow outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground',
         className,
       )}
       {...reste}
-    />
+    >
+      <CheckboxRadix.Indicator className="flex items-center justify-center text-current">
+        <Check className="size-3.5" />
+      </CheckboxRadix.Indicator>
+    </CheckboxRadix.Root>
   );
 }
 
-export function Label({ className, ...reste }: LabelHTMLAttributes<HTMLLabelElement>) {
+export function Label({ className, ...reste }: ComponentProps<typeof LabelRadix.Root>) {
   return (
-    <label
+    <LabelRadix.Root
+      data-slot="label"
       className={cn(
-        'flex items-center gap-1 text-sm font-medium leading-none select-none',
+        'flex items-center gap-1 text-sm font-medium leading-none select-none peer-disabled:cursor-not-allowed peer-disabled:opacity-50',
         className,
       )}
       {...reste}

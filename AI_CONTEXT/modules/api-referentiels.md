@@ -26,7 +26,7 @@ du domaine.
 | `POST` | `/api/referentiels/:ressource` | création |
 | `PATCH` | `/api/referentiels/:ressource/:id` | modification |
 | `DELETE` | `/api/referentiels/:ressource/:id` | **désactivation**, pas suppression |
-| `GET` | `/api/geographie/{regions,cercles,communes}` | lecture seule |
+| `GET` | `/api/geographie/{regions,cercles,communes}` | lecture seule ; `?regionId=` / `?cercleId=` filtrent (listes en cascade) |
 
 `:ressource` ∈ `especes` · `types-infrastructure` · `aliments` ·
 `produits-sanitaires` · `paliers`. La correspondance segment → modèle

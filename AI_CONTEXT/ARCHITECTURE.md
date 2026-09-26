@@ -12,8 +12,8 @@ lui sont affectées. Terrain sans réseau → **hors-ligne d'abord**.
 | API | NestJS 12 + Prisma 7 | référentiels, géographie, saisie, indicateurs, **authentification JWT** (D18), **synchronisation** (D21) |
 | Base | PostgreSQL 17 | index partiels + contraintes `CHECK` (voir DOMAINE.md) |
 | Calculs | `@aqua/shared` (TS pur) | **une seule** implémentation pour API, admin, mobile |
-| Admin | React 18 + Refine + Tailwind v4 | référentiels **et** saisie de terrain ; composants possédés (D17) |
-| Mobile | **PWA** + IndexedDB (Dexie) + Workbox | `apps/pwa`, hors ligne d'abord, installable chez un particulier (D19) |
+| Admin | React 19 + Refine 5 + Vite 8 + Tailwind v4 | référentiels **et** saisie de terrain ; shadcn/ui + Radix, thème vert (D24) ; carte Leaflet/OSM (D25) |
+| Mobile | **PWA** React 19 + Vite 8 + IndexedDB (Dexie) + Workbox | `apps/pwa`, hors ligne d'abord, installable chez un particulier (D19) |
 | MCP | SDK officiel, transport stdio | lecture seule — interroger et analyser |
 
 ## Découpage
@@ -48,7 +48,7 @@ aquasuivi/
 │   ├── saisie.ts               ← les 12 tables de terrain, hiérarchisées
 │   ├── i18n.ts                 ← tous les libellés et formats, fr + XOF
 │   ├── index.css               ← jetons de couleur, clair et sombre
-│   ├── composants/ui/          ← nos composants, façon shadcn/ui
+│   ├── composants/ui/          ← composants shadcn/ui (Radix), dans le dépôt
 │   └── pages/                  liste et formulaire génériques
 ├── apps/pwa/src/               ← application de terrain, hors ligne (D19)
 │   ├── db.ts                   base IndexedDB (Dexie) + journal des envois

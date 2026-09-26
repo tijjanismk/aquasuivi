@@ -1,5 +1,6 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 import type { ButtonHTMLAttributes } from 'react';
+import { Slot } from 'radix-ui';
 import { cn } from '@/lib/utils';
 
 const styles = cva(
@@ -28,10 +29,14 @@ const styles = cva(
 );
 
 export type ProprietesBouton = ButtonHTMLAttributes<HTMLButtonElement> &
-  VariantProps<typeof styles>;
+  VariantProps<typeof styles> & {
+    /// Rend l'enfant (un `Link`…) avec le style du bouton, sans `<button>` autour.
+    asChild?: boolean;
+  };
 
-export function Button({ className, variant, size, ...reste }: ProprietesBouton) {
-  return <button className={cn(styles({ variant, size }), className)} {...reste} />;
+export function Button({ className, variant, size, asChild = false, ...reste }: ProprietesBouton) {
+  const Composant = asChild ? Slot.Root : 'button';
+  return <Composant data-slot="button" className={cn(styles({ variant, size }), className)} {...reste} />;
 }
 
 export { styles as stylesBouton };

@@ -55,6 +55,7 @@ const TEXTES = {
     'valeur.vide': '—',
     'valeur.oui': 'oui',
     'valeur.non': 'non',
+    'valeur.choisirAvant': 'Choisir d’abord : {parent}',
   },
 };
 

@@ -105,14 +105,14 @@ export function TableauRessource({
 
   const requete = useList({
     resource: ressource.nom,
-    pagination: { current: page, pageSize: taillePage },
+    pagination: { currentPage: page, pageSize: taillePage },
     sorters: [{ field: tri.champ, order: tri.ordre }],
     filters: filtresRefine,
   });
 
   const colonnes = champsEnListe(ressource);
-  const lignes = (requete.data?.data ?? []) as Record<string, unknown>[];
-  const total = requete.data?.total ?? 0;
+  const lignes = (requete.result.data ?? []) as Record<string, unknown>[];
+  const total = requete.result.total ?? 0;
   const dernierePage = Math.max(Math.ceil(total / taillePage), 1);
 
   function basculerTri(champ: string) {
@@ -143,7 +143,7 @@ export function TableauRessource({
           </div>
         )}
         <span className="text-sm text-muted-foreground">
-          {requete.isLoading ? t('liste.chargement') : t('liste.lignes', { n: total })}
+          {requete.query.isLoading ? t('liste.chargement') : t('liste.lignes', { n: total })}
         </span>
         {cheminNouveau && (
           <Link to={cheminNouveau} className="ml-auto">
@@ -155,13 +155,13 @@ export function TableauRessource({
         )}
       </div>
 
-      {requete.isError && (
+      {requete.query.isError && (
         <Alerte className="mb-3" data-test="erreur">
-          {messageErreur(requete.error) ?? t('erreur.apiInjoignable')}
+          {messageErreur(requete.query.error) ?? t('erreur.apiInjoignable')}
         </Alerte>
       )}
 
-      {!requete.isLoading && lignes.length === 0 ? (
+      {!requete.query.isLoading && lignes.length === 0 ? (
         <Card className="border-dashed p-8 text-center text-sm text-muted-foreground">
           {t('liste.vide')}
         </Card>

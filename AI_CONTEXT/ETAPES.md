@@ -93,8 +93,13 @@ de saisie (`controles.ts`), vérifiés aussi par l'API dans
       vétérinaire (`seed.ts:89-91` — places tenues, règle de sécurité
       alimentaire)
 - [ ] Renseigner les codes ASFIS des 7 espèces sans `codeFao`
-- [ ] Charger la géographie complète du Mali (aujourd'hui : Sikasso /
-      Sikasso / Finkolo seulement)
+- [x] Charger la géographie complète du Mali — `prisma/data/decoupage_mali.json`
+      (19 régions, 157 cercles, 792 communes, codes officiels) + district de
+      Bamako (`bamako.json`, `Region.type = DISTRICT`, cercle technique
+      « Bamako » choisi d’office dans les formulaires, codes « 00… » maison) ; listes Région → Cercle →
+      Commune en cascade (admin `dependDe`, PWA `dependDe`) et cohérence
+      contrôlée à l’écriture d’une ferme (`RATTACHEMENT_INCOHERENT`) ; villages
+      du fichier non chargés, `Ferme.village` reste un texte
 
 **Fin :** la migration applique les 6 contraintes SQL, et une tentative
 d'ouvrir deux cycles sur le même bassin est rejetée par la base.
@@ -288,6 +293,22 @@ vérifie qu'API, admin et PWA hors ligne donnent le même résultat.
 
 **Fin :** `https://terrain.…` s'installe sur un téléphone Android et
 synchronise avec `https://api.…`.
+
+---
+
+## Étape 11 — Interface : shadcn, Radix, thème vert, carte `[~]` (D24–D26)
+
+- [x] Dernières versions : React 19, Vite 8, TypeScript 7 (API en 6),
+      Refine 5, React Router 8 (7 dans l'admin) — D26
+- [x] `components.json` (admin, PWA) : `pnpm dlx shadcn@latest add …`
+- [x] Radix : `Checkbox`, `Label`, `Button asChild` ; `select` natif gardé
+- [x] Thème vert `--vert-50` … `--vert-950`, clair et sombre, admin = PWA
+- [x] Carte `/carte` (admin) : Leaflet + OpenStreetMap, points colorés
+      par alertes, fermes sans coordonnées listées ; CSP de Caddy ouverte
+      à `tile.openstreetmap.org`
+- [ ] Saisir latitude / longitude en cliquant sur la carte (fiche ferme)
+- [ ] PWA : « utiliser ma position » (GPS) à la création d'une ferme
+- [ ] Carte hors ligne : tuiles auto-hébergées (PMTiles du Mali), D25
 
 ---
 

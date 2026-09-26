@@ -31,6 +31,16 @@ export const FERMES: Ressource = {
     { nom: 'email', libelle: 'Courriel', type: 'texte' },
     { nom: 'cooperative', libelle: 'Coopérative', type: 'texte' },
     { nom: 'pays', libelle: 'Pays', type: 'texte' },
+    { nom: 'regionId', libelle: 'Région / district', type: 'relation', ressourceLiee: 'geographie/regions', enListe: true },
+    { nom: 'cercleId', libelle: 'Cercle', type: 'relation', ressourceLiee: 'geographie/cercles', dependDe: 'regionId' },
+    {
+      nom: 'communeId',
+      libelle: 'Commune',
+      type: 'relation',
+      ressourceLiee: 'geographie/communes',
+      dependDe: 'cercleId',
+      enListe: true,
+    },
     { nom: 'village', libelle: 'Village', type: 'texte', enListe: true },
     {
       nom: 'latitude',

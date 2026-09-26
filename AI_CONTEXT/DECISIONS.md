@@ -282,6 +282,10 @@ clavier avec beaucoup d'options, et pilotables en test.
 **Coût.** Ces composants sont à nous : aucune mise à jour ne viendra les
 corriger.
 
+> **Révisé par D24** : shadcn est désormais configuré (`components.json`)
+> et les primitives Radix remplacent case à cocher, étiquette et `Slot`.
+> Le `select` reste natif.
+
 **Gain.** Aucun thème imposé, rien à contourner, et le poids reste faible.
 
 **Conséquence.** Les tests de bout en bout s'accrochent à des attributs
@@ -457,6 +461,76 @@ particulier chiffre son projet sans réseau.
 
 **Coût.** La projection est aussi bonne que les repères de l'espèce ;
 ils sont en base (D10), donc corrigibles sans redéploiement.
+
+---
+
+## D24 — shadcn/ui configuré, primitives Radix, thème vert
+
+**Problème.** D17 recopiait shadcn à la main, sans Radix : chaque nouveau
+composant (dialogue, info-bulle, menu) aurait été à réécrire, avec son
+accessibilité clavier et lecteur d'écran.
+
+**Choix.** `components.json` dans l'admin et la PWA (style *new-york*,
+Tailwind v4, alias `@/composants/ui` et `@/ui`) : `pnpm dlx shadcn@latest
+add <composant>` dépose un composant dans le dépôt, qu'on possède ensuite
+comme avant. Les primitives viennent du paquet unifié **`radix-ui`** :
+`Checkbox`, `Label`, `Slot` (`<Button asChild>`) pour commencer.
+
+Le **`select` reste natif** : 800 communes se parcourent mieux dans la
+liste du système, au clavier comme au doigt, et les parcours e2e pilotent
+un vrai `select`. Le Select de Radix n'est à prendre que pour une liste
+courte où le style compte.
+
+Thème **vert** : une gamme `--vert-50` … `--vert-950` (palette `green`
+de Tailwind) dans `index.css`, d'où découlent tous les jetons (`primary`
+= vert-700 en clair, vert-500 en sombre) et les couleurs de graphique.
+Les nuances sont aussi des classes : `bg-vert-100`, `text-vert-800`. Le
+fichier est **identique** dans l'admin et la PWA — le modifier dans les deux.
+
+**Coût.** Une dépendance de plus, `radix-ui`, à tenir à jour ; et un
+composant ajouté par l'outil doit être relu (il peut écraser un fichier
+existant du même nom).
+
+---
+
+## D25 — Carte : Leaflet et OpenStreetMap, gratuits
+
+**Problème.** Situer les fermes et repérer d'un coup d'œil où sont les
+alertes, sans coût récurrent ni compte chez un fournisseur.
+
+**Choix.** **Leaflet** + **react-leaflet 5**, fond **OpenStreetMap**
+(`tile.openstreetmap.org`) : libre, sans clé, sans facturation. Page
+`/carte` de l'admin : un point par ferme ayant latitude et longitude,
+coloré selon ses alertes (D22), fiche au clic ; les fermes sans
+coordonnées sont listées à part. Points en `CircleMarker` (SVG) : pas
+d'images de marqueur à embarquer, et la couleur suit le thème.
+
+**Coût.** Le fond de carte vient d'Internet : **hors ligne, les points
+restent mais le fond disparaît**. La politique d'usage d'OSM interdit
+le trafic lourd et le pré-téléchargement massif : pour un usage national
+ou une carte hors ligne sur la PWA, héberger ses propres tuiles
+(Protomaps / PMTiles, un fichier statique pour le Mali) plutôt que
+d'aspirer les serveurs d'OSM.
+
+---
+
+## D26 — Dernières versions, sauf là où un outil ne suit pas
+
+**Choix.** React 19, Vite 8, TypeScript 7, Refine 5, react-leaflet 5.
+Trois exceptions, chacune levable plus tard :
+
+- **API en TypeScript 6** : Nest CLI utilise l'API de programmation du
+  compilateur, absente de TypeScript 7.0 (annoncée pour 7.1).
+- **Admin en React Router 7** : `@refinedev/react-router` 2 ne déclare
+  pas React Router 8. La PWA, sans Refine, est en React Router 8.
+- **Prisma reste en 7.x** : le `latest` publié est une version candidate
+  (`8.0.0-rc`).
+
+TypeScript 6 et 7 n'incluent plus les `@types` d'office : chaque
+`tsconfig` déclare `"types": ["node"]` (et `vite/client` côté front) ;
+`baseUrl` n'existe plus, `paths` suffit. Refine 5 : `useList().result`,
+`useOne().result`, états dans `.query`, `mutation.isPending`,
+`pagination.currentPage`, et `@tanstack/react-query` 5 à installer soi-même.
 
 ---
 

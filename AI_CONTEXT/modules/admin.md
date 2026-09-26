@@ -68,9 +68,14 @@ n'existe pas.
 
 ## Interface
 
-Tailwind v4, composants façon shadcn/ui écrits à la main (D17). Une seule
-couleur principale, un vert d'eau, définie dans `index.css` : la changer
-là la change partout.
+Tailwind v4, composants shadcn/ui sur primitives Radix (D24), ajoutés
+par `pnpm dlx shadcn@latest add` grâce à `components.json`. Thème vert :
+une gamme `--vert-50` … `--vert-950` dans `index.css`, d'où découlent
+tous les jetons ; la changer là la change partout (et dans la PWA, dont le
+fichier est identique).
+
+**Carte** (`pages/Carte.tsx`, D25) : Leaflet + fond OpenStreetMap, un
+point par ferme géolocalisée, coloré selon ses alertes.
 
 Le **thème sombre suit le réglage du système** (`main.tsx` pose la classe
 `dark`). Sans cette bascule, les jetons sombres seraient du CSS mort.
@@ -128,9 +133,10 @@ consolidation par commune/cercle/région. Et **aucun écran de connexion** :
 l'API n'a pas d'authentification.
 
 ## Dépendances
-`@refinedev/core` (sans kit d'interface), `@refinedev/simple-rest`,
-`@refinedev/react-router`, `react-router`, `tailwindcss`,
-`class-variance-authority`, `tailwind-merge`, `clsx`, `lucide-react`.
+`@refinedev/core` 5 (sans kit d'interface) et `@tanstack/react-query` 5,
+`@refinedev/simple-rest`, `@refinedev/react-router`, `react-router` **7**
+(Refine ne déclare pas encore la 8, D26), `radix-ui`, `leaflet` +
+`react-leaflet`, `tailwindcss`, `class-variance-authority`,
+`tailwind-merge`, `clsx`, `lucide-react`.
 
-React est en **18**, pas 19 : Refine 4 déclare ses pairs en `^17 || ^18`
-et l'installation en 19 produisait des avertissements sur tout l'arbre.
+React 19, Vite 8, TypeScript 7 (D26).

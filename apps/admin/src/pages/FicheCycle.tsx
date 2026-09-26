@@ -73,7 +73,7 @@ export function FicheCycle() {
   const [alertes, setAlertes] = useState<AlerteCycle[]>([]);
 
   const cycle = useOne({ resource: CYCLES.nom, id });
-  const ligne = cycle.data?.data as Record<string, unknown> | undefined;
+  const ligne = cycle.result as Record<string, unknown> | undefined;
 
   useEffect(() => {
     if (!id) return;

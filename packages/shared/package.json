@@ -11,7 +11,9 @@
       "default": "./dist/index.js"
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "prepare": "tsc -p tsconfig.build.json",
@@ -20,7 +22,7 @@
   },
   "devDependencies": {
     "@types/node": "^24.0.0",
-    "tsx": "^4.21.0",
-    "typescript": "^5.9.0"
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
   }
 }

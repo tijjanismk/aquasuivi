@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, lazy, Suspense } from 'react';
 import { Authenticated, Refine, useGetIdentity, useLogout } from '@refinedev/core';
 import routerProvider from '@refinedev/react-router';
 import dataProvider from '@refinedev/simple-rest';
@@ -10,7 +10,8 @@ import {
   GitMerge,
   KeyRound,
   LayoutDashboard,
-  Map as Carte,
+  Map as IconeCarte,
+  MapPinned,
   UsersRound,
   LogOut,
   Scale,
@@ -34,6 +35,8 @@ import { Connexion } from './pages/Connexion';
 import { Simulation } from './pages/Simulation';
 import { Conflits } from './pages/Conflits';
 import { Consolidation } from './pages/Consolidation';
+// Leaflet pèse plus que tout le reste de l'admin : chargé à l'ouverture de la carte.
+const Carte = lazy(() => import('./pages/Carte').then((m) => ({ default: m.Carte })));
 import { ADMINISTRATION } from './administration';
 import { authProvider, utilisateurCourant, type Utilisateur } from './session';
 
@@ -111,12 +114,17 @@ function MiseEnPage() {
             {FERMES.libelle}
           </NavLink>
 
+          <NavLink to="/carte" className={({ isActive }) => lienLateral(isActive)}>
+            <MapPinned className="size-4" />
+            Carte
+          </NavLink>
+
           <NavLink to="/simulation" className={({ isActive }) => lienLateral(isActive)}>
             <Calculator className="size-4" />
             Simulation
           </NavLink>
           <NavLink to="/consolidation" className={({ isActive }) => lienLateral(isActive)}>
-            <Carte className="size-4" />
+            <IconeCarte className="size-4" />
             Consolidation
           </NavLink>
 
@@ -192,6 +200,14 @@ export function App() {
             <Route index element={<Accueil />} />
             <Route path="/simulation" element={<Simulation />} />
             <Route path="/consolidation" element={<Consolidation />} />
+            <Route
+              path="/carte"
+              element={
+                <Suspense fallback={<p className="text-sm text-muted-foreground">Chargement de la carte…</p>}>
+                  <Carte />
+                </Suspense>
+              }
+            />
             <Route path="/conflits" element={<Conflits />} />
 
             {/* Administration : comptes et affectations, rôle ADMIN (étape 6). */}

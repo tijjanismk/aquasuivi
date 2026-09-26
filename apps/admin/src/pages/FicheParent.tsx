@@ -96,7 +96,7 @@ export function FicheParent({ type }: { type: keyof typeof CONFIGURATIONS }) {
   const { id = '' } = useParams();
   const config = CONFIGURATIONS[type]!;
   const requete = useOne({ resource: config.parent.nom, id });
-  const ligne = (requete.data?.data ?? {}) as Record<string, unknown>;
+  const ligne = (requete.result ?? {}) as Record<string, unknown>;
 
   const retour = config.retour(ligne);
   const cheminActuel = `/${config.parent.chemin}/${id}`;

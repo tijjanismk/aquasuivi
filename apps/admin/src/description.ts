@@ -25,6 +25,9 @@ export interface Champ {
   ressourceLiee?: string;
   /// Champ à afficher pour la ligne liée (défaut : `nom`).
   libelleLie?: string;
+  /// Liste en cascade : les options sont filtrées par la valeur de ce champ
+  /// (même nom de colonne côté API), et vidées quand il change.
+  dependDe?: string;
   /// Visible dans le tableau de liste. Les autres n'apparaissent qu'au formulaire.
   enListe?: boolean;
   aide?: string;

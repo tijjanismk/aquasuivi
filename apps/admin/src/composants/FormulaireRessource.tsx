@@ -47,6 +47,24 @@ function versPayload(champs: Champ[], valeurs: Valeurs, creation: boolean): Vale
   return payload;
 }
 
+/// Change un champ et vide ceux qui en dépendent, de proche en proche :
+/// changer de région vide le cercle, donc la commune.
+function avecCascade(champs: Champ[], valeurs: Valeurs, nom: string, valeur: string): Valeurs {
+  const suivantes = { ...valeurs, [nom]: valeur };
+  if (valeurs[nom] === valeur) return suivantes;
+  const aVider = [nom];
+  while (aVider.length > 0) {
+    const parent = aVider.pop();
+    for (const c of champs) {
+      if (c.dependDe === parent) {
+        suivantes[c.nom] = '';
+        aVider.push(c.nom);
+      }
+    }
+  }
+  return suivantes;
+}
+
 function typeInput(champ: Champ) {
   if (champ.type === 'date') return 'date';
   if (champ.type === 'texte' || champ.type === 'texteLong') return 'text';
@@ -59,30 +77,46 @@ function typeInput(champ: Champ) {
 function ChampRelation({
   champ,
   valeur,
+  parent,
+  libelleParent,
   onChange,
 }: {
   champ: Champ;
   valeur: string;
+  /// Valeur et libellé du champ dont celui-ci dépend (`dependDe`).
+  parent?: string;
+  libelleParent?: string;
   onChange: (v: string) => void;
 }) {
   const liee = champ.ressourceLiee ? parNom(champ.ressourceLiee) : undefined;
+  // Sans parent choisi, rien à proposer : 792 communes en vrac ne se lisent pas.
+  const enAttente = Boolean(champ.dependDe) && !parent;
   const requete = useList({
     resource: champ.ressourceLiee ?? '',
-    pagination: { current: 1, pageSize: 200 },
+    pagination: { currentPage: 1, pageSize: 200 },
     sorters: [{ field: liee?.triDefaut ?? 'id', order: 'asc' }],
-    queryOptions: { enabled: Boolean(champ.ressourceLiee) },
+    filters: champ.dependDe && parent ? [{ field: champ.dependDe, operator: 'eq', value: parent }] : [],
+    queryOptions: { enabled: Boolean(champ.ressourceLiee) && !enAttente },
   });
 
-  const options = (requete.data?.data ?? []) as Record<string, unknown>[];
+  const options = enAttente ? [] : ((requete.result.data ?? []) as Record<string, unknown>[]);
+
+  // Un seul choix possible — le cercle technique du district de Bamako : on le
+  // prend, plutôt que de faire choisir ce qui n'en est pas un.
+  const seul = champ.dependDe && options.length === 1 ? String(options[0]!['id']) : undefined;
+  useEffect(() => {
+    if (seul && !valeur) onChange(seul);
+  }, [seul, valeur]);
 
   return (
     <Select
       id={champ.nom}
       value={valeur}
       required={champ.requis}
+      disabled={enAttente}
       onChange={(e) => onChange(e.target.value)}
     >
-      <option value="">{t('valeur.vide')}</option>
+      <option value="">{enAttente ? t('valeur.choisirAvant', { parent: libelleParent ?? '' }) : t('valeur.vide')}</option>
       {options.map((o) => (
         <option key={String(o['id'])} value={String(o['id'])}>
           {libelleLigne(o, champ.libelleLie ?? 'nom')}
@@ -121,15 +155,17 @@ export function FormulaireRessource({
     queryOptions: { enabled: !creation },
   });
 
-  const { mutate: creer, isLoading: enCreation } = useCreate();
-  const { mutate: modifier, isLoading: enModification } = useUpdate();
+  const { mutate: creer, mutation: creation_ } = useCreate();
+  const { mutate: modifier, mutation: modification } = useUpdate();
+  const enCreation = creation_.isPending;
+  const enModification = modification.isPending;
 
   useEffect(() => {
     if (creation) {
       setValeurs(Object.fromEntries(champs.map((c) => [c.nom, valeurInitiale(c)])));
       return;
     }
-    const ligne = existante.data?.data as Valeurs | undefined;
+    const ligne = existante.result as Valeurs | undefined;
     if (!ligne) return;
     setValeurs(
       Object.fromEntries(
@@ -143,7 +179,7 @@ export function FormulaireRessource({
       ),
     );
     // `champs` est dérivé de `ressource` : inutile de le suivre séparément.
-  }, [ressource, creation, existante.data]);
+  }, [ressource, creation, existante.result]);
 
   function enregistrer(evenement: React.FormEvent) {
     evenement.preventDefault();
@@ -186,8 +222,8 @@ export function FormulaireRessource({
                   <Checkbox
                     id={champ.nom}
                     checked={Boolean(valeurs[champ.nom])}
-                    onChange={(e) =>
-                      setValeurs((v) => ({ ...v, [champ.nom]: e.target.checked }))
+                    onCheckedChange={(coche) =>
+                      setValeurs((v) => ({ ...v, [champ.nom]: coche === true }))
                     }
                   />
                   {champ.libelle}
@@ -219,7 +255,13 @@ export function FormulaireRessource({
                     <ChampRelation
                       champ={champ}
                       valeur={String(valeurs[champ.nom] ?? '')}
-                      onChange={(v) => setValeurs((x) => ({ ...x, [champ.nom]: v }))}
+                      {...(champ.dependDe
+                        ? {
+                            parent: String(valeurs[champ.dependDe] ?? ''),
+                            libelleParent: champs.find((c) => c.nom === champ.dependDe)?.libelle,
+                          }
+                        : {})}
+                      onChange={(v) => setValeurs((x) => avecCascade(champs, x, champ.nom, v))}
                     />
                   ) : (
                     <Input

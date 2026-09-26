@@ -106,7 +106,7 @@ export class ControlesService {
     const auj = aujourdhui();
     switch (ressource) {
       case 'fermes':
-        return [];
+        return this.territoire(l);
       case 'infrastructures':
         return controlerInfrastructure(l);
       case 'cycles':
@@ -143,6 +143,25 @@ export class ControlesService {
       case 'mesures-eau':
         return this.mesureEau(l, auj);
     }
+  }
+
+  /// Commune dans son cercle, cercle dans sa région : sinon la consolidation
+  /// compterait la même ferme dans deux territoires selon le niveau choisi.
+  private async territoire(l: Ligne): Promise<Violation[]> {
+    const v: Violation[] = [];
+    if (l['communeId']) {
+      const commune = await this.db.commune.findUnique({ where: { id: String(l['communeId']) }, select: { cercleId: true } });
+      if (commune && commune.cercleId !== l['cercleId']) {
+        v.push(incoherent('communeId', 'La commune n’appartient pas au cercle choisi.'));
+      }
+    }
+    if (l['cercleId']) {
+      const cercle = await this.db.cercle.findUnique({ where: { id: String(l['cercleId']) }, select: { regionId: true } });
+      if (cercle && cercle.regionId !== l['regionId']) {
+        v.push(incoherent('cercleId', 'Le cercle n’appartient pas à la région choisie.'));
+      }
+    }
+    return v;
   }
 
   private async memeCycle(modele: 'pesee' | 'lot', idLigne: unknown, cycleId: unknown, champ: string) {

@@ -96,7 +96,7 @@ export function Simulation() {
   };
 
   const options = (choix: ChampSim['choix']) =>
-    ((choix === 'especes' ? especes : types).data?.data ?? []).map((l) => ({ id: String(l['id']), nom: String(l['nom']) }));
+    ((choix === 'especes' ? especes : types).result.data ?? []).map((l) => ({ id: String(l['id']), nom: String(l['nom']) }));
 
   const r = resultat;
   return (

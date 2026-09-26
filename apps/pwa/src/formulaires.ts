@@ -27,8 +27,11 @@ export interface Champ {
   unite?: string;
   aide?: string;
   options?: Option[];
-  /// Choix lus dans IndexedDB (référentiels, lots du cycle…).
-  charger?: (ctx: Contexte) => Promise<Option[]>;
+  /// Choix lus dans IndexedDB (référentiels, lots du cycle…). `valeurs` : le
+  /// formulaire en cours, pour les listes en cascade.
+  charger?: (ctx: Contexte, valeurs: Record<string, string>) => Promise<Option[]>;
+  /// Liste en cascade : rechargée, et vidée, quand ce champ change.
+  dependDe?: string;
   defaut?: (ctx: Contexte) => unknown;
 }
 
@@ -64,7 +67,21 @@ export const FORMULAIRES: Record<Segment, Formulaire> = {
       { nom: 'nom', libelle: 'Nom de la ferme', type: 'texte', requis: true },
       { nom: 'promoteur', libelle: 'Promoteur', type: 'texte' },
       { nom: 'telephone', libelle: 'Téléphone', type: 'texte' },
-      { nom: 'regionId', libelle: 'Région', type: 'reference', charger: async () => actifs(await db.regions.toArray()) },
+      { nom: 'regionId', libelle: 'Région / district', type: 'reference', charger: async () => actifs(await db.regions.toArray()) },
+      {
+        nom: 'cercleId',
+        libelle: 'Cercle',
+        type: 'reference',
+        dependDe: 'regionId',
+        charger: async (_, v) => (v['regionId'] ? actifs(await db.cercles.where('regionId').equals(v['regionId']).toArray()) : []),
+      },
+      {
+        nom: 'communeId',
+        libelle: 'Commune',
+        type: 'reference',
+        dependDe: 'cercleId',
+        charger: async (_, v) => (v['cercleId'] ? actifs(await db.communes.where('cercleId').equals(v['cercleId']).toArray()) : []),
+      },
       { nom: 'village', libelle: 'Village', type: 'texte' },
     ],
   },

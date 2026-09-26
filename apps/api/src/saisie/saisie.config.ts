@@ -17,7 +17,11 @@ export const RESSOURCES = {
     modele: 'ferme',
     filtres: ['regionId', 'cercleId', 'communeId', 'actif'],
     tri: 'nom',
-    inclut: { region: { select: { nom: true } }, commune: { select: { nom: true } } },
+    inclut: {
+      region: { select: { nom: true } },
+      cercle: { select: { nom: true } },
+      commune: { select: { nom: true } },
+    },
   },
   infrastructures: {
     modele: 'infrastructure',

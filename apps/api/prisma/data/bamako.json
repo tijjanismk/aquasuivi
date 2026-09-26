@@ -1,0 +1,21 @@
+[
+ {
+  "code": "00",
+  "name": "District de Bamako",
+  "type": "DISTRICT",
+  "cercles": [
+   {
+    "code": "0001",
+    "name": "Bamako",
+    "communes": [
+     { "code": "00010101", "name": "COMMUNE I" },
+     { "code": "00010102", "name": "COMMUNE II" },
+     { "code": "00010103", "name": "COMMUNE III" },
+     { "code": "00010104", "name": "COMMUNE IV" },
+     { "code": "00010105", "name": "COMMUNE V" },
+     { "code": "00010106", "name": "COMMUNE VI" }
+    ]
+   }
+  ]
+ }
+]
