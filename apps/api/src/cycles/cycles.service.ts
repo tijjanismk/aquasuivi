@@ -73,6 +73,97 @@ export class CyclesService {
     return resultat.sort((a, b) => rang[a.alertes[0]!.niveau] - rang[b.alertes[0]!.niveau]);
   }
 
+  /// Consolidation par territoire (étape 6) : chaque cycle est chiffré par
+  /// `calculerIndicateurs` — les mêmes chiffres que sa fiche —, puis sommé.
+  /// Période : cycles actifs entre `depuis` et `jusqua` (mise en charge avant
+  /// la fin de période, clôture après son début ou cycle en cours).
+  async consolidation(
+    u: UtilisateurConnecte,
+    niveau: 'region' | 'cercle' | 'commune',
+    depuis?: string,
+    jusqua?: string,
+  ) {
+    const ferme = fermesLisibles(u);
+    const jourUtc = (d: string) => new Date(`${d}T00:00:00.000Z`);
+    const cycles = await this.prisma.client.cycle.findMany({
+      where: {
+        ...(ferme ? { infrastructure: { ferme } } : {}),
+        ...(jusqua ? { dateMiseEnCharge: { lte: jourUtc(jusqua) } } : {}),
+        ...(depuis ? { OR: [{ dateCloture: null }, { dateCloture: { gte: jourUtc(depuis) } }] } : {}),
+      },
+      select: {
+        id: true,
+        dateCloture: true,
+        infrastructure: {
+          select: {
+            id: true,
+            superficie: true,
+            ferme: {
+              select: {
+                id: true,
+                region: { select: { id: true, nom: true } },
+                cercle: { select: { id: true, nom: true } },
+                commune: { select: { id: true, nom: true } },
+              },
+            },
+          },
+        },
+      },
+      take: 2000,
+    });
+
+    type Ligne = {
+      territoireId: string | null; territoire: string;
+      fermes: Set<string>; bassins: Set<string>; cyclesEnCours: number; cyclesBoucles: number;
+      productionKg: number; produits: number; charges: number; resultat: number;
+      survies: number[];
+    };
+    const groupes = new Map<string, Ligne>();
+    for (const c of cycles) {
+      const f = c.infrastructure.ferme;
+      const t = f[niveau];
+      const cle = t?.id ?? 'aucun';
+      const g = groupes.get(cle) ?? {
+        territoireId: t?.id ?? null, territoire: t?.nom ?? 'Non renseigné',
+        fermes: new Set(), bassins: new Set(), cyclesEnCours: 0, cyclesBoucles: 0,
+        productionKg: 0, produits: 0, charges: 0, resultat: 0, survies: [],
+      };
+      g.fermes.add(f.id);
+      g.bassins.add(c.infrastructure.id);
+      if (c.dateCloture) g.cyclesBoucles++;
+      else g.cyclesEnCours++;
+      const { agregat } = await this.charger(c.id, u);
+      if (agregat.lots.length > 0) {
+        const i = calculerIndicateurs(agregat);
+        g.productionKg += i.production.productionRecolteeKg;
+        g.produits += i.economie.produits.total;
+        g.charges += i.economie.charges.total;
+        g.resultat += i.economie.resultat;
+        if (c.dateCloture && i.zootechnie.tauxSurviePct !== null) g.survies.push(i.zootechnie.tauxSurviePct);
+      }
+      groupes.set(cle, g);
+    }
+
+    const arrondi = (v: number, d = 1) => Math.round(v * 10 ** d) / 10 ** d;
+    const lignes = [...groupes.values()]
+      .map((g) => ({
+        territoireId: g.territoireId,
+        territoire: g.territoire,
+        fermes: g.fermes.size,
+        bassins: g.bassins.size,
+        cyclesEnCours: g.cyclesEnCours,
+        cyclesBoucles: g.cyclesBoucles,
+        productionKg: arrondi(g.productionKg),
+        produits: Math.round(g.produits),
+        charges: Math.round(g.charges),
+        resultat: Math.round(g.resultat),
+        prixRevientMoyenKg: g.productionKg > 0 ? Math.round(g.charges / g.productionKg) : null,
+        tauxSurvieMoyenPct: g.survies.length ? arrondi(g.survies.reduce((s, x) => s + x, 0) / g.survies.length) : null,
+      }))
+      .sort((a, b) => b.productionKg - a.productionKg || a.territoire.localeCompare(b.territoire, 'fr'));
+    return { niveau, depuis: depuis ?? null, jusqua: jusqua ?? null, tronque: cycles.length === 2000, lignes };
+  }
+
   /// Agrégat du cycle et relevés d'eau, depuis PostgreSQL.
   private async charger(cycleId: string, u: UtilisateurConnecte) {
     const ferme = fermesLisibles(u);

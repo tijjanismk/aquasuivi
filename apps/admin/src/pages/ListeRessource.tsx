@@ -5,14 +5,14 @@ import { TableauRessource } from '@/composants/TableauRessource';
 /// Page de liste d'une ressource de premier niveau : référentiels et fermes.
 /// Les ressources filles (pesées, lots…) n'ont pas de page à elles — elles
 /// s'affichent dans la fiche de leur parent.
-export function ListeRessource({ base }: { base: 'referentiels' | 'fermes' }) {
+export function ListeRessource({ base }: { base: 'referentiels' | 'fermes' | 'administration' }) {
   const { ressource: segment } = useParams();
   const chemin = base === 'fermes' ? 'fermes' : (segment ?? '');
   const ressource = parChemin(chemin);
 
   if (!ressource) return <p>Ressource inconnue.</p>;
 
-  const racine = base === 'fermes' ? '/fermes' : `/referentiels/${ressource.chemin}`;
+  const racine = base === 'fermes' ? '/fermes' : `/${base}/${ressource.chemin}`;
   // Les fermes ont une fiche ; un référentiel se modifie directement.
   const lienLigne = (id: string) => (base === 'fermes' ? `/fermes/${id}` : `${racine}/${id}`);
 

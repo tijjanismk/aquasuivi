@@ -7,7 +7,11 @@ import {
   Fish,
   FlaskConical,
   Calculator,
+  GitMerge,
+  KeyRound,
   LayoutDashboard,
+  Map as Carte,
+  UsersRound,
   LogOut,
   Scale,
   Sprout,
@@ -28,7 +32,10 @@ import { FicheParent } from './pages/FicheParent';
 import { FicheCycle } from './pages/FicheCycle';
 import { Connexion } from './pages/Connexion';
 import { Simulation } from './pages/Simulation';
-import { authProvider, type Utilisateur } from './session';
+import { Conflits } from './pages/Conflits';
+import { Consolidation } from './pages/Consolidation';
+import { ADMINISTRATION } from './administration';
+import { authProvider, utilisateurCourant, type Utilisateur } from './session';
 
 /// Les listes partagent une seule route. Sans cette clé, React réutilise
 /// l'instance d'une ressource à l'autre : le tri de la précédente resterait
@@ -108,6 +115,31 @@ function MiseEnPage() {
             <Calculator className="size-4" />
             Simulation
           </NavLink>
+          <NavLink to="/consolidation" className={({ isActive }) => lienLateral(isActive)}>
+            <Carte className="size-4" />
+            Consolidation
+          </NavLink>
+
+          {utilisateurCourant()?.role === 'ADMIN' && (
+            <>
+              <div className="mt-4 px-3 pb-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                Administration
+              </div>
+              {ADMINISTRATION.map((r) => {
+                const Icone = r.chemin === 'utilisateurs' ? UsersRound : KeyRound;
+                return (
+                  <NavLink key={r.chemin} to={`/administration/${r.chemin}`} className={({ isActive }) => lienLateral(isActive)}>
+                    <Icone className="size-4" />
+                    {r.libelle}
+                  </NavLink>
+                );
+              })}
+              <NavLink to="/conflits" className={({ isActive }) => lienLateral(isActive)}>
+                <GitMerge className="size-4" />
+                Conflits
+              </NavLink>
+            </>
+          )}
 
           <div className="mt-4 px-3 pb-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
             Référentiels
@@ -159,6 +191,22 @@ export function App() {
           >
             <Route index element={<Accueil />} />
             <Route path="/simulation" element={<Simulation />} />
+            <Route path="/consolidation" element={<Consolidation />} />
+            <Route path="/conflits" element={<Conflits />} />
+
+            {/* Administration : comptes et affectations, rôle ADMIN (étape 6). */}
+            <Route
+              path="/administration/:ressource"
+              element={<ParRessource enfant={<ListeRessource base="administration" />} />}
+            />
+            <Route
+              path="/administration/:ressource/nouveau"
+              element={<ParRessource enfant={<PageFormulaire base="administration" />} />}
+            />
+            <Route
+              path="/administration/:ressource/:id"
+              element={<ParRessource enfant={<PageFormulaire base="administration" />} />}
+            />
 
             {/* Référentiels : liste puis formulaire, sans fiche intermédiaire. */}
             <Route

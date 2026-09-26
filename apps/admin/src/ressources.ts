@@ -4,8 +4,9 @@
 import type { Ressource } from './description';
 import { REFERENTIELS } from './referentiels';
 import { RESSOURCES_SAISIE } from './saisie';
+import { ADMINISTRATION } from './administration';
 
-export const TOUTES: Ressource[] = [...REFERENTIELS, ...RESSOURCES_SAISIE];
+export const TOUTES: Ressource[] = [...REFERENTIELS, ...RESSOURCES_SAISIE, ...ADMINISTRATION];
 
 export function parNom(nom: string): Ressource | undefined {
   return TOUTES.find((r) => r.nom === nom);

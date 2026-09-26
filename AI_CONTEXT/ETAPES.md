@@ -165,7 +165,7 @@ de synchronisation lui-même, côté PWA (étape 7).
 
 ---
 
-## Étape 6 — Admin React/Refine `[~]`
+## Étape 6 — Admin React/Refine `[x]`
 
 - [x] Administration des référentiels (espèces, types, aliments,
       produits, paliers) — `apps/admin`, écrans engendrés depuis
@@ -176,9 +176,16 @@ de synchronisation lui-même, côté PWA (étape 7).
 - [x] **Fiche cycle avec les indicateurs** — `pages/FicheCycle.tsx`
 - [x] Écran de connexion — `pages/Connexion.tsx`, session dans
       `src/session.ts` (rafraîchissement silencieux, un seul à la fois)
-- [ ] Gestion des utilisateurs et des `AccesFerme`
-- [ ] Écran de consultation des conflits (`ConflitSync`)
-- [ ] Consolidation par commune / cercle / région
+- [x] Gestion des utilisateurs et des `AccesFerme` — `/admin/utilisateurs`,
+      `/admin/acces` (rôle ADMIN), écrans génériques `src/administration.ts` ;
+      désactivation et changement de mot de passe coupent les sessions
+- [x] Écran de consultation des conflits (`ConflitSync`) — valeur écartée
+      contre valeur retenue, champ par champ ; « traité » / « rouvrir »
+- [x] Consolidation par commune / cercle / région — `GET /consolidation`,
+      chaque cycle chiffré par `calculerIndicateurs`, dans le périmètre lisible
+- [x] Simulation (étape 9) et alertes en cours (étape 8) dans l'admin
+
+`pnpm --filter @aqua/e2e test:administration` (29 contrôles).
 
 **Fin :** un administrateur crée une espèce et un palier sans toucher à
 la base. ✅ — et au-delà : `pnpm --filter @aqua/e2e test:saisie` crée en

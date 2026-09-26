@@ -25,6 +25,17 @@ L'API est fermée par défaut depuis D18 : JWT, cloisonnement par
   les indicateurs donnent la survie **en pourcentage** (94). Le moteur
   d'alertes accepte les deux ; l'admin devrait l'afficher en %.
 
+## Administration — à savoir
+
+- **Rôle porté par le jeton** : un changement de rôle prend effet au plus
+  15 minutes après ; mot de passe changé et désactivation, eux, révoquent
+  aussitôt les jetons de rafraîchissement.
+- **Consolidation** : recalcul de chaque cycle (2 000 au plus, signalé
+  `tronque`). Pour un tableau de bord national, matérialiser les
+  indicateurs des cycles bouclés.
+- **Géographie** : seule la région de Sikasso est chargée (étape 3) ;
+  les fermes sans territoire tombent dans « Non renseigné ».
+
 ## PWA — à savoir
 
 - **Composants UI dupliqués** : `apps/pwa/src/ui/` est une copie de

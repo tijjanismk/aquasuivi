@@ -11,7 +11,9 @@ export type TypeChamp =
   | 'date'
   | 'booleen'
   | 'enum'
-  | 'relation';
+  | 'relation'
+  /// Saisi masqué, jamais relu : l'API ne renvoie pas les mots de passe.
+  | 'motDePasse';
 
 export interface Champ {
   nom: string;

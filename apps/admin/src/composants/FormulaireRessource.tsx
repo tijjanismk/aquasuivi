@@ -50,6 +50,7 @@ function versPayload(champs: Champ[], valeurs: Valeurs, creation: boolean): Vale
 function typeInput(champ: Champ) {
   if (champ.type === 'date') return 'date';
   if (champ.type === 'texte' || champ.type === 'texteLong') return 'text';
+  if (champ.type === 'motDePasse') return 'password';
   return 'number';
 }
 

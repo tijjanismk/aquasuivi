@@ -11,7 +11,7 @@ export function PageFormulaire({
   base,
   chemin,
 }: {
-  base: 'referentiels' | 'saisie';
+  base: 'referentiels' | 'saisie' | 'administration';
   /// Imposé quand la route ne porte pas de paramètre `:ressource`
   /// — `/fermes/nouveau`, par exemple.
   chemin?: string;
@@ -33,7 +33,7 @@ export function PageFormulaire({
   const retour = parametres.get('retour');
   const destination =
     retour ??
-    (base === 'referentiels' ? `/referentiels/${ressource.chemin}` : '/fermes');
+    (base === 'saisie' ? '/fermes' : `/${base}/${ressource.chemin}`);
   const revenir = () => navigate(destination);
 
   return (

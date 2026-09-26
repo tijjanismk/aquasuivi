@@ -12,6 +12,8 @@ import { SyncController } from './sync/sync.controller.js';
 import { SyncService } from './sync/sync.service.js';
 import { SimulationsController } from './simulations/simulations.controller.js';
 import { SimulationsService } from './simulations/simulations.service.js';
+import { AdministrationController } from './administration/administration.controller.js';
+import { AdministrationService } from './administration/administration.service.js';
 import { CyclesController } from './cycles/cycles.controller.js';
 import { CyclesService } from './cycles/cycles.service.js';
 import { SanteController } from './sante.controller.js';
@@ -46,6 +48,7 @@ function secretJwt(): string {
     CyclesController,
     SyncController,
     SimulationsController,
+    AdministrationController,
   ],
   providers: [
     AuthService,
@@ -54,6 +57,7 @@ function secretJwt(): string {
     ControlesService,
     SyncService,
     SimulationsService,
+    AdministrationService,
     CyclesService,
     // Tout est fermé par défaut ; `@Publique()` ouvre une route (D18).
     { provide: APP_GUARD, useClass: GardeJwt },
