@@ -14,8 +14,8 @@ import {
 } from '@/saisie';
 import { formaterDate, formaterMontant, formaterNombre, t } from '@/i18n';
 import { Button } from '@/composants/ui/button';
-import { Card } from '@/composants/ui/divers';
 import { TableauRessource } from '@/composants/TableauRessource';
+import { Card, CardContent } from '@/composants/ui/card';
 
 /// Fiche d'une ligne « parent » : son résumé, puis la liste de ses enfants.
 /// Ferme → infrastructures, infrastructure → cycles, pesée → échantillons,
@@ -123,7 +123,8 @@ export function FicheParent({ type }: { type: keyof typeof CONFIGURATIONS }) {
         </Link>
       </div>
 
-      <Card className="mb-8 grid grid-cols-2 gap-4 p-5 sm:grid-cols-3 lg:grid-cols-4">
+      <Card className="mb-8 py-5">
+        <CardContent className="grid grid-cols-2 gap-4 px-5 sm:grid-cols-3 lg:grid-cols-4">
         {champsEnListe(config.parent).map((champ) => (
           <div key={champ.nom}>
             <div className="text-xs text-muted-foreground">{champ.libelle}</div>
@@ -132,6 +133,7 @@ export function FicheParent({ type }: { type: keyof typeof CONFIGURATIONS }) {
             </div>
           </div>
         ))}
+        </CardContent>
       </Card>
 
       <section>

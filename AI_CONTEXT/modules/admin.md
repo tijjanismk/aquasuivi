@@ -68,8 +68,12 @@ n'existe pas.
 
 ## Interface
 
-Tailwind v4, composants shadcn/ui sur primitives Radix (D24), ajoutés
-par `pnpm dlx shadcn@latest add` grâce à `components.json`. Thème vert :
+Tailwind v4, composants officiels shadcn/ui (registre `new-york-v4`) sur
+primitives Radix, un fichier par composant dans `composants/ui/` (D24).
+Cartes en `CardHeader`/`CardContent`, tableaux dans une `Card` `py-0`.
+**Formulaire générique** (`FormulaireRessource.tsx`) : react-hook-form +
+zod + `Field`, schéma déduit des champs décrits ; listes en cascade par
+`useWatch` sur le champ parent (`dependDe`). Thème vert :
 une gamme `--vert-50` … `--vert-950` dans `index.css`, d'où découlent
 tous les jetons ; la changer là la change partout (et dans la PWA, dont le
 fichier est identique).

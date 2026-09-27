@@ -9,10 +9,12 @@ import { etatCycle, useRequete } from '../donnees';
 import { date, montant, nombre } from '../format';
 import { supprimer } from '../saisie';
 import { Entete } from '../App';
-import { Alerte, Badge, Card } from '@/ui/divers';
 import { Section, Vide, EnAttente } from './liste';
 import { cn } from '@/lib/utils';
 import { useEnAttente } from './Fermes';
+import { Alert, AlertDescription } from '@/ui/alert';
+import { Badge } from '@/ui/badge';
+import { Card, CardContent } from '@/ui/card';
 
 const ACTIONS: { ressource: Segment | 'pesee'; libelle: string; icone: LucideIcon }[] = [
   { ressource: 'pesee', libelle: 'Pesée', icone: Scale },
@@ -111,14 +113,19 @@ export function Cycle() {
       />
 
       {etat === null && (
-        <Alerte className="mb-4 border-primary/30 bg-primary/5 text-foreground">
-          Commencez par la mise en charge : le nombre d’alevins et leur poids.
-          <Link to={`/saisie/lots/nouveau?cycle=${id}`} className="ml-1 font-medium text-primary underline">Saisir les alevins</Link>
-        </Alerte>
+        <Alert variant="succes" className="mb-4">
+          <AlertDescription>
+            <p>
+              Commencez par la mise en charge : le nombre d’alevins et leur poids.
+              <Link to={`/saisie/lots/nouveau?cycle=${id}`} className="ml-1 font-medium text-primary underline">Saisir les alevins</Link>
+            </p>
+          </AlertDescription>
+        </Alert>
       )}
 
       {i && (
-        <Card data-test="indicateurs" className="mb-4 p-4">
+        <Card data-test="indicateurs" className="mb-4 py-4">
+          <CardContent className="px-4">
           <div className="grid grid-cols-3 gap-2">
             <Chiffre test="effectif" libelle="poissons" valeur={nombre(i.zootechnie.effectifFinal, 0)} />
             <Chiffre test="poids-moyen" libelle="g en moyenne" valeur={nombre(i.zootechnie.poidsMoyenFinalG)} />
@@ -133,6 +140,7 @@ export function Cycle() {
               <span className="text-muted-foreground"> ({nombre(etat.ration.tauxPct)} % de la biomasse)</span>
             </p>
           )}
+          </CardContent>
         </Card>
       )}
 
@@ -174,7 +182,7 @@ export function Cycle() {
         </div>
       )}
 
-      {erreur && <Alerte className="mb-4">{erreur}</Alerte>}
+      {erreur && <Alert variant="destructive" className="mb-4"><AlertDescription>{erreur}</AlertDescription></Alert>}
 
       <Section titre="Historique">
         {ops?.length === 0 && <Vide>Aucune opération pour l’instant.</Vide>}

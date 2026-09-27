@@ -172,6 +172,11 @@ window.__saisir = (id, valeur) => {
     if (el.checked !== valeur) el.click();
     return true;
   }
+  // Case à cocher Radix (shadcn) : un <button role="checkbox">, l'état est dans aria-checked.
+  if (el.getAttribute('role') === 'checkbox') {
+    if ((el.getAttribute('aria-checked') === 'true') !== valeur) el.click();
+    return true;
+  }
   const setter = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el), 'value').set;
   setter.call(el, String(valeur));
   el.dispatchEvent(new Event(el.tagName === 'SELECT' ? 'change' : 'input', { bubbles: true }));

@@ -4,10 +4,10 @@ import { db } from '../db';
 import { useRequete } from '../donnees';
 import { nombre } from '../format';
 import { Entete } from '../App';
-import { stylesBouton } from '@/ui/button';
-import { Badge } from '@/ui/divers';
+import { buttonVariants } from '@/ui/button';
 import { Carte, Section, Vide } from './liste';
 import { useEnAttente } from './Fermes';
+import { Badge } from '@/ui/badge';
 
 export function Ferme() {
   const { id = '' } = useParams();
@@ -38,7 +38,7 @@ export function Ferme() {
       <Section
         titre="Bassins"
         action={
-          <Link to={`/saisie/infrastructures/nouveau?ferme=${id}`} data-test="nouveau-bassin" className={stylesBouton({ size: 'sm' })}>
+          <Link to={`/saisie/infrastructures/nouveau?ferme=${id}`} data-test="nouveau-bassin" className={buttonVariants({ size: 'sm' })}>
             <Plus /> Bassin
           </Link>
         }

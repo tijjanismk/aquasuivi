@@ -4,7 +4,9 @@ import { CircleMarker, MapContainer, Popup, TileLayer, useMap } from 'react-leaf
 import { latLngBounds } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { appelApi } from '@/session';
-import { Alerte, Badge, Card } from '@/composants/ui/divers';
+import { Alert, AlertDescription } from '@/composants/ui/alert';
+import { Badge } from '@/composants/ui/badge';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/composants/ui/card';
 
 /// Carte des fermes (D25). Fond OpenStreetMap : gratuit, sans clé ni compte,
 /// mais servi par Internet — hors ligne, les points restent, le fond disparaît.
@@ -94,7 +96,7 @@ export function Carte() {
         cours. Fond de carte OpenStreetMap : il faut une connexion pour l’afficher.
       </p>
 
-      {erreur && <Alerte className="mb-4">{erreur}</Alerte>}
+      {erreur && <Alert variant="destructive" className="mb-4"><AlertDescription>{erreur}</AlertDescription></Alert>}
 
       <div className="mb-3 flex flex-wrap gap-4 text-sm">
         {(Object.keys(LIBELLES) as Etat[]).map((e) => (
@@ -108,7 +110,7 @@ export function Carte() {
         </span>
       </div>
 
-      <Card className="overflow-hidden p-0">
+      <Card className="gap-0 overflow-hidden py-0">
         <MapContainer center={MALI} zoom={5} scrollWheelZoom className="h-[560px] w-full" data-test="carte">
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -151,18 +153,20 @@ export function Carte() {
       </Card>
 
       {sansPosition.length > 0 && (
-        <Card className="mt-6 p-5">
-          <h3 className="mb-1 font-semibold">Fermes sans coordonnées</h3>
-          <p className="mb-3 text-sm text-muted-foreground">
-            À compléter depuis leur fiche (latitude et longitude) pour qu’elles apparaissent sur la carte.
-          </p>
-          <div className="flex flex-wrap gap-2">
+        <Card className="mt-6">
+          <CardHeader>
+            <CardTitle>Fermes sans coordonnées</CardTitle>
+            <CardDescription>
+              À compléter depuis leur fiche (latitude et longitude) pour qu’elles apparaissent sur la carte.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="flex flex-wrap gap-2">
             {sansPosition.map((f) => (
               <Link key={f.id} to={`/fermes/${f.id}`}>
                 <Badge variant="outline">{f.nom}</Badge>
               </Link>
             ))}
-          </div>
+          </CardContent>
         </Card>
       )}
     </>

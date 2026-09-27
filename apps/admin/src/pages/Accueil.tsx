@@ -7,7 +7,8 @@ import { ListeAlertes } from '@/composants/Alertes';
 import type { Alerte as AlerteCycle } from '@aqua/shared';
 import { REFERENTIELS } from '../referentiels';
 import { formaterNombre } from '../i18n';
-import { Alerte, Card } from '@/composants/ui/divers';
+import { Alert, AlertDescription } from '@/composants/ui/alert';
+import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from '@/composants/ui/card';
 
 interface Sante {
   base: string;
@@ -47,12 +48,20 @@ function AlertesEnCours() {
       </h3>
       <div className="grid gap-3 lg:grid-cols-2">
         {cycles.map((c) => (
-          <Card key={c.cycleId} className="p-4">
-            <Link to={`/cycles/${c.cycleId}`} className="mb-2 flex items-center justify-between font-medium hover:text-primary">
-              {c.ferme} · {c.bassin} · cycle {c.numero}
-              <ChevronRight className="size-4 text-muted-foreground" />
-            </Link>
-            <ListeAlertes alertes={c.alertes} />
+          <Card key={c.cycleId} className="gap-3 py-4">
+            <CardHeader className="px-4">
+              <CardTitle className="text-base">
+                <Link to={`/cycles/${c.cycleId}`} className="hover:text-primary">
+                  {c.ferme} · {c.bassin} · cycle {c.numero}
+                </Link>
+              </CardTitle>
+              <CardAction>
+                <ChevronRight className="size-4 text-muted-foreground" />
+              </CardAction>
+            </CardHeader>
+            <CardContent className="px-4">
+              <ListeAlertes alertes={c.alertes} />
+            </CardContent>
           </Card>
         ))}
       </div>
@@ -82,17 +91,21 @@ export function Accueil() {
       </p>
 
       {erreur && (
-        <Alerte className="mb-6">
-          API injoignable sur {API_URL}. Lancez-la avec <code>pnpm dev:api</code>.
-        </Alerte>
+        <Alert variant="destructive" className="mb-6">
+          <AlertDescription>
+            API injoignable sur {API_URL}. Lancez-la avec <code>pnpm dev:api</code>.
+          </AlertDescription>
+        </Alert>
       )}
 
       {sante && (
         <div className="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
           {Object.entries(sante.referentiels).map(([cle, valeur]) => (
-            <Card key={cle} className="p-4">
-              <div className="tabulaire text-2xl font-semibold">{formaterNombre(valeur)}</div>
-              <div className="mt-0.5 text-xs text-muted-foreground">{LIBELLES[cle] ?? cle}</div>
+            <Card key={cle} className="py-4">
+              <CardHeader className="px-4">
+                <CardDescription className="text-xs">{LIBELLES[cle] ?? cle}</CardDescription>
+                <CardTitle className="tabulaire text-2xl">{formaterNombre(valeur)}</CardTitle>
+              </CardHeader>
             </Card>
           ))}
         </div>
@@ -103,12 +116,14 @@ export function Accueil() {
       <div className="grid gap-3 sm:grid-cols-2">
         {REFERENTIELS.map((r) => (
           <Link key={r.chemin} to={`/referentiels/${r.chemin}`} className="group">
-            <Card className="h-full p-5 transition-colors group-hover:border-primary/40 group-hover:bg-accent/40">
-              <div className="mb-1 flex items-center justify-between gap-2">
-                <span className="font-medium">{r.libelle}</span>
-                <ChevronRight className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
-              </div>
-              <p className="text-sm leading-relaxed text-muted-foreground">{r.description}</p>
+            <Card className="h-full py-5 transition-colors group-hover:border-primary/40 group-hover:bg-accent/40">
+              <CardHeader className="px-5">
+                <CardTitle className="text-base">{r.libelle}</CardTitle>
+                <CardDescription className="leading-relaxed">{r.description}</CardDescription>
+                <CardAction>
+                  <ChevronRight className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
+                </CardAction>
+              </CardHeader>
             </Card>
           </Link>
         ))}

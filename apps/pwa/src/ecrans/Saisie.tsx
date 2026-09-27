@@ -7,9 +7,11 @@ import { FORMULAIRES, type Champ, type Contexte, type Formulaire, type Option } 
 import { enregistrer, ErreurSaisie, supprimer } from '../saisie';
 import { Entete } from '../App';
 import { Button } from '@/ui/button';
-import { Input, Label, Select } from '@/ui/champ';
-import { Alerte } from '@/ui/divers';
 import { Vide } from './liste';
+import { Alert, AlertDescription } from '@/ui/alert';
+import { Input } from '@/ui/input';
+import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from '@/ui/field';
+import { NativeSelect, NativeSelectOption } from '@/ui/native-select';
 
 const SEGMENTS = Object.keys(FORMULAIRES) as Segment[];
 
@@ -78,19 +80,19 @@ export function ChampSaisie({ champ, valeur, onChange, options, erreur }: {
     value: valeur,
   };
   return (
-    <div className="flex flex-col gap-1.5">
-      <Label htmlFor={id}>
+    <Field data-invalid={erreur ? true : undefined}>
+      <FieldLabel htmlFor={id}>
         {champ.libelle}
         {champ.unite && <span className="font-normal text-muted-foreground"> ({champ.unite})</span>}
         {champ.requis && <span className="text-destructive"> *</span>}
-      </Label>
+      </FieldLabel>
       {champ.type === 'choix' || champ.type === 'reference' ? (
-        <Select {...commun} className="h-11 text-base" onChange={(e) => onChange(e.target.value)}>
-          <option value="">{champ.requis ? 'Choisir…' : '—'}</option>
+        <NativeSelect {...commun} className="h-11 text-base" onChange={(e) => onChange(e.target.value)}>
+          <NativeSelectOption value="">{champ.requis ? 'Choisir…' : '—'}</NativeSelectOption>
           {(champ.options ?? options ?? []).map((o) => (
-            <option key={o.valeur} value={o.valeur}>{o.libelle}</option>
+            <NativeSelectOption key={o.valeur} value={o.valeur}>{o.libelle}</NativeSelectOption>
           ))}
-        </Select>
+        </NativeSelect>
       ) : (
         <Input
           {...commun}
@@ -101,11 +103,11 @@ export function ChampSaisie({ champ, valeur, onChange, options, erreur }: {
         />
       )}
       {erreur ? (
-        <p data-test="erreur-champ" className="text-xs text-destructive">{erreur}</p>
+        <FieldError data-test="erreur-champ">{erreur}</FieldError>
       ) : (
-        champ.aide && <p className="text-xs text-muted-foreground">{champ.aide}</p>
+        champ.aide && <FieldDescription>{champ.aide}</FieldDescription>
       )}
-    </div>
+    </Field>
   );
 }
 
@@ -224,7 +226,8 @@ export function Saisie() {
   return (
     <>
       <Entete titre={f.titre} retour={destination(ressource, ligne ?? { id: '' }, ctx)} />
-      <form data-test="formulaire" onSubmit={soumettre} className="flex flex-col gap-4" noValidate>
+      <form data-test="formulaire" onSubmit={soumettre} noValidate>
+        <FieldGroup className="gap-4">
         {f.champs.map((champ) => (
           <ChampSaisie
             key={champ.nom}
@@ -236,7 +239,9 @@ export function Saisie() {
           />
         ))}
         {generales.length > 0 && (
-          <Alerte data-test="refus">{generales.map((v) => v.message).join(' ')}</Alerte>
+          <Alert variant="destructive" data-test="refus">
+            <AlertDescription>{generales.map((v) => v.message).join(' ')}</AlertDescription>
+          </Alert>
         )}
         <Button type="submit" size="lg" disabled={attente} data-test="enregistrer">
           Enregistrer
@@ -246,6 +251,7 @@ export function Saisie() {
             <Trash2 /> Supprimer
           </Button>
         )}
+        </FieldGroup>
       </form>
     </>
   );

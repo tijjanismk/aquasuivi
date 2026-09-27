@@ -3,7 +3,11 @@ import { appelApi } from '@/session';
 import { formaterDate } from '@/i18n';
 import { cn } from '@/lib/utils';
 import { Button } from '@/composants/ui/button';
-import { Alerte, Badge, Card } from '@/composants/ui/divers';
+import { Alert, AlertDescription } from '@/composants/ui/alert';
+import { Badge } from '@/composants/ui/badge';
+import { Card, CardContent, CardHeader } from '@/composants/ui/card';
+import { Checkbox } from '@/composants/ui/checkbox';
+import { Label } from '@/composants/ui/label';
 
 interface Conflit {
   id: string;
@@ -89,20 +93,20 @@ export function Conflits() {
         Deux appareils ont modifié la même ligne hors ligne. La modification la plus récente a gagné ;
         l’autre est gardée ici pour qu’aucune saisie ne se perde en silence.
       </p>
-      <label className="mb-4 flex items-center gap-2 text-sm">
-        <input type="checkbox" checked={tous} onChange={(e) => setTous(e.target.checked)} />
-        Afficher aussi les conflits traités
-      </label>
-      {erreur && <Alerte>{erreur}</Alerte>}
+      <div className="mb-4 flex items-center gap-2">
+        <Checkbox id="tous" checked={tous} onCheckedChange={(c) => setTous(c === true)} />
+        <Label htmlFor="tous" className="font-normal">Afficher aussi les conflits traités</Label>
+      </div>
+      {erreur && <Alert variant="destructive"><AlertDescription>{erreur}</AlertDescription></Alert>}
       {conflits?.length === 0 && (
-        <Card className="border-dashed p-6 text-center text-sm text-muted-foreground" data-test="vide">
-          Aucun conflit à traiter.
+        <Card className="border-dashed py-6" data-test="vide">
+          <CardContent className="text-center text-sm text-muted-foreground">Aucun conflit à traiter.</CardContent>
         </Card>
       )}
       <div className="flex flex-col gap-3">
         {conflits?.map((c) => (
-          <Card key={c.id} data-test="conflit" className={cn('p-4', c.resolu && 'opacity-60')}>
-            <div className="mb-2 flex flex-wrap items-center gap-2">
+          <Card key={c.id} data-test="conflit" className={cn('gap-3 py-4', c.resolu && 'opacity-60')}>
+            <CardHeader className="flex flex-wrap items-center gap-2 px-4">
               <Badge variant="outline">{c.tableCible}</Badge>
               <span className="text-sm text-muted-foreground">
                 {formaterDate(c.createdAt)} · {c.auteur ?? 'auteur inconnu'}
@@ -112,9 +116,11 @@ export function Conflits() {
               <Button size="sm" variant="outline" className="ml-auto" data-test="marquer" onClick={() => void marquer(c)}>
                 {c.resolu ? 'Rouvrir' : 'Marquer comme traité'}
               </Button>
-            </div>
-            <p className="mb-2 text-sm">{RAISONS[c.raison] ?? c.raison}</p>
-            <Differences rejetee={c.valeurRejetee} retenue={c.valeurRetenue} />
+            </CardHeader>
+            <CardContent className="px-4">
+              <p className="mb-2 text-sm">{RAISONS[c.raison] ?? c.raison}</p>
+              <Differences rejetee={c.valeurRejetee} retenue={c.valeurRetenue} />
+            </CardContent>
           </Card>
         ))}
       </div>

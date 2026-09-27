@@ -5,11 +5,13 @@ import { ArrowLeft } from 'lucide-react';
 import { appelApi } from '@/session';
 import { CYCLES, SECTIONS_CYCLE } from '@/saisie';
 import { formaterDate, formaterMontant, formaterNombre, t } from '@/i18n';
-import { Alerte, Badge, Card } from '@/composants/ui/divers';
 import { Button } from '@/composants/ui/button';
 import { TableauRessource } from '@/composants/TableauRessource';
 import { ListeAlertes } from '@/composants/Alertes';
 import type { Alerte as AlerteCycle } from '@aqua/shared';
+import { Alert, AlertDescription } from '@/composants/ui/alert';
+import { Badge } from '@/composants/ui/badge';
+import { Card, CardContent } from '@/composants/ui/card';
 
 interface Indicateurs {
   cycle: { dureeJours: number | null };
@@ -141,24 +143,25 @@ export function FicheCycle() {
           {t('cycle.indicateurs')}
         </h3>
 
-        {erreurIndicateurs && <Alerte>{erreurIndicateurs}</Alerte>}
+        {erreurIndicateurs && <Alert variant="destructive"><AlertDescription>{erreurIndicateurs}</AlertDescription></Alert>}
 
         {!erreurIndicateurs && !indicateurs && (
-          <Card className="border-dashed p-6 text-center text-sm text-muted-foreground">
-            {t('liste.chargement')}
+          <Card className="border-dashed py-6">
+            <CardContent className="text-center text-sm text-muted-foreground">{t('liste.chargement')}</CardContent>
           </Card>
         )}
 
         {indicateurs && (
           <>
             {indicateurs.conformite.recoltesNonConformes > 0 && (
-              <Alerte className="mb-3">
-                {t('cycle.recoltesNonConformes', {
-                  n: indicateurs.conformite.recoltesNonConformes,
-                })}
-              </Alerte>
+              <Alert variant="destructive" className="mb-3">
+                <AlertDescription>
+                  {t('cycle.recoltesNonConformes', { n: indicateurs.conformite.recoltesNonConformes })}
+                </AlertDescription>
+              </Alert>
             )}
-            <Card className="grid grid-cols-2 gap-5 p-5 sm:grid-cols-3 lg:grid-cols-5">
+            <Card className="py-5">
+              <CardContent className="grid grid-cols-2 gap-5 px-5 sm:grid-cols-3 lg:grid-cols-5">
               <Chiffre
                 libelle="Effectif final"
                 valeur={nb(indicateurs.zootechnie.effectifFinal, 0)}
@@ -244,6 +247,7 @@ export function FicheCycle() {
                 valeur={nb(indicateurs.production.chargeFinale, 2)}
                 unite="kg"
               />
+              </CardContent>
             </Card>
           </>
         )}

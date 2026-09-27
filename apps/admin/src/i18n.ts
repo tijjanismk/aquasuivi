@@ -50,6 +50,9 @@ const TEXTES = {
     'liste.confirmerDesactivation': 'Désactiver cette ligne ?',
     'form.nouvelle': 'Nouvelle entrée',
     'form.refus': 'Enregistrement refusé.',
+    'form.obligatoire': 'Obligatoire.',
+    'form.nombre': 'Nombre attendu (virgule ou point décimal).',
+    'form.entier': 'Nombre entier attendu.',
     'erreur.apiInjoignable':
       'Impossible de joindre l’API. Vérifiez qu’elle tourne sur le port 3000.',
     'valeur.vide': '—',

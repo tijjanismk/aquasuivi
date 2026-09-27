@@ -4,7 +4,7 @@ import { db } from '../db';
 import { useRequete } from '../donnees';
 import { utilisateur } from '../session';
 import { Entete } from '../App';
-import { stylesBouton } from '@/ui/button';
+import { buttonVariants } from '@/ui/button';
 import { Carte, Section, Vide } from './liste';
 
 /// Identifiants ayant une saisie pas encore acceptée par le serveur.
@@ -32,7 +32,7 @@ export function Fermes() {
       <Section
         titre="Fermes"
         action={
-          <Link to="/saisie/fermes/nouveau" data-test="nouvelle-ferme" className={stylesBouton({ size: 'sm' })}>
+          <Link to="/saisie/fermes/nouveau" data-test="nouvelle-ferme" className={buttonVariants({ size: 'sm' })}>
             <Plus /> Ferme
           </Link>
         }
@@ -54,7 +54,7 @@ export function Fermes() {
             );
           })}
       </Section>
-      <Link to="/simuler" data-test="lien-simuler" className={stylesBouton({ variant: 'outline', className: 'w-full' })}>
+      <Link to="/simuler" data-test="lien-simuler" className={buttonVariants({ variant: 'outline', className: 'w-full' })}>
         <Calculator /> Simuler un projet
       </Link>
     </>

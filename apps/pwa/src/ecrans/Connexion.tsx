@@ -4,8 +4,9 @@ import { Fish } from 'lucide-react';
 import { connecter, ErreurApi, inscrire, utilisateur } from '../session';
 import { synchroniser } from '../sync';
 import { Button } from '@/ui/button';
-import { Input, Label } from '@/ui/champ';
-import { Alerte } from '@/ui/divers';
+import { Alert, AlertDescription } from '@/ui/alert';
+import { Input } from '@/ui/input';
+import { Field, FieldDescription, FieldGroup, FieldLabel } from '@/ui/field';
 
 /// Connexion ou inscription libre d'un particulier (D19) : téléphone et mot
 /// de passe suffisent. La première synchronisation charge référentiels et
@@ -73,21 +74,22 @@ export function Connexion() {
           ))}
         </div>
 
-        <form data-test="form-connexion" onSubmit={soumettre} className="flex flex-col gap-4">
+        <form data-test="form-connexion" onSubmit={soumettre}>
+          <FieldGroup className="gap-4">
           {mode === 'inscription' && (
             <div className="grid grid-cols-2 gap-3">
-              <div className="flex flex-col gap-2">
-                <Label htmlFor="nom">Nom</Label>
+              <Field>
+                <FieldLabel htmlFor="nom">Nom</FieldLabel>
                 <Input id="nom" required autoComplete="family-name" value={champs.nom} onChange={maj('nom')} />
-              </div>
-              <div className="flex flex-col gap-2">
-                <Label htmlFor="prenom">Prénom</Label>
+              </Field>
+              <Field>
+                <FieldLabel htmlFor="prenom">Prénom</FieldLabel>
                 <Input id="prenom" autoComplete="given-name" value={champs.prenom} onChange={maj('prenom')} />
-              </div>
+              </Field>
             </div>
           )}
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="identifiant">{mode === 'connexion' ? 'Téléphone ou e-mail' : 'Téléphone'}</Label>
+          <Field>
+            <FieldLabel htmlFor="identifiant">{mode === 'connexion' ? 'Téléphone ou e-mail' : 'Téléphone'}</FieldLabel>
             <Input
               id="identifiant"
               required
@@ -97,9 +99,9 @@ export function Connexion() {
               value={champs.identifiant}
               onChange={maj('identifiant')}
             />
-          </div>
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="motDePasse">Mot de passe</Label>
+          </Field>
+          <Field>
+            <FieldLabel htmlFor="motDePasse">Mot de passe</FieldLabel>
             <Input
               id="motDePasse"
               type="password"
@@ -110,12 +112,17 @@ export function Connexion() {
               value={champs.motDePasse}
               onChange={maj('motDePasse')}
             />
-            {mode === 'inscription' && <p className="text-xs text-muted-foreground">Au moins 8 caractères.</p>}
-          </div>
-          {erreur && <Alerte data-test="erreur">{erreur}</Alerte>}
+            {mode === 'inscription' && <FieldDescription>Au moins 8 caractères.</FieldDescription>}
+          </Field>
+          {erreur && (
+            <Alert variant="destructive" data-test="erreur">
+              <AlertDescription>{erreur}</AlertDescription>
+            </Alert>
+          )}
           <Button type="submit" size="lg" disabled={attente} data-test="valider">
             {attente ? 'Un instant…' : mode === 'connexion' ? 'Se connecter' : 'Créer mon compte'}
           </Button>
+          </FieldGroup>
         </form>
       </div>
     </div>

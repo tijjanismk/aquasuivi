@@ -54,8 +54,18 @@ L'API est fermée par défaut depuis D18 : JWT, cloisonnement par
   de pré-téléchargement — au-delà d'un usage d'administration, héberger
   ses tuiles (D25). La CSP de `deploy/Caddyfile` autorise
   `tile.openstreetmap.org` : **changer de fournisseur = changer la CSP**.
-- **`index.css` est dupliqué** entre admin et PWA : toute retouche du
-  thème se fait dans les deux.
+- **`index.css` et `ui/` sont dupliqués** entre admin et PWA : toute
+  retouche du thème ou d'un composant se fait dans les deux.
+- **Ajouter un composant shadcn** : `shadcn add` 4.21 écrit
+  `import { cn } from "cn"` (et installe un paquet npm `cn`) et écrase
+  `button.tsx`. Procédure sûre : `--dry-run` pour voir ce qui change,
+  ou lire `https://ui.shadcn.com/r/styles/new-york-v4/<nom>.json`, copier
+  `files[].content`, remplacer `"cn"` par `"@/lib/utils"` et
+  `@/registry/new-york-v4/ui/` par l'alias de l'app, ajouter soi-même les
+  `dependencies` listées. Le registre expire souvent ici (réseau lent).
+- **Cases à cocher Radix** : un `<button role="checkbox">`, pas un
+  `<input>`. `__saisir` (e2e) lit `aria-checked` ; un test qui ferait
+  `.checked` lirait `undefined`.
 - **Versions bloquées** (D26) : API en TypeScript 6 (Nest CLI), admin en
   React Router 7 (Refine). À relever quand Nest et Refine suivront.
 - **`@nestjs/jwt` 11** n'annonce pas NestJS 12 (avertissement de pair
@@ -163,13 +173,16 @@ Modifier ces fichiers a le plus d'effets de bord :
 
 ## Symboles dupliqués
 
-28 noms exportés par plusieurs fichiers. **Voulus** pour l'essentiel :
+48 noms exportés par plusieurs fichiers (carte du 27/09/2026, 135
+fichiers). **Voulus** pour l'essentiel :
 
-- **Composants d'interface** (`Button`, `Card`, `Badge`, `Alerte`,
-  `Input`, `Select`, `Checkbox`, `Label`, `cn`, `stylesBouton`) : copies
-  identiques entre `admin/src/composants/ui/` et `pwa/src/ui/`, comme
-  `index.css`. Deux apps, deux bundles, pas de paquet d'interface commun —
-  **modifier les deux**.
+- **Composants shadcn** (`Button`, `Card` et ses parties, `Field` et ses
+  parties, `Badge`, `Alert`, `Input`, `NativeSelect`, `Label`,
+  `Separator`, `buttonVariants`, `cn`…) : copies identiques entre
+  `admin/src/composants/ui/` et `pwa/src/ui/`, comme `index.css`. Deux
+  apps, deux bundles, pas de paquet d'interface commun — **modifier les
+  deux**. La PWA n'a que ce qu'elle utilise (ni `checkbox`, ni `table`,
+  ni `textarea`).
 - **Même nom, sens différent** : `Carte` (page carte de l'admin / carte
   de liste de la PWA), `Alerte` (bandeau d'interface / alerte métier de
   `shared`), `Simulation`, `Connexion`, `App`, `Cycle`, `Ferme`, `Pesee`

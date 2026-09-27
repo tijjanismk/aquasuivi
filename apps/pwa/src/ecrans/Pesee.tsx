@@ -8,10 +8,12 @@ import { enregistrer, ErreurSaisie, supprimer } from '../saisie';
 import { nombre } from '../format';
 import { Entete } from '../App';
 import { Button } from '@/ui/button';
-import { Input, Select } from '@/ui/champ';
-import { Alerte, Card } from '@/ui/divers';
 import { Vide } from './liste';
 import { ChampSaisie } from './Saisie';
+import { Alert, AlertDescription } from '@/ui/alert';
+import { Card, CardAction, CardContent, CardHeader, CardTitle } from '@/ui/card';
+import { Input } from '@/ui/input';
+import { NativeSelect, NativeSelectOption } from '@/ui/native-select';
 
 interface LigneEchantillon {
   id?: string;
@@ -119,13 +121,14 @@ export function Pesee() {
           <ChampSaisie key={c.nom} champ={c} valeur={valeurs[c.nom] ?? ''} onChange={(v) => setValeurs((x) => ({ ...x, [c.nom]: v }))} />
         ))}
 
-        <Card className="p-3">
-          <div className="mb-2 flex items-baseline justify-between">
-            <h2 className="text-sm font-semibold">Échantillons</h2>
-            <span data-test="moyenne" className="text-sm tabular-nums text-muted-foreground">
+        <Card className="gap-3 py-3">
+          <CardHeader className="px-3">
+            <CardTitle className="text-sm">Échantillons</CardTitle>
+            <CardAction data-test="moyenne" className="text-sm tabular-nums text-muted-foreground">
               {moyenne ? `${nombre(moyenne)} g en moyenne · ${poissons} poissons` : 'poids moyen —'}
-            </span>
-          </div>
+            </CardAction>
+          </CardHeader>
+          <CardContent className="px-3">
           <div className="mb-1 grid grid-cols-[1fr_1fr_auto] gap-2 px-1 text-xs text-muted-foreground">
             <span>Poissons</span>
             <span>Poids total (g)</span>
@@ -135,9 +138,9 @@ export function Pesee() {
             {echantillons.map((x, i) => (
               <div key={x.id ?? `n${i}`} data-test="echantillon" className="flex flex-col gap-1">
                 {lots.length > 1 && (
-                  <Select aria-label="Lot" value={x.lotId} onChange={(e) => maj(i, 'lotId', e.target.value)}>
-                    {lots.map((o) => <option key={o.valeur} value={o.valeur}>{o.libelle}</option>)}
-                  </Select>
+                  <NativeSelect aria-label="Lot" value={x.lotId} onChange={(e) => maj(i, 'lotId', e.target.value)}>
+                    {lots.map((o) => <NativeSelectOption key={o.valeur} value={o.valeur}>{o.libelle}</NativeSelectOption>)}
+                  </NativeSelect>
                 )}
                 <div className="grid grid-cols-[1fr_1fr_auto] gap-2">
                   <Input aria-label={`Poissons, échantillon ${i + 1}`} data-test="ech-nombre" inputMode="numeric" className="h-11 text-base" value={x.nombre} onChange={(e) => maj(i, 'nombre', e.target.value)} />
@@ -160,9 +163,14 @@ export function Pesee() {
           <Button type="button" variant="ghost" size="sm" className="mt-2" onClick={() => setEchantillons((l) => [...l, vide(lots[0]?.valeur)])}>
             <Plus /> Échantillon
           </Button>
+          </CardContent>
         </Card>
 
-        {violations.length > 0 && <Alerte data-test="refus">{violations.map((v) => v.message).join(' ')}</Alerte>}
+        {violations.length > 0 && (
+          <Alert variant="destructive" data-test="refus">
+            <AlertDescription>{violations.map((v) => v.message).join(' ')}</AlertDescription>
+          </Alert>
+        )}
         <Button type="submit" size="lg" disabled={attente} data-test="enregistrer">Enregistrer la pesée</Button>
         {id && (
           <Button

@@ -301,7 +301,9 @@ synchronise avec `https://api.…`.
 - [x] Dernières versions : React 19, Vite 8, TypeScript 7 (API en 6),
       Refine 5, React Router 8 (7 dans l'admin) — D26
 - [x] `components.json` (admin, PWA) : `pnpm dlx shadcn@latest add …`
-- [x] Radix : `Checkbox`, `Label`, `Button asChild` ; `select` natif gardé
+- [x] Composants officiels shadcn (Card, Table, Field, Input, NativeSelect,
+      Alert, Badge…) dans l'admin et la PWA ; formulaires admin en
+      react-hook-form + zod ; e2e (11 parcours) et `test:shared` verts
 - [x] Thème vert `--vert-50` … `--vert-950`, clair et sombre, admin = PWA
 - [x] Carte `/carte` (admin) : Leaflet + OpenStreetMap, points colorés
       par alertes, fermes sans coordonnées listées ; CSP de Caddy ouverte

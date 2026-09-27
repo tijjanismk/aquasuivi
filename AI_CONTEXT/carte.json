@@ -1,7 +1,7 @@
 {
  "racine": "C:\\Users\\USER\\Downloads\\aqua-suivi-socle\\aquasuivi",
  "avertissement": null,
- "nb_fichiers": 119,
+ "nb_fichiers": 135,
  "fichiers": {
   "apps/admin/vite.config.ts": {
    "fichier": "apps/admin/vite.config.ts",
@@ -275,7 +275,7 @@
   "apps/admin/src/i18n.ts": {
    "fichier": "apps/admin/src/i18n.ts",
    "langage": "ts",
-   "lignes": 109,
+   "lignes": 112,
    "exporte": [
     "CleTexte",
     "DEVISE_PAR_DEFAUT",
@@ -479,7 +479,7 @@
   "apps/admin/src/composants/FormulaireRessource.tsx": {
    "fichier": "apps/admin/src/composants/FormulaireRessource.tsx",
    "langage": "ts",
-   "lignes": 304,
+   "lignes": 390,
    "exporte": [
     "FormulaireRessource",
     "ProprietesFormulaire"
@@ -489,6 +489,7 @@
      "source": "react",
      "symboles": [
       "useEffect",
+      "useMemo",
       "useState"
      ]
     },
@@ -499,6 +500,27 @@
       "useList",
       "useOne",
       "useUpdate"
+     ]
+    },
+    {
+     "source": "react-hook-form",
+     "symboles": [
+      "Control",
+      "Controller",
+      "useForm",
+      "useWatch"
+     ]
+    },
+    {
+     "source": "@hookform/resolvers/zod",
+     "symboles": [
+      "zodResolver"
+     ]
+    },
+    {
+     "source": "zod",
+     "symboles": [
+      "z"
      ]
     },
     {
@@ -540,19 +562,52 @@
      ]
     },
     {
-     "source": "@/composants/ui/champ",
+     "source": "@/composants/ui/alert",
      "symboles": [
-      "Checkbox",
-      "Input",
-      "Label",
-      "Select"
+      "Alert",
+      "AlertDescription"
      ]
     },
     {
-     "source": "@/composants/ui/divers",
+     "source": "@/composants/ui/card",
      "symboles": [
-      "Alerte",
-      "Card"
+      "Card",
+      "CardContent"
+     ]
+    },
+    {
+     "source": "@/composants/ui/checkbox",
+     "symboles": [
+      "Checkbox"
+     ]
+    },
+    {
+     "source": "@/composants/ui/field",
+     "symboles": [
+      "Field",
+      "FieldDescription",
+      "FieldError",
+      "FieldGroup",
+      "FieldLabel"
+     ]
+    },
+    {
+     "source": "@/composants/ui/input",
+     "symboles": [
+      "Input"
+     ]
+    },
+    {
+     "source": "@/composants/ui/native-select",
+     "symboles": [
+      "NativeSelect",
+      "NativeSelectOption"
+     ]
+    },
+    {
+     "source": "@/composants/ui/textarea",
+     "symboles": [
+      "Textarea"
      ]
     }
    ]
@@ -560,7 +615,7 @@
   "apps/admin/src/composants/TableauRessource.tsx": {
    "fichier": "apps/admin/src/composants/TableauRessource.tsx",
    "langage": "ts",
-   "lignes": 276,
+   "lignes": 278,
    "exporte": [
     "ProprietesTableau",
     "TableauRessource"
@@ -642,17 +697,29 @@
      ]
     },
     {
-     "source": "@/composants/ui/champ",
+     "source": "@/composants/ui/alert",
      "symboles": [
-      "Input"
+      "Alert",
+      "AlertDescription"
      ]
     },
     {
-     "source": "@/composants/ui/divers",
+     "source": "@/composants/ui/badge",
      "symboles": [
-      "Alerte",
-      "Badge",
-      "Card"
+      "Badge"
+     ]
+    },
+    {
+     "source": "@/composants/ui/card",
+     "symboles": [
+      "Card",
+      "CardContent"
+     ]
+    },
+    {
+     "source": "@/composants/ui/input",
+     "symboles": [
+      "Input"
      ]
     },
     {
@@ -668,16 +735,20 @@
     }
    ]
   },
-  "apps/admin/src/composants/ui/button.tsx": {
-   "fichier": "apps/admin/src/composants/ui/button.tsx",
+  "apps/admin/src/composants/ui/alert.tsx": {
+   "fichier": "apps/admin/src/composants/ui/alert.tsx",
    "langage": "ts",
-   "lignes": 43,
+   "lignes": 69,
    "exporte": [
-    "Button",
-    "ProprietesBouton",
-    "stylesBouton"
+    "Alert",
+    "AlertDescription",
+    "AlertTitle"
    ],
    "importe": [
+    {
+     "source": "react",
+     "symboles": []
+    },
     {
      "source": "class-variance-authority",
      "symboles": [
@@ -686,9 +757,37 @@
      ]
     },
     {
-     "source": "react",
+     "source": "@/lib/utils",
      "symboles": [
-      "ButtonHTMLAttributes"
+      "cn"
+     ]
+    }
+   ]
+  },
+  "apps/admin/src/composants/ui/badge.tsx": {
+   "fichier": "apps/admin/src/composants/ui/badge.tsx",
+   "langage": "ts",
+   "lignes": 50,
+   "exporte": [
+    "Badge",
+    "badgeVariants"
+   ],
+   "importe": [
+    {
+     "source": "react",
+     "symboles": []
+    },
+    {
+     "source": "class-variance-authority",
+     "symboles": [
+      "VariantProps",
+      "cva"
+     ]
+    },
+    {
+     "source": "@/lib/utils",
+     "symboles": [
+      "cn"
      ]
     },
     {
@@ -696,65 +795,22 @@
      "symboles": [
       "Slot"
      ]
-    },
-    {
-     "source": "@/lib/utils",
-     "symboles": [
-      "cn"
-     ]
     }
    ]
   },
-  "apps/admin/src/composants/ui/champ.tsx": {
-   "fichier": "apps/admin/src/composants/ui/champ.tsx",
+  "apps/admin/src/composants/ui/button.tsx": {
+   "fichier": "apps/admin/src/composants/ui/button.tsx",
    "langage": "ts",
-   "lignes": 60,
+   "lignes": 64,
    "exporte": [
-    "Checkbox",
-    "Input",
-    "Label",
-    "Select"
+    "Button",
+    "buttonVariants"
    ],
    "importe": [
     {
      "source": "react",
-     "symboles": [
-      "ComponentProps",
-      "InputHTMLAttributes",
-      "SelectHTMLAttributes"
-     ]
+     "symboles": []
     },
-    {
-     "source": "radix-ui",
-     "symboles": [
-      "CheckboxRadix",
-      "LabelRadix"
-     ]
-    },
-    {
-     "source": "lucide-react",
-     "symboles": [
-      "Check"
-     ]
-    },
-    {
-     "source": "@/lib/utils",
-     "symboles": [
-      "cn"
-     ]
-    }
-   ]
-  },
-  "apps/admin/src/composants/ui/divers.tsx": {
-   "fichier": "apps/admin/src/composants/ui/divers.tsx",
-   "langage": "ts",
-   "lignes": 51,
-   "exporte": [
-    "Alerte",
-    "Badge",
-    "Card"
-   ],
-   "importe": [
     {
      "source": "class-variance-authority",
      "symboles": [
@@ -763,10 +819,36 @@
      ]
     },
     {
-     "source": "react",
+     "source": "@/lib/utils",
      "symboles": [
-      "HTMLAttributes"
+      "cn"
      ]
+    },
+    {
+     "source": "radix-ui",
+     "symboles": [
+      "Slot"
+     ]
+    }
+   ]
+  },
+  "apps/admin/src/composants/ui/card.tsx": {
+   "fichier": "apps/admin/src/composants/ui/card.tsx",
+   "langage": "ts",
+   "lignes": 92,
+   "exporte": [
+    "Card",
+    "CardAction",
+    "CardContent",
+    "CardDescription",
+    "CardFooter",
+    "CardHeader",
+    "CardTitle"
+   ],
+   "importe": [
+    {
+     "source": "react",
+     "symboles": []
     },
     {
      "source": "@/lib/utils",
@@ -776,14 +858,198 @@
     }
    ]
   },
+  "apps/admin/src/composants/ui/checkbox.tsx": {
+   "fichier": "apps/admin/src/composants/ui/checkbox.tsx",
+   "langage": "ts",
+   "lignes": 32,
+   "exporte": [
+    "Checkbox"
+   ],
+   "importe": [
+    {
+     "source": "react",
+     "symboles": []
+    },
+    {
+     "source": "@/lib/utils",
+     "symboles": [
+      "cn"
+     ]
+    },
+    {
+     "source": "lucide-react",
+     "symboles": [
+      "CheckIcon"
+     ]
+    },
+    {
+     "source": "radix-ui",
+     "symboles": [
+      "CheckboxPrimitive"
+     ]
+    }
+   ]
+  },
+  "apps/admin/src/composants/ui/field.tsx": {
+   "fichier": "apps/admin/src/composants/ui/field.tsx",
+   "langage": "ts",
+   "lignes": 249,
+   "exporte": [
+    "Field",
+    "FieldContent",
+    "FieldDescription",
+    "FieldError",
+    "FieldGroup",
+    "FieldLabel",
+    "FieldLegend",
+    "FieldSeparator",
+    "FieldSet",
+    "FieldTitle"
+   ],
+   "importe": [
+    {
+     "source": "react",
+     "symboles": [
+      "useMemo"
+     ]
+    },
+    {
+     "source": "class-variance-authority",
+     "symboles": [
+      "VariantProps",
+      "cva"
+     ]
+    },
+    {
+     "source": "@/lib/utils",
+     "symboles": [
+      "cn"
+     ]
+    },
+    {
+     "source": "@/composants/ui/label",
+     "symboles": [
+      "Label"
+     ]
+    },
+    {
+     "source": "@/composants/ui/separator",
+     "symboles": [
+      "Separator"
+     ]
+    }
+   ]
+  },
+  "apps/admin/src/composants/ui/input.tsx": {
+   "fichier": "apps/admin/src/composants/ui/input.tsx",
+   "langage": "ts",
+   "lignes": 21,
+   "exporte": [
+    "Input"
+   ],
+   "importe": [
+    {
+     "source": "react",
+     "symboles": []
+    },
+    {
+     "source": "@/lib/utils",
+     "symboles": [
+      "cn"
+     ]
+    }
+   ]
+  },
+  "apps/admin/src/composants/ui/label.tsx": {
+   "fichier": "apps/admin/src/composants/ui/label.tsx",
+   "langage": "ts",
+   "lignes": 24,
+   "exporte": [
+    "Label"
+   ],
+   "importe": [
+    {
+     "source": "react",
+     "symboles": []
+    },
+    {
+     "source": "@/lib/utils",
+     "symboles": [
+      "cn"
+     ]
+    },
+    {
+     "source": "radix-ui",
+     "symboles": [
+      "LabelPrimitive"
+     ]
+    }
+   ]
+  },
+  "apps/admin/src/composants/ui/native-select.tsx": {
+   "fichier": "apps/admin/src/composants/ui/native-select.tsx",
+   "langage": "ts",
+   "lignes": 64,
+   "exporte": [
+    "NativeSelect",
+    "NativeSelectOptGroup",
+    "NativeSelectOption"
+   ],
+   "importe": [
+    {
+     "source": "react",
+     "symboles": []
+    },
+    {
+     "source": "@/lib/utils",
+     "symboles": [
+      "cn"
+     ]
+    },
+    {
+     "source": "lucide-react",
+     "symboles": [
+      "ChevronDownIcon"
+     ]
+    }
+   ]
+  },
+  "apps/admin/src/composants/ui/separator.tsx": {
+   "fichier": "apps/admin/src/composants/ui/separator.tsx",
+   "langage": "ts",
+   "lignes": 28,
+   "exporte": [
+    "Separator"
+   ],
+   "importe": [
+    {
+     "source": "react",
+     "symboles": []
+    },
+    {
+     "source": "@/lib/utils",
+     "symboles": [
+      "cn"
+     ]
+    },
+    {
+     "source": "radix-ui",
+     "symboles": [
+      "SeparatorPrimitive"
+     ]
+    }
+   ]
+  },
   "apps/admin/src/composants/ui/table.tsx": {
    "fichier": "apps/admin/src/composants/ui/table.tsx",
    "langage": "ts",
-   "lignes": 52,
+   "lignes": 116,
    "exporte": [
     "Table",
     "TableBody",
+    "TableCaption",
     "TableCell",
+    "TableFooter",
     "TableHead",
     "TableHeader",
     "TableRow"
@@ -791,11 +1057,27 @@
    "importe": [
     {
      "source": "react",
+     "symboles": []
+    },
+    {
+     "source": "@/lib/utils",
      "symboles": [
-      "HTMLAttributes",
-      "TdHTMLAttributes",
-      "ThHTMLAttributes"
+      "cn"
      ]
+    }
+   ]
+  },
+  "apps/admin/src/composants/ui/textarea.tsx": {
+   "fichier": "apps/admin/src/composants/ui/textarea.tsx",
+   "langage": "ts",
+   "lignes": 18,
+   "exporte": [
+    "Textarea"
+   ],
+   "importe": [
+    {
+     "source": "react",
+     "symboles": []
     },
     {
      "source": "@/lib/utils",
@@ -831,7 +1113,7 @@
   "apps/admin/src/pages/Accueil.tsx": {
    "fichier": "apps/admin/src/pages/Accueil.tsx",
    "langage": "ts",
-   "lignes": 119,
+   "lignes": 134,
    "exporte": [
     "Accueil"
    ],
@@ -892,10 +1174,21 @@
      ]
     },
     {
-     "source": "@/composants/ui/divers",
+     "source": "@/composants/ui/alert",
      "symboles": [
-      "Alerte",
-      "Card"
+      "Alert",
+      "AlertDescription"
+     ]
+    },
+    {
+     "source": "@/composants/ui/card",
+     "symboles": [
+      "Card",
+      "CardAction",
+      "CardContent",
+      "CardDescription",
+      "CardHeader",
+      "CardTitle"
      ]
     }
    ]
@@ -903,7 +1196,7 @@
   "apps/admin/src/pages/Carte.tsx": {
    "fichier": "apps/admin/src/pages/Carte.tsx",
    "langage": "ts",
-   "lignes": 171,
+   "lignes": 175,
    "exporte": [
     "Carte"
    ],
@@ -945,11 +1238,26 @@
      ]
     },
     {
-     "source": "@/composants/ui/divers",
+     "source": "@/composants/ui/alert",
      "symboles": [
-      "Alerte",
-      "Badge",
-      "Card"
+      "Alert",
+      "AlertDescription"
+     ]
+    },
+    {
+     "source": "@/composants/ui/badge",
+     "symboles": [
+      "Badge"
+     ]
+    },
+    {
+     "source": "@/composants/ui/card",
+     "symboles": [
+      "Card",
+      "CardContent",
+      "CardDescription",
+      "CardHeader",
+      "CardTitle"
      ]
     }
    ]
@@ -957,7 +1265,7 @@
   "apps/admin/src/pages/Conflits.tsx": {
    "fichier": "apps/admin/src/pages/Conflits.tsx",
    "langage": "ts",
-   "lignes": 124,
+   "lignes": 130,
    "exporte": [
     "Conflits"
    ],
@@ -994,11 +1302,36 @@
      ]
     },
     {
-     "source": "@/composants/ui/divers",
+     "source": "@/composants/ui/alert",
      "symboles": [
-      "Alerte",
-      "Badge",
-      "Card"
+      "Alert",
+      "AlertDescription"
+     ]
+    },
+    {
+     "source": "@/composants/ui/badge",
+     "symboles": [
+      "Badge"
+     ]
+    },
+    {
+     "source": "@/composants/ui/card",
+     "symboles": [
+      "Card",
+      "CardContent",
+      "CardHeader"
+     ]
+    },
+    {
+     "source": "@/composants/ui/checkbox",
+     "symboles": [
+      "Checkbox"
+     ]
+    },
+    {
+     "source": "@/composants/ui/label",
+     "symboles": [
+      "Label"
      ]
     }
    ]
@@ -1006,7 +1339,7 @@
   "apps/admin/src/pages/Connexion.tsx": {
    "fichier": "apps/admin/src/pages/Connexion.tsx",
    "langage": "ts",
-   "lignes": 76,
+   "lignes": 103,
    "exporte": [
     "Connexion"
    ],
@@ -1014,7 +1347,6 @@
     {
      "source": "react",
      "symboles": [
-      "FormEvent",
       "useState"
      ]
     },
@@ -1022,6 +1354,25 @@
      "source": "@refinedev/core",
      "symboles": [
       "useLogin"
+     ]
+    },
+    {
+     "source": "react-hook-form",
+     "symboles": [
+      "Controller",
+      "useForm"
+     ]
+    },
+    {
+     "source": "@hookform/resolvers/zod",
+     "symboles": [
+      "zodResolver"
+     ]
+    },
+    {
+     "source": "zod",
+     "symboles": [
+      "z"
      ]
     },
     {
@@ -1043,17 +1394,35 @@
      ]
     },
     {
-     "source": "@/composants/ui/champ",
+     "source": "@/composants/ui/alert",
      "symboles": [
-      "Input",
-      "Label"
+      "Alert",
+      "AlertDescription"
      ]
     },
     {
-     "source": "@/composants/ui/divers",
+     "source": "@/composants/ui/card",
      "symboles": [
-      "Alerte",
-      "Card"
+      "Card",
+      "CardContent",
+      "CardDescription",
+      "CardHeader",
+      "CardTitle"
+     ]
+    },
+    {
+     "source": "@/composants/ui/field",
+     "symboles": [
+      "Field",
+      "FieldError",
+      "FieldGroup",
+      "FieldLabel"
+     ]
+    },
+    {
+     "source": "@/composants/ui/input",
+     "symboles": [
+      "Input"
      ]
     }
    ]
@@ -1061,7 +1430,7 @@
   "apps/admin/src/pages/Consolidation.tsx": {
    "fichier": "apps/admin/src/pages/Consolidation.tsx",
    "langage": "ts",
-   "lignes": 154,
+   "lignes": 159,
    "exporte": [
     "Consolidation"
    ],
@@ -1093,21 +1462,6 @@
      ]
     },
     {
-     "source": "@/composants/ui/champ",
-     "symboles": [
-      "Input",
-      "Label",
-      "Select"
-     ]
-    },
-    {
-     "source": "@/composants/ui/divers",
-     "symboles": [
-      "Alerte",
-      "Card"
-     ]
-    },
-    {
      "source": "@/composants/ui/table",
      "symboles": [
       "Table",
@@ -1117,13 +1471,47 @@
       "TableHeader",
       "TableRow"
      ]
+    },
+    {
+     "source": "@/composants/ui/alert",
+     "symboles": [
+      "Alert",
+      "AlertDescription"
+     ]
+    },
+    {
+     "source": "@/composants/ui/card",
+     "symboles": [
+      "Card",
+      "CardContent"
+     ]
+    },
+    {
+     "source": "@/composants/ui/field",
+     "symboles": [
+      "Field",
+      "FieldLabel"
+     ]
+    },
+    {
+     "source": "@/composants/ui/input",
+     "symboles": [
+      "Input"
+     ]
+    },
+    {
+     "source": "@/composants/ui/native-select",
+     "symboles": [
+      "NativeSelect",
+      "NativeSelectOption"
+     ]
     }
    ]
   },
   "apps/admin/src/pages/FicheCycle.tsx": {
    "fichier": "apps/admin/src/pages/FicheCycle.tsx",
    "langage": "ts",
-   "lignes": 282,
+   "lignes": 286,
    "exporte": [
     "FicheCycle"
    ],
@@ -1177,14 +1565,6 @@
      ]
     },
     {
-     "source": "@/composants/ui/divers",
-     "symboles": [
-      "Alerte",
-      "Badge",
-      "Card"
-     ]
-    },
-    {
      "source": "@/composants/ui/button",
      "symboles": [
       "Button"
@@ -1207,13 +1587,33 @@
      "symboles": [
       "AlerteCycle"
      ]
+    },
+    {
+     "source": "@/composants/ui/alert",
+     "symboles": [
+      "Alert",
+      "AlertDescription"
+     ]
+    },
+    {
+     "source": "@/composants/ui/badge",
+     "symboles": [
+      "Badge"
+     ]
+    },
+    {
+     "source": "@/composants/ui/card",
+     "symboles": [
+      "Card",
+      "CardContent"
+     ]
     }
    ]
   },
   "apps/admin/src/pages/FicheParent.tsx": {
    "fichier": "apps/admin/src/pages/FicheParent.tsx",
    "langage": "ts",
-   "lignes": 156,
+   "lignes": 158,
    "exporte": [
     "FicheParent"
    ],
@@ -1277,15 +1677,16 @@
      ]
     },
     {
-     "source": "@/composants/ui/divers",
-     "symboles": [
-      "Card"
-     ]
-    },
-    {
      "source": "@/composants/TableauRessource",
      "symboles": [
       "TableauRessource"
+     ]
+    },
+    {
+     "source": "@/composants/ui/card",
+     "symboles": [
+      "Card",
+      "CardContent"
      ]
     }
    ]
@@ -1363,7 +1764,7 @@
   "apps/admin/src/pages/Simulation.tsx": {
    "fichier": "apps/admin/src/pages/Simulation.tsx",
    "langage": "ts",
-   "lignes": 192,
+   "lignes": 205,
    "exporte": [
     "Simulation"
    ],
@@ -1415,18 +1816,42 @@
      ]
     },
     {
-     "source": "@/composants/ui/champ",
+     "source": "@/composants/ui/alert",
      "symboles": [
-      "Input",
-      "Label",
-      "Select"
+      "Alert",
+      "AlertDescription"
      ]
     },
     {
-     "source": "@/composants/ui/divers",
+     "source": "@/composants/ui/card",
      "symboles": [
-      "Alerte",
-      "Card"
+      "Card",
+      "CardContent",
+      "CardDescription",
+      "CardHeader",
+      "CardTitle"
+     ]
+    },
+    {
+     "source": "@/composants/ui/field",
+     "symboles": [
+      "Field",
+      "FieldDescription",
+      "FieldGroup",
+      "FieldLabel"
+     ]
+    },
+    {
+     "source": "@/composants/ui/input",
+     "symboles": [
+      "Input"
+     ]
+    },
+    {
+     "source": "@/composants/ui/native-select",
+     "symboles": [
+      "NativeSelect",
+      "NativeSelectOption"
      ]
     }
    ]
@@ -2830,7 +3255,7 @@
   "apps/e2e/test/navigateur.ts": {
    "fichier": "apps/e2e/test/navigateur.ts",
    "langage": "ts",
-   "lignes": 186,
+   "lignes": 191,
    "exporte": [
     "Navigateur",
     "OUTILS_SAISIE",
@@ -3401,6 +3826,20 @@
     }
    ]
   },
+  "apps/pwa/dev-dist/sw.js": {
+   "fichier": "apps/pwa/dev-dist/sw.js",
+   "langage": "ts",
+   "lignes": 94,
+   "exporte": [],
+   "importe": []
+  },
+  "apps/pwa/dev-dist/workbox-f0c192c2.js": {
+   "fichier": "apps/pwa/dev-dist/workbox-f0c192c2.js",
+   "langage": "ts",
+   "lignes": 3378,
+   "exporte": [],
+   "importe": []
+  },
   "apps/pwa/scripts/icones.mjs": {
    "fichier": "apps/pwa/scripts/icones.mjs",
    "langage": "ts",
@@ -3900,13 +4339,7 @@
     {
      "source": "@/ui/button",
      "symboles": [
-      "stylesBouton"
-     ]
-    },
-    {
-     "source": "@/ui/divers",
-     "symboles": [
-      "Badge"
+      "buttonVariants"
      ]
     },
     {
@@ -3922,13 +4355,19 @@
      "symboles": [
       "useEnAttente"
      ]
+    },
+    {
+     "source": "@/ui/badge",
+     "symboles": [
+      "Badge"
+     ]
     }
    ]
   },
   "apps/pwa/src/ecrans/Compte.tsx": {
    "fichier": "apps/pwa/src/ecrans/Compte.tsx",
    "langage": "ts",
-   "lignes": 41,
+   "lignes": 46,
    "exporte": [
     "Compte"
    ],
@@ -3977,10 +4416,19 @@
      ]
     },
     {
-     "source": "@/ui/divers",
+     "source": "@/ui/alert",
      "symboles": [
-      "Alerte",
-      "Card"
+      "Alert",
+      "AlertDescription"
+     ]
+    },
+    {
+     "source": "@/ui/card",
+     "symboles": [
+      "Card",
+      "CardDescription",
+      "CardHeader",
+      "CardTitle"
      ]
     }
    ]
@@ -3988,7 +4436,7 @@
   "apps/pwa/src/ecrans/Connexion.tsx": {
    "fichier": "apps/pwa/src/ecrans/Connexion.tsx",
    "langage": "ts",
-   "lignes": 124,
+   "lignes": 131,
    "exporte": [
     "Connexion"
    ],
@@ -4035,16 +4483,25 @@
      ]
     },
     {
-     "source": "@/ui/champ",
+     "source": "@/ui/alert",
      "symboles": [
-      "Input",
-      "Label"
+      "Alert",
+      "AlertDescription"
      ]
     },
     {
-     "source": "@/ui/divers",
+     "source": "@/ui/input",
      "symboles": [
-      "Alerte"
+      "Input"
+     ]
+    },
+    {
+     "source": "@/ui/field",
+     "symboles": [
+      "Field",
+      "FieldDescription",
+      "FieldGroup",
+      "FieldLabel"
      ]
     }
    ]
@@ -4052,7 +4509,7 @@
   "apps/pwa/src/ecrans/Corrections.tsx": {
    "fichier": "apps/pwa/src/ecrans/Corrections.tsx",
    "langage": "ts",
-   "lignes": 70,
+   "lignes": 72,
    "exporte": [
     "Corrections"
    ],
@@ -4105,13 +4562,7 @@
      "source": "@/ui/button",
      "symboles": [
       "Button",
-      "stylesBouton"
-     ]
-    },
-    {
-     "source": "@/ui/divers",
-     "symboles": [
-      "Card"
+      "buttonVariants"
      ]
     },
     {
@@ -4119,13 +4570,23 @@
      "symboles": [
       "Vide"
      ]
+    },
+    {
+     "source": "@/ui/card",
+     "symboles": [
+      "Card",
+      "CardDescription",
+      "CardFooter",
+      "CardHeader",
+      "CardTitle"
+     ]
     }
    ]
   },
   "apps/pwa/src/ecrans/Cycle.tsx": {
    "fichier": "apps/pwa/src/ecrans/Cycle.tsx",
    "langage": "ts",
-   "lignes": 203,
+   "lignes": 211,
    "exporte": [
     "Cycle"
    ],
@@ -4199,14 +4660,6 @@
      ]
     },
     {
-     "source": "@/ui/divers",
-     "symboles": [
-      "Alerte",
-      "Badge",
-      "Card"
-     ]
-    },
-    {
      "source": "./liste",
      "symboles": [
       "EnAttente",
@@ -4224,6 +4677,26 @@
      "source": "./Fermes",
      "symboles": [
       "useEnAttente"
+     ]
+    },
+    {
+     "source": "@/ui/alert",
+     "symboles": [
+      "Alert",
+      "AlertDescription"
+     ]
+    },
+    {
+     "source": "@/ui/badge",
+     "symboles": [
+      "Badge"
+     ]
+    },
+    {
+     "source": "@/ui/card",
+     "symboles": [
+      "Card",
+      "CardContent"
      ]
     }
    ]
@@ -4277,13 +4750,7 @@
     {
      "source": "@/ui/button",
      "symboles": [
-      "stylesBouton"
-     ]
-    },
-    {
-     "source": "@/ui/divers",
-     "symboles": [
-      "Badge"
+      "buttonVariants"
      ]
     },
     {
@@ -4298,6 +4765,12 @@
      "source": "./Fermes",
      "symboles": [
       "useEnAttente"
+     ]
+    },
+    {
+     "source": "@/ui/badge",
+     "symboles": [
+      "Badge"
      ]
     }
    ]
@@ -4352,7 +4825,7 @@
     {
      "source": "@/ui/button",
      "symboles": [
-      "stylesBouton"
+      "buttonVariants"
      ]
     },
     {
@@ -4368,7 +4841,7 @@
   "apps/pwa/src/ecrans/liste.tsx": {
    "fichier": "apps/pwa/src/ecrans/liste.tsx",
    "langage": "ts",
-   "lignes": 64,
+   "lignes": 63,
    "exporte": [
     "Carte",
     "EnAttente",
@@ -4394,13 +4867,22 @@
       "ChevronRight",
       "CloudUpload"
      ]
+    },
+    {
+     "source": "@/ui/card",
+     "symboles": [
+      "Card",
+      "CardContent",
+      "CardDescription",
+      "CardTitle"
+     ]
     }
    ]
   },
   "apps/pwa/src/ecrans/Pesee.tsx": {
    "fichier": "apps/pwa/src/ecrans/Pesee.tsx",
    "langage": "ts",
-   "lignes": 185,
+   "lignes": 193,
    "exporte": [
     "Pesee"
    ],
@@ -4475,20 +4957,6 @@
      ]
     },
     {
-     "source": "@/ui/champ",
-     "symboles": [
-      "Input",
-      "Select"
-     ]
-    },
-    {
-     "source": "@/ui/divers",
-     "symboles": [
-      "Alerte",
-      "Card"
-     ]
-    },
-    {
      "source": "./liste",
      "symboles": [
       "Vide"
@@ -4499,13 +4967,43 @@
      "symboles": [
       "ChampSaisie"
      ]
+    },
+    {
+     "source": "@/ui/alert",
+     "symboles": [
+      "Alert",
+      "AlertDescription"
+     ]
+    },
+    {
+     "source": "@/ui/card",
+     "symboles": [
+      "Card",
+      "CardAction",
+      "CardContent",
+      "CardHeader",
+      "CardTitle"
+     ]
+    },
+    {
+     "source": "@/ui/input",
+     "symboles": [
+      "Input"
+     ]
+    },
+    {
+     "source": "@/ui/native-select",
+     "symboles": [
+      "NativeSelect",
+      "NativeSelectOption"
+     ]
     }
    ]
   },
   "apps/pwa/src/ecrans/Saisie.tsx": {
    "fichier": "apps/pwa/src/ecrans/Saisie.tsx",
    "langage": "ts",
-   "lignes": 253,
+   "lignes": 259,
    "exporte": [
     "ChampSaisie",
     "Saisie"
@@ -4579,23 +5077,39 @@
      ]
     },
     {
-     "source": "@/ui/champ",
-     "symboles": [
-      "Input",
-      "Label",
-      "Select"
-     ]
-    },
-    {
-     "source": "@/ui/divers",
-     "symboles": [
-      "Alerte"
-     ]
-    },
-    {
      "source": "./liste",
      "symboles": [
       "Vide"
+     ]
+    },
+    {
+     "source": "@/ui/alert",
+     "symboles": [
+      "Alert",
+      "AlertDescription"
+     ]
+    },
+    {
+     "source": "@/ui/input",
+     "symboles": [
+      "Input"
+     ]
+    },
+    {
+     "source": "@/ui/field",
+     "symboles": [
+      "Field",
+      "FieldDescription",
+      "FieldError",
+      "FieldGroup",
+      "FieldLabel"
+     ]
+    },
+    {
+     "source": "@/ui/native-select",
+     "symboles": [
+      "NativeSelect",
+      "NativeSelectOption"
      ]
     }
    ]
@@ -4603,7 +5117,7 @@
   "apps/pwa/src/ecrans/Simuler.tsx": {
    "fichier": "apps/pwa/src/ecrans/Simuler.tsx",
    "langage": "ts",
-   "lignes": 171,
+   "lignes": 188,
    "exporte": [
     "Simuler"
    ],
@@ -4667,13 +5181,6 @@
      ]
     },
     {
-     "source": "@/ui/divers",
-     "symboles": [
-      "Alerte",
-      "Card"
-     ]
-    },
-    {
      "source": "./Saisie",
      "symboles": [
       "ChampSaisie"
@@ -4683,6 +5190,23 @@
      "source": "@/lib/utils",
      "symboles": [
       "cn"
+     ]
+    },
+    {
+     "source": "@/ui/alert",
+     "symboles": [
+      "Alert",
+      "AlertDescription"
+     ]
+    },
+    {
+     "source": "@/ui/card",
+     "symboles": [
+      "Card",
+      "CardContent",
+      "CardDescription",
+      "CardHeader",
+      "CardTitle"
      ]
     }
    ]
@@ -4710,16 +5234,20 @@
     }
    ]
   },
-  "apps/pwa/src/ui/button.tsx": {
-   "fichier": "apps/pwa/src/ui/button.tsx",
+  "apps/pwa/src/ui/alert.tsx": {
+   "fichier": "apps/pwa/src/ui/alert.tsx",
    "langage": "ts",
-   "lignes": 43,
+   "lignes": 69,
    "exporte": [
-    "Button",
-    "ProprietesBouton",
-    "stylesBouton"
+    "Alert",
+    "AlertDescription",
+    "AlertTitle"
    ],
    "importe": [
+    {
+     "source": "react",
+     "symboles": []
+    },
     {
      "source": "class-variance-authority",
      "symboles": [
@@ -4728,9 +5256,37 @@
      ]
     },
     {
-     "source": "react",
+     "source": "@/lib/utils",
      "symboles": [
-      "ButtonHTMLAttributes"
+      "cn"
+     ]
+    }
+   ]
+  },
+  "apps/pwa/src/ui/badge.tsx": {
+   "fichier": "apps/pwa/src/ui/badge.tsx",
+   "langage": "ts",
+   "lignes": 50,
+   "exporte": [
+    "Badge",
+    "badgeVariants"
+   ],
+   "importe": [
+    {
+     "source": "react",
+     "symboles": []
+    },
+    {
+     "source": "class-variance-authority",
+     "symboles": [
+      "VariantProps",
+      "cva"
+     ]
+    },
+    {
+     "source": "@/lib/utils",
+     "symboles": [
+      "cn"
      ]
     },
     {
@@ -4738,65 +5294,22 @@
      "symboles": [
       "Slot"
      ]
-    },
-    {
-     "source": "@/lib/utils",
-     "symboles": [
-      "cn"
-     ]
     }
    ]
   },
-  "apps/pwa/src/ui/champ.tsx": {
-   "fichier": "apps/pwa/src/ui/champ.tsx",
+  "apps/pwa/src/ui/button.tsx": {
+   "fichier": "apps/pwa/src/ui/button.tsx",
    "langage": "ts",
-   "lignes": 60,
+   "lignes": 64,
    "exporte": [
-    "Checkbox",
-    "Input",
-    "Label",
-    "Select"
+    "Button",
+    "buttonVariants"
    ],
    "importe": [
     {
      "source": "react",
-     "symboles": [
-      "ComponentProps",
-      "InputHTMLAttributes",
-      "SelectHTMLAttributes"
-     ]
+     "symboles": []
     },
-    {
-     "source": "radix-ui",
-     "symboles": [
-      "CheckboxRadix",
-      "LabelRadix"
-     ]
-    },
-    {
-     "source": "lucide-react",
-     "symboles": [
-      "Check"
-     ]
-    },
-    {
-     "source": "@/lib/utils",
-     "symboles": [
-      "cn"
-     ]
-    }
-   ]
-  },
-  "apps/pwa/src/ui/divers.tsx": {
-   "fichier": "apps/pwa/src/ui/divers.tsx",
-   "langage": "ts",
-   "lignes": 51,
-   "exporte": [
-    "Alerte",
-    "Badge",
-    "Card"
-   ],
-   "importe": [
     {
      "source": "class-variance-authority",
      "symboles": [
@@ -4805,15 +5318,191 @@
      ]
     },
     {
+     "source": "@/lib/utils",
+     "symboles": [
+      "cn"
+     ]
+    },
+    {
+     "source": "radix-ui",
+     "symboles": [
+      "Slot"
+     ]
+    }
+   ]
+  },
+  "apps/pwa/src/ui/card.tsx": {
+   "fichier": "apps/pwa/src/ui/card.tsx",
+   "langage": "ts",
+   "lignes": 92,
+   "exporte": [
+    "Card",
+    "CardAction",
+    "CardContent",
+    "CardDescription",
+    "CardFooter",
+    "CardHeader",
+    "CardTitle"
+   ],
+   "importe": [
+    {
+     "source": "react",
+     "symboles": []
+    },
+    {
+     "source": "@/lib/utils",
+     "symboles": [
+      "cn"
+     ]
+    }
+   ]
+  },
+  "apps/pwa/src/ui/field.tsx": {
+   "fichier": "apps/pwa/src/ui/field.tsx",
+   "langage": "ts",
+   "lignes": 249,
+   "exporte": [
+    "Field",
+    "FieldContent",
+    "FieldDescription",
+    "FieldError",
+    "FieldGroup",
+    "FieldLabel",
+    "FieldLegend",
+    "FieldSeparator",
+    "FieldSet",
+    "FieldTitle"
+   ],
+   "importe": [
+    {
      "source": "react",
      "symboles": [
-      "HTMLAttributes"
+      "useMemo"
+     ]
+    },
+    {
+     "source": "class-variance-authority",
+     "symboles": [
+      "VariantProps",
+      "cva"
      ]
     },
     {
      "source": "@/lib/utils",
      "symboles": [
       "cn"
+     ]
+    },
+    {
+     "source": "@/ui/label",
+     "symboles": [
+      "Label"
+     ]
+    },
+    {
+     "source": "@/ui/separator",
+     "symboles": [
+      "Separator"
+     ]
+    }
+   ]
+  },
+  "apps/pwa/src/ui/input.tsx": {
+   "fichier": "apps/pwa/src/ui/input.tsx",
+   "langage": "ts",
+   "lignes": 21,
+   "exporte": [
+    "Input"
+   ],
+   "importe": [
+    {
+     "source": "react",
+     "symboles": []
+    },
+    {
+     "source": "@/lib/utils",
+     "symboles": [
+      "cn"
+     ]
+    }
+   ]
+  },
+  "apps/pwa/src/ui/label.tsx": {
+   "fichier": "apps/pwa/src/ui/label.tsx",
+   "langage": "ts",
+   "lignes": 24,
+   "exporte": [
+    "Label"
+   ],
+   "importe": [
+    {
+     "source": "react",
+     "symboles": []
+    },
+    {
+     "source": "@/lib/utils",
+     "symboles": [
+      "cn"
+     ]
+    },
+    {
+     "source": "radix-ui",
+     "symboles": [
+      "LabelPrimitive"
+     ]
+    }
+   ]
+  },
+  "apps/pwa/src/ui/native-select.tsx": {
+   "fichier": "apps/pwa/src/ui/native-select.tsx",
+   "langage": "ts",
+   "lignes": 64,
+   "exporte": [
+    "NativeSelect",
+    "NativeSelectOptGroup",
+    "NativeSelectOption"
+   ],
+   "importe": [
+    {
+     "source": "react",
+     "symboles": []
+    },
+    {
+     "source": "@/lib/utils",
+     "symboles": [
+      "cn"
+     ]
+    },
+    {
+     "source": "lucide-react",
+     "symboles": [
+      "ChevronDownIcon"
+     ]
+    }
+   ]
+  },
+  "apps/pwa/src/ui/separator.tsx": {
+   "fichier": "apps/pwa/src/ui/separator.tsx",
+   "langage": "ts",
+   "lignes": 28,
+   "exporte": [
+    "Separator"
+   ],
+   "importe": [
+    {
+     "source": "react",
+     "symboles": []
+    },
+    {
+     "source": "@/lib/utils",
+     "symboles": [
+      "cn"
+     ]
+    },
+    {
+     "source": "radix-ui",
+     "symboles": [
+      "SeparatorPrimitive"
      ]
     }
    ]
@@ -5289,25 +5978,73 @@
     ]
    },
    {
+    "par": "apps/admin/src/composants/ui/alert.tsx",
+    "symboles": [
+     "cn"
+    ]
+   },
+   {
+    "par": "apps/admin/src/composants/ui/badge.tsx",
+    "symboles": [
+     "cn"
+    ]
+   },
+   {
     "par": "apps/admin/src/composants/ui/button.tsx",
     "symboles": [
      "cn"
     ]
    },
    {
-    "par": "apps/admin/src/composants/ui/champ.tsx",
+    "par": "apps/admin/src/composants/ui/card.tsx",
     "symboles": [
      "cn"
     ]
    },
    {
-    "par": "apps/admin/src/composants/ui/divers.tsx",
+    "par": "apps/admin/src/composants/ui/checkbox.tsx",
+    "symboles": [
+     "cn"
+    ]
+   },
+   {
+    "par": "apps/admin/src/composants/ui/field.tsx",
+    "symboles": [
+     "cn"
+    ]
+   },
+   {
+    "par": "apps/admin/src/composants/ui/input.tsx",
+    "symboles": [
+     "cn"
+    ]
+   },
+   {
+    "par": "apps/admin/src/composants/ui/label.tsx",
+    "symboles": [
+     "cn"
+    ]
+   },
+   {
+    "par": "apps/admin/src/composants/ui/native-select.tsx",
+    "symboles": [
+     "cn"
+    ]
+   },
+   {
+    "par": "apps/admin/src/composants/ui/separator.tsx",
     "symboles": [
      "cn"
     ]
    },
    {
     "par": "apps/admin/src/composants/ui/table.tsx",
+    "symboles": [
+     "cn"
+    ]
+   },
+   {
+    "par": "apps/admin/src/composants/ui/textarea.tsx",
     "symboles": [
      "cn"
     ]
@@ -5844,14 +6581,213 @@
     ]
    }
   ],
-  "apps/admin/src/composants/ui/champ.tsx": [
+  "apps/admin/src/composants/ui/alert.tsx": [
    {
     "par": "apps/admin/src/composants/FormulaireRessource.tsx",
     "symboles": [
-     "Checkbox",
-     "Input",
-     "Label",
-     "Select"
+     "Alert",
+     "AlertDescription"
+    ]
+   },
+   {
+    "par": "apps/admin/src/composants/TableauRessource.tsx",
+    "symboles": [
+     "Alert",
+     "AlertDescription"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/Accueil.tsx",
+    "symboles": [
+     "Alert",
+     "AlertDescription"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/Carte.tsx",
+    "symboles": [
+     "Alert",
+     "AlertDescription"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/Conflits.tsx",
+    "symboles": [
+     "Alert",
+     "AlertDescription"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/Connexion.tsx",
+    "symboles": [
+     "Alert",
+     "AlertDescription"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/Consolidation.tsx",
+    "symboles": [
+     "Alert",
+     "AlertDescription"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/FicheCycle.tsx",
+    "symboles": [
+     "Alert",
+     "AlertDescription"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/Simulation.tsx",
+    "symboles": [
+     "Alert",
+     "AlertDescription"
+    ]
+   }
+  ],
+  "apps/admin/src/composants/ui/card.tsx": [
+   {
+    "par": "apps/admin/src/composants/FormulaireRessource.tsx",
+    "symboles": [
+     "Card",
+     "CardContent"
+    ]
+   },
+   {
+    "par": "apps/admin/src/composants/TableauRessource.tsx",
+    "symboles": [
+     "Card",
+     "CardContent"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/Accueil.tsx",
+    "symboles": [
+     "Card",
+     "CardAction",
+     "CardContent",
+     "CardDescription",
+     "CardHeader",
+     "CardTitle"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/Carte.tsx",
+    "symboles": [
+     "Card",
+     "CardContent",
+     "CardDescription",
+     "CardHeader",
+     "CardTitle"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/Conflits.tsx",
+    "symboles": [
+     "Card",
+     "CardContent",
+     "CardHeader"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/Connexion.tsx",
+    "symboles": [
+     "Card",
+     "CardContent",
+     "CardDescription",
+     "CardHeader",
+     "CardTitle"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/Consolidation.tsx",
+    "symboles": [
+     "Card",
+     "CardContent"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/FicheCycle.tsx",
+    "symboles": [
+     "Card",
+     "CardContent"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/FicheParent.tsx",
+    "symboles": [
+     "Card",
+     "CardContent"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/Simulation.tsx",
+    "symboles": [
+     "Card",
+     "CardContent",
+     "CardDescription",
+     "CardHeader",
+     "CardTitle"
+    ]
+   }
+  ],
+  "apps/admin/src/composants/ui/checkbox.tsx": [
+   {
+    "par": "apps/admin/src/composants/FormulaireRessource.tsx",
+    "symboles": [
+     "Checkbox"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/Conflits.tsx",
+    "symboles": [
+     "Checkbox"
+    ]
+   }
+  ],
+  "apps/admin/src/composants/ui/field.tsx": [
+   {
+    "par": "apps/admin/src/composants/FormulaireRessource.tsx",
+    "symboles": [
+     "Field",
+     "FieldDescription",
+     "FieldError",
+     "FieldGroup",
+     "FieldLabel"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/Connexion.tsx",
+    "symboles": [
+     "Field",
+     "FieldError",
+     "FieldGroup",
+     "FieldLabel"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/Consolidation.tsx",
+    "symboles": [
+     "Field",
+     "FieldLabel"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/Simulation.tsx",
+    "symboles": [
+     "Field",
+     "FieldDescription",
+     "FieldGroup",
+     "FieldLabel"
+    ]
+   }
+  ],
+  "apps/admin/src/composants/ui/input.tsx": [
+   {
+    "par": "apps/admin/src/composants/FormulaireRessource.tsx",
+    "symboles": [
+     "Input"
     ]
    },
    {
@@ -5863,99 +6799,76 @@
    {
     "par": "apps/admin/src/pages/Connexion.tsx",
     "symboles": [
-     "Input",
-     "Label"
+     "Input"
     ]
    },
    {
     "par": "apps/admin/src/pages/Consolidation.tsx",
     "symboles": [
-     "Input",
-     "Label",
-     "Select"
+     "Input"
     ]
    },
    {
     "par": "apps/admin/src/pages/Simulation.tsx",
     "symboles": [
-     "Input",
-     "Label",
-     "Select"
+     "Input"
     ]
    }
   ],
-  "apps/admin/src/composants/ui/divers.tsx": [
+  "apps/admin/src/composants/ui/native-select.tsx": [
    {
     "par": "apps/admin/src/composants/FormulaireRessource.tsx",
     "symboles": [
-     "Alerte",
-     "Card"
+     "NativeSelect",
+     "NativeSelectOption"
     ]
    },
+   {
+    "par": "apps/admin/src/pages/Consolidation.tsx",
+    "symboles": [
+     "NativeSelect",
+     "NativeSelectOption"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/Simulation.tsx",
+    "symboles": [
+     "NativeSelect",
+     "NativeSelectOption"
+    ]
+   }
+  ],
+  "apps/admin/src/composants/ui/textarea.tsx": [
+   {
+    "par": "apps/admin/src/composants/FormulaireRessource.tsx",
+    "symboles": [
+     "Textarea"
+    ]
+   }
+  ],
+  "apps/admin/src/composants/ui/badge.tsx": [
    {
     "par": "apps/admin/src/composants/TableauRessource.tsx",
     "symboles": [
-     "Alerte",
-     "Badge",
-     "Card"
-    ]
-   },
-   {
-    "par": "apps/admin/src/pages/Accueil.tsx",
-    "symboles": [
-     "Alerte",
-     "Card"
+     "Badge"
     ]
    },
    {
     "par": "apps/admin/src/pages/Carte.tsx",
     "symboles": [
-     "Alerte",
-     "Badge",
-     "Card"
+     "Badge"
     ]
    },
    {
     "par": "apps/admin/src/pages/Conflits.tsx",
     "symboles": [
-     "Alerte",
-     "Badge",
-     "Card"
-    ]
-   },
-   {
-    "par": "apps/admin/src/pages/Connexion.tsx",
-    "symboles": [
-     "Alerte",
-     "Card"
-    ]
-   },
-   {
-    "par": "apps/admin/src/pages/Consolidation.tsx",
-    "symboles": [
-     "Alerte",
-     "Card"
+     "Badge"
     ]
    },
    {
     "par": "apps/admin/src/pages/FicheCycle.tsx",
     "symboles": [
-     "Alerte",
-     "Badge",
-     "Card"
-    ]
-   },
-   {
-    "par": "apps/admin/src/pages/FicheParent.tsx",
-    "symboles": [
-     "Card"
-    ]
-   },
-   {
-    "par": "apps/admin/src/pages/Simulation.tsx",
-    "symboles": [
-     "Alerte",
-     "Card"
+     "Badge"
     ]
    }
   ],
@@ -5980,6 +6893,28 @@
      "TableHead",
      "TableHeader",
      "TableRow"
+    ]
+   }
+  ],
+  "apps/admin/src/composants/ui/label.tsx": [
+   {
+    "par": "apps/admin/src/composants/ui/field.tsx",
+    "symboles": [
+     "Label"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/Conflits.tsx",
+    "symboles": [
+     "Label"
+    ]
+   }
+  ],
+  "apps/admin/src/composants/ui/separator.tsx": [
+   {
+    "par": "apps/admin/src/composants/ui/field.tsx",
+    "symboles": [
+     "Separator"
     ]
    }
   ],
@@ -6995,19 +7930,55 @@
     ]
    },
    {
+    "par": "apps/pwa/src/ui/alert.tsx",
+    "symboles": [
+     "cn"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ui/badge.tsx",
+    "symboles": [
+     "cn"
+    ]
+   },
+   {
     "par": "apps/pwa/src/ui/button.tsx",
     "symboles": [
      "cn"
     ]
    },
    {
-    "par": "apps/pwa/src/ui/champ.tsx",
+    "par": "apps/pwa/src/ui/card.tsx",
     "symboles": [
      "cn"
     ]
    },
    {
-    "par": "apps/pwa/src/ui/divers.tsx",
+    "par": "apps/pwa/src/ui/field.tsx",
+    "symboles": [
+     "cn"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ui/input.tsx",
+    "symboles": [
+     "cn"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ui/label.tsx",
+    "symboles": [
+     "cn"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ui/native-select.tsx",
+    "symboles": [
+     "cn"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ui/separator.tsx",
     "symboles": [
      "cn"
     ]
@@ -7189,7 +8160,7 @@
    {
     "par": "apps/pwa/src/ecrans/Bassin.tsx",
     "symboles": [
-     "stylesBouton"
+     "buttonVariants"
     ]
    },
    {
@@ -7208,19 +8179,19 @@
     "par": "apps/pwa/src/ecrans/Corrections.tsx",
     "symboles": [
      "Button",
-     "stylesBouton"
+     "buttonVariants"
     ]
    },
    {
     "par": "apps/pwa/src/ecrans/Ferme.tsx",
     "symboles": [
-     "stylesBouton"
+     "buttonVariants"
     ]
    },
    {
     "par": "apps/pwa/src/ecrans/Fermes.tsx",
     "symboles": [
-     "stylesBouton"
+     "buttonVariants"
     ]
    },
    {
@@ -7239,67 +8210,6 @@
     "par": "apps/pwa/src/ecrans/Simuler.tsx",
     "symboles": [
      "Button"
-    ]
-   }
-  ],
-  "apps/pwa/src/ui/divers.tsx": [
-   {
-    "par": "apps/pwa/src/ecrans/Bassin.tsx",
-    "symboles": [
-     "Badge"
-    ]
-   },
-   {
-    "par": "apps/pwa/src/ecrans/Compte.tsx",
-    "symboles": [
-     "Alerte",
-     "Card"
-    ]
-   },
-   {
-    "par": "apps/pwa/src/ecrans/Connexion.tsx",
-    "symboles": [
-     "Alerte"
-    ]
-   },
-   {
-    "par": "apps/pwa/src/ecrans/Corrections.tsx",
-    "symboles": [
-     "Card"
-    ]
-   },
-   {
-    "par": "apps/pwa/src/ecrans/Cycle.tsx",
-    "symboles": [
-     "Alerte",
-     "Badge",
-     "Card"
-    ]
-   },
-   {
-    "par": "apps/pwa/src/ecrans/Ferme.tsx",
-    "symboles": [
-     "Badge"
-    ]
-   },
-   {
-    "par": "apps/pwa/src/ecrans/Pesee.tsx",
-    "symboles": [
-     "Alerte",
-     "Card"
-    ]
-   },
-   {
-    "par": "apps/pwa/src/ecrans/Saisie.tsx",
-    "symboles": [
-     "Alerte"
-    ]
-   },
-   {
-    "par": "apps/pwa/src/ecrans/Simuler.tsx",
-    "symboles": [
-     "Alerte",
-     "Card"
     ]
    }
   ],
@@ -7355,27 +8265,165 @@
     ]
    }
   ],
-  "apps/pwa/src/ui/champ.tsx": [
+  "apps/pwa/src/ui/badge.tsx": [
+   {
+    "par": "apps/pwa/src/ecrans/Bassin.tsx",
+    "symboles": [
+     "Badge"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Cycle.tsx",
+    "symboles": [
+     "Badge"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Ferme.tsx",
+    "symboles": [
+     "Badge"
+    ]
+   }
+  ],
+  "apps/pwa/src/ui/alert.tsx": [
+   {
+    "par": "apps/pwa/src/ecrans/Compte.tsx",
+    "symboles": [
+     "Alert",
+     "AlertDescription"
+    ]
+   },
    {
     "par": "apps/pwa/src/ecrans/Connexion.tsx",
     "symboles": [
-     "Input",
-     "Label"
+     "Alert",
+     "AlertDescription"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Cycle.tsx",
+    "symboles": [
+     "Alert",
+     "AlertDescription"
     ]
    },
    {
     "par": "apps/pwa/src/ecrans/Pesee.tsx",
     "symboles": [
-     "Input",
-     "Select"
+     "Alert",
+     "AlertDescription"
     ]
    },
    {
     "par": "apps/pwa/src/ecrans/Saisie.tsx",
     "symboles": [
-     "Input",
-     "Label",
-     "Select"
+     "Alert",
+     "AlertDescription"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Simuler.tsx",
+    "symboles": [
+     "Alert",
+     "AlertDescription"
+    ]
+   }
+  ],
+  "apps/pwa/src/ui/card.tsx": [
+   {
+    "par": "apps/pwa/src/ecrans/Compte.tsx",
+    "symboles": [
+     "Card",
+     "CardDescription",
+     "CardHeader",
+     "CardTitle"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Corrections.tsx",
+    "symboles": [
+     "Card",
+     "CardDescription",
+     "CardFooter",
+     "CardHeader",
+     "CardTitle"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Cycle.tsx",
+    "symboles": [
+     "Card",
+     "CardContent"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/liste.tsx",
+    "symboles": [
+     "Card",
+     "CardContent",
+     "CardDescription",
+     "CardTitle"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Pesee.tsx",
+    "symboles": [
+     "Card",
+     "CardAction",
+     "CardContent",
+     "CardHeader",
+     "CardTitle"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Simuler.tsx",
+    "symboles": [
+     "Card",
+     "CardContent",
+     "CardDescription",
+     "CardHeader",
+     "CardTitle"
+    ]
+   }
+  ],
+  "apps/pwa/src/ui/input.tsx": [
+   {
+    "par": "apps/pwa/src/ecrans/Connexion.tsx",
+    "symboles": [
+     "Input"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Pesee.tsx",
+    "symboles": [
+     "Input"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Saisie.tsx",
+    "symboles": [
+     "Input"
+    ]
+   }
+  ],
+  "apps/pwa/src/ui/field.tsx": [
+   {
+    "par": "apps/pwa/src/ecrans/Connexion.tsx",
+    "symboles": [
+     "Field",
+     "FieldDescription",
+     "FieldGroup",
+     "FieldLabel"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Saisie.tsx",
+    "symboles": [
+     "Field",
+     "FieldDescription",
+     "FieldError",
+     "FieldGroup",
+     "FieldLabel"
     ]
    }
   ],
@@ -7439,6 +8487,38 @@
      "ErreurSaisie",
      "enregistrer",
      "supprimer"
+    ]
+   }
+  ],
+  "apps/pwa/src/ui/native-select.tsx": [
+   {
+    "par": "apps/pwa/src/ecrans/Pesee.tsx",
+    "symboles": [
+     "NativeSelect",
+     "NativeSelectOption"
+    ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Saisie.tsx",
+    "symboles": [
+     "NativeSelect",
+     "NativeSelectOption"
+    ]
+   }
+  ],
+  "apps/pwa/src/ui/label.tsx": [
+   {
+    "par": "apps/pwa/src/ui/field.tsx",
+    "symboles": [
+     "Label"
+    ]
+   }
+  ],
+  "apps/pwa/src/ui/separator.tsx": [
+   {
+    "par": "apps/pwa/src/ui/field.tsx",
+    "symboles": [
+     "Separator"
     ]
    }
   ],
@@ -7635,26 +8715,57 @@
    "apps/mcp/src/api.ts",
    "apps/pwa/src/session.ts"
   ],
-  "Alerte": [
-   "apps/admin/src/composants/ui/divers.tsx",
-   "apps/pwa/src/ui/divers.tsx",
-   "packages/shared/src/alertes.ts"
+  "Alert": [
+   "apps/admin/src/composants/ui/alert.tsx",
+   "apps/pwa/src/ui/alert.tsx"
+  ],
+  "AlertDescription": [
+   "apps/admin/src/composants/ui/alert.tsx",
+   "apps/pwa/src/ui/alert.tsx"
+  ],
+  "AlertTitle": [
+   "apps/admin/src/composants/ui/alert.tsx",
+   "apps/pwa/src/ui/alert.tsx"
   ],
   "App": [
    "apps/admin/src/App.tsx",
    "apps/pwa/src/App.tsx"
   ],
   "Badge": [
-   "apps/admin/src/composants/ui/divers.tsx",
-   "apps/pwa/src/ui/divers.tsx"
+   "apps/admin/src/composants/ui/badge.tsx",
+   "apps/pwa/src/ui/badge.tsx"
   ],
   "Button": [
    "apps/admin/src/composants/ui/button.tsx",
    "apps/pwa/src/ui/button.tsx"
   ],
   "Card": [
-   "apps/admin/src/composants/ui/divers.tsx",
-   "apps/pwa/src/ui/divers.tsx"
+   "apps/admin/src/composants/ui/card.tsx",
+   "apps/pwa/src/ui/card.tsx"
+  ],
+  "CardAction": [
+   "apps/admin/src/composants/ui/card.tsx",
+   "apps/pwa/src/ui/card.tsx"
+  ],
+  "CardContent": [
+   "apps/admin/src/composants/ui/card.tsx",
+   "apps/pwa/src/ui/card.tsx"
+  ],
+  "CardDescription": [
+   "apps/admin/src/composants/ui/card.tsx",
+   "apps/pwa/src/ui/card.tsx"
+  ],
+  "CardFooter": [
+   "apps/admin/src/composants/ui/card.tsx",
+   "apps/pwa/src/ui/card.tsx"
+  ],
+  "CardHeader": [
+   "apps/admin/src/composants/ui/card.tsx",
+   "apps/pwa/src/ui/card.tsx"
+  ],
+  "CardTitle": [
+   "apps/admin/src/composants/ui/card.tsx",
+   "apps/pwa/src/ui/card.tsx"
   ],
   "Carte": [
    "apps/admin/src/pages/Carte.tsx",
@@ -7663,10 +8774,6 @@
   "Champ": [
    "apps/admin/src/description.ts",
    "apps/pwa/src/formulaires.ts"
-  ],
-  "Checkbox": [
-   "apps/admin/src/composants/ui/champ.tsx",
-   "apps/pwa/src/ui/champ.tsx"
   ],
   "Connexion": [
    "apps/admin/src/pages/Connexion.tsx",
@@ -7681,17 +8788,69 @@
    "apps/mcp/src/api.ts",
    "apps/pwa/src/ecrans/Ferme.tsx"
   ],
+  "Field": [
+   "apps/admin/src/composants/ui/field.tsx",
+   "apps/pwa/src/ui/field.tsx"
+  ],
+  "FieldContent": [
+   "apps/admin/src/composants/ui/field.tsx",
+   "apps/pwa/src/ui/field.tsx"
+  ],
+  "FieldDescription": [
+   "apps/admin/src/composants/ui/field.tsx",
+   "apps/pwa/src/ui/field.tsx"
+  ],
+  "FieldError": [
+   "apps/admin/src/composants/ui/field.tsx",
+   "apps/pwa/src/ui/field.tsx"
+  ],
+  "FieldGroup": [
+   "apps/admin/src/composants/ui/field.tsx",
+   "apps/pwa/src/ui/field.tsx"
+  ],
+  "FieldLabel": [
+   "apps/admin/src/composants/ui/field.tsx",
+   "apps/pwa/src/ui/field.tsx"
+  ],
+  "FieldLegend": [
+   "apps/admin/src/composants/ui/field.tsx",
+   "apps/pwa/src/ui/field.tsx"
+  ],
+  "FieldSeparator": [
+   "apps/admin/src/composants/ui/field.tsx",
+   "apps/pwa/src/ui/field.tsx"
+  ],
+  "FieldSet": [
+   "apps/admin/src/composants/ui/field.tsx",
+   "apps/pwa/src/ui/field.tsx"
+  ],
+  "FieldTitle": [
+   "apps/admin/src/composants/ui/field.tsx",
+   "apps/pwa/src/ui/field.tsx"
+  ],
   "Infrastructure": [
    "apps/mcp/src/api.ts",
    "packages/shared/src/types.ts"
   ],
   "Input": [
-   "apps/admin/src/composants/ui/champ.tsx",
-   "apps/pwa/src/ui/champ.tsx"
+   "apps/admin/src/composants/ui/input.tsx",
+   "apps/pwa/src/ui/input.tsx"
   ],
   "Label": [
-   "apps/admin/src/composants/ui/champ.tsx",
-   "apps/pwa/src/ui/champ.tsx"
+   "apps/admin/src/composants/ui/label.tsx",
+   "apps/pwa/src/ui/label.tsx"
+  ],
+  "NativeSelect": [
+   "apps/admin/src/composants/ui/native-select.tsx",
+   "apps/pwa/src/ui/native-select.tsx"
+  ],
+  "NativeSelectOptGroup": [
+   "apps/admin/src/composants/ui/native-select.tsx",
+   "apps/pwa/src/ui/native-select.tsx"
+  ],
+  "NativeSelectOption": [
+   "apps/admin/src/composants/ui/native-select.tsx",
+   "apps/pwa/src/ui/native-select.tsx"
   ],
   "OptionsListe": [
    "apps/api/src/referentiels/referentiels.service.ts",
@@ -7700,10 +8859,6 @@
   "Pesee": [
    "apps/pwa/src/ecrans/Pesee.tsx",
    "packages/shared/src/types.ts"
-  ],
-  "ProprietesBouton": [
-   "apps/admin/src/composants/ui/button.tsx",
-   "apps/pwa/src/ui/button.tsx"
   ],
   "REFERENTIELS": [
    "apps/admin/src/referentiels.ts",
@@ -7717,9 +8872,9 @@
    "apps/admin/src/saisie.ts",
    "apps/api/src/saisie/saisie.controller.ts"
   ],
-  "Select": [
-   "apps/admin/src/composants/ui/champ.tsx",
-   "apps/pwa/src/ui/champ.tsx"
+  "Separator": [
+   "apps/admin/src/composants/ui/separator.tsx",
+   "apps/pwa/src/ui/separator.tsx"
   ],
   "Simulation": [
    "apps/admin/src/pages/Simulation.tsx",
@@ -7738,40 +8893,44 @@
    "apps/admin/src/session.ts",
    "apps/pwa/src/session.ts"
   ],
+  "badgeVariants": [
+   "apps/admin/src/composants/ui/badge.tsx",
+   "apps/pwa/src/ui/badge.tsx"
+  ],
+  "buttonVariants": [
+   "apps/admin/src/composants/ui/button.tsx",
+   "apps/pwa/src/ui/button.tsx"
+  ],
   "cn": [
    "apps/admin/src/lib/utils.ts",
    "apps/pwa/src/lib/utils.ts"
-  ],
-  "stylesBouton": [
-   "apps/admin/src/composants/ui/button.tsx",
-   "apps/pwa/src/ui/button.tsx"
   ]
  },
  "dependances_externes": {
+  "react": 41,
   "@nestjs": 32,
-  "react": 27,
-  "lucide-react": 21,
+  "lucide-react": 22,
   "node:path": 20,
   "node:url": 19,
   "react-router": 19,
   "pg": 14,
   "@prisma": 12,
   "@refinedev": 11,
+  "radix-ui": 9,
+  "class-variance-authority": 8,
+  "zod": 7,
   "node:fs": 5,
   "express": 5,
-  "zod": 5,
-  "class-variance-authority": 4,
-  "radix-ui": 4,
   "node:crypto": 3,
   "ulid": 3,
   "vite": 2,
   "@vitejs": 2,
   "@tailwindcss": 2,
   "react-dom": 2,
+  "react-hook-form": 2,
+  "@hookform": 2,
   "clsx": 2,
   "tailwind-merge": 2,
-  "rxjs": 2,
-  "node:child_process": 2,
-  "@modelcontextprotocol": 2
+  "rxjs": 2
  }
 }

@@ -2,9 +2,12 @@ import { useEffect, useState } from 'react';
 import { appelApi } from '@/session';
 import { formaterMontant, formaterNombre } from '@/i18n';
 import { cn } from '@/lib/utils';
-import { Input, Label, Select } from '@/composants/ui/champ';
-import { Alerte, Card } from '@/composants/ui/divers';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/composants/ui/table';
+import { Alert, AlertDescription } from '@/composants/ui/alert';
+import { Card, CardContent } from '@/composants/ui/card';
+import { Field, FieldLabel } from '@/composants/ui/field';
+import { Input } from '@/composants/ui/input';
+import { NativeSelect, NativeSelectOption } from '@/composants/ui/native-select';
 
 interface Ligne {
   territoireId: string | null;
@@ -73,28 +76,30 @@ export function Consolidation() {
         vous pouvez consulter sont comptées.
       </p>
 
-      <Card className="mb-6 flex flex-wrap items-end gap-4 p-4">
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="niveau">Regrouper par</Label>
-          <Select id="niveau" value={niveau} onChange={(e) => setNiveau(e.target.value as keyof typeof NIVEAUX)}>
-            {Object.entries(NIVEAUX).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
-          </Select>
-        </div>
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="depuis">Du</Label>
+      <Card className="mb-6 py-4">
+        <CardContent className="flex flex-wrap items-end gap-4 px-4">
+        <Field className="w-auto">
+          <FieldLabel htmlFor="niveau">Regrouper par</FieldLabel>
+          <NativeSelect id="niveau" value={niveau} onChange={(e) => setNiveau(e.target.value as keyof typeof NIVEAUX)}>
+            {Object.entries(NIVEAUX).map(([v, l]) => <NativeSelectOption key={v} value={v}>{l}</NativeSelectOption>)}
+          </NativeSelect>
+        </Field>
+        <Field className="w-auto">
+          <FieldLabel htmlFor="depuis">Du</FieldLabel>
           <Input id="depuis" type="date" value={depuis} onChange={(e) => setDepuis(e.target.value)} />
-        </div>
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="jusqua">Au</Label>
+        </Field>
+        <Field className="w-auto">
+          <FieldLabel htmlFor="jusqua">Au</FieldLabel>
           <Input id="jusqua" type="date" value={jusqua} onChange={(e) => setJusqua(e.target.value)} />
-        </div>
+        </Field>
+        </CardContent>
       </Card>
 
-      {erreur && <Alerte>{erreur}</Alerte>}
-      {donnees?.tronque && <Alerte className="mb-4">Plus de 2 000 cycles : réduisez la période pour un total exact.</Alerte>}
+      {erreur && <Alert variant="destructive"><AlertDescription>{erreur}</AlertDescription></Alert>}
+      {donnees?.tronque && <Alert variant="destructive" className="mb-4"><AlertDescription>Plus de 2 000 cycles : réduisez la période pour un total exact.</AlertDescription></Alert>}
 
       {donnees && (
-        <Card className="overflow-x-auto p-0" data-test="consolidation">
+        <Card className="gap-0 overflow-x-auto py-0" data-test="consolidation">
           <Table>
             <TableHeader>
               <TableRow>

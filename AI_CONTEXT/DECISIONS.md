@@ -471,15 +471,36 @@ composant (dialogue, info-bulle, menu) aurait été à réécrire, avec son
 accessibilité clavier et lecteur d'écran.
 
 **Choix.** `components.json` dans l'admin et la PWA (style *new-york*,
-Tailwind v4, alias `@/composants/ui` et `@/ui`) : `pnpm dlx shadcn@latest
-add <composant>` dépose un composant dans le dépôt, qu'on possède ensuite
-comme avant. Les primitives viennent du paquet unifié **`radix-ui`** :
-`Checkbox`, `Label`, `Slot` (`<Button asChild>`) pour commencer.
+Tailwind v4, alias `@/composants/ui` et `@/ui`). Les composants sont
+les **fichiers officiels du registre** `new-york-v4`, un par composant :
+`button`, `card`, `table`, `input`, `label`, `checkbox`, `native-select`,
+`badge`, `alert`, `textarea`, `field`, `separator`. Les anciens
+`champ.tsx` / `divers.tsx` ont disparu. Primitives : paquet unifié
+**`radix-ui`**. Trois retouches, signalées en commentaire dans le fichier :
+`Badge` variante `muted`, `Alert` variante `succes`, `NativeSelect`
+pleine largeur.
 
-Le **`select` reste natif** : 800 communes se parcourent mieux dans la
-liste du système, au clavier comme au doigt, et les parcours e2e pilotent
-un vrai `select`. Le Select de Radix n'est à prendre que pour une liste
-courte où le style compte.
+**Cartes** : `CardHeader` (`CardTitle`, `CardDescription`, `CardAction`)
++ `CardContent` / `CardFooter`. Une carte qui contient un tableau ou la
+carte Leaflet est `gap-0 py-0` ; une tuile chiffrée met le libellé en
+`CardDescription` et la valeur en `CardTitle`.
+
+**Formulaires** : composants `Field` (`FieldGroup`, `FieldLabel`,
+`FieldDescription`, `FieldError`) — la forme actuelle de shadcn, à la
+place de l'ancien `form.tsx`.
+- Admin : **react-hook-form + zod** (`Controller` par champ). Le schéma
+  du formulaire générique est **déduit de la description** de la
+  ressource (obligatoire, nombre à virgule ou point, entier) ; les règles
+  métier restent à l'API et à `@aqua/shared` (D20). Les refus de l'API
+  s'affichent toujours dans une `Alert` `data-test="erreur"`.
+- PWA : `Field` pour la présentation, mais la validation reste celle des
+  **contrôles partagés hors ligne** (violations → `FieldError`) ;
+  react-hook-form n'y apporterait rien et doublerait l'état.
+
+Le **`select` reste natif**, sous la forme du `NativeSelect` de shadcn :
+800 communes se parcourent mieux dans la liste du système, au clavier
+comme au doigt, et les parcours e2e pilotent un vrai `select`. Le Select
+de Radix n'est à prendre que pour une liste courte où le style compte.
 
 Thème **vert** : une gamme `--vert-50` … `--vert-950` (palette `green`
 de Tailwind) dans `index.css`, d'où découlent tous les jetons (`primary`
@@ -487,9 +508,12 @@ de Tailwind) dans `index.css`, d'où découlent tous les jetons (`primary`
 Les nuances sont aussi des classes : `bg-vert-100`, `text-vert-800`. Le
 fichier est **identique** dans l'admin et la PWA — le modifier dans les deux.
 
-**Coût.** Une dépendance de plus, `radix-ui`, à tenir à jour ; et un
-composant ajouté par l'outil doit être relu (il peut écraser un fichier
-existant du même nom).
+**Coût.** Des dépendances de plus (`radix-ui`, `react-hook-form`,
+`@hookform/resolvers`, `zod`) ; les composants sont **dupliqués** entre
+admin et PWA (deux bundles, pas de paquet d'interface commun). La commande
+`shadcn add` 4.21 importe `cn` depuis un paquet npm `cn` au lieu de
+`@/lib/utils` et écraserait `button.tsx` : voir ALERTES pour ajouter un
+composant proprement.
 
 ---
 
