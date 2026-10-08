@@ -63,7 +63,7 @@ async function historique(cycleId: string): Promise<Operation[]> {
   const ops: Operation[] = [
     ...lots.map((l) => ({ ressource: 'lots' as const, ligne: l, date: l['dateMiseEnCharge'], libelle: 'Mise en charge', detail: `${nombre(l['nombre'], 0)} alevins de ${nombre(l['poidsMoyenG'])} g` })),
     ...pesees.map((p) => ({ ressource: 'pesees' as const, ligne: p, date: p['dateOperation'], libelle: `Pesée ${p['numero'] ?? ''}`, detail: poidsMoyen(p.id) ? `${nombre(poidsMoyen(p.id))} g en moyenne` : 'Échantillons à saisir' })),
-    ...distributions.map((d) => ({ ressource: 'distributions' as const, ligne: d, date: d['dateDebut'], libelle: 'Aliment', detail: `${nombre(d['quantiteTotaleKg'])} kg ${aliments.get(d['alimentId']) ?? ''}` })),
+    ...distributions.map((d) => ({ ressource: 'distributions' as const, ligne: d, date: d['dateDebut'], libelle: 'Aliment', detail: `${d['quantiteTotaleKg'] != null ? `${nombre(d['quantiteTotaleKg'])} kg` : `${nombre(d['rationKgJour'], 2)} kg/j`} ${aliments.get(d['alimentId']) ?? ''}` })),
     ...morts.map((m) => ({ ressource: 'mortalites' as const, ligne: m, date: m['dateConstat'], libelle: 'Mortalité', detail: `${nombre(m['nombre'], 0)} poisson(s)` })),
     ...traitements.map((t) => ({ ressource: 'traitements' as const, ligne: t, date: t['dateOperation'], libelle: 'Traitement', detail: t['finDelaiAttente'] ? `Pas de récolte avant le ${date(t['finDelaiAttente'])}` : (t['motif'] ?? '') })),
     ...recoltes.map((r) => ({ ressource: 'recoltes' as const, ligne: r, date: r['dateOperation'], libelle: 'Récolte', detail: `${nombre(r['poidsKg'])} kg · ${montant(Number(r['poidsKg']) * Number(r['prixKg'] ?? 0))}` })),
@@ -134,11 +134,20 @@ export function Cycle() {
             <Chiffre test="ic" libelle="indice de conso." valeur={nombre(i.alimentation.indiceConsommation, 2)} />
             <Chiffre test="resultat" libelle="résultat" valeur={montant(i.economie.resultat)} long />
           </div>
-          {etat?.ration && !clos && (
+          {/* La ration fixée à la dernière pêche fait foi jusqu'à la suivante (D29) ;
+              le palier du jour n'est qu'un repère tant qu'aucune n'est fixée. */}
+          {!clos && i.alimentation.rationEnCoursKgJour !== null ? (
             <p data-test="ration" className="mt-3 rounded-lg bg-accent px-3 py-2 text-sm text-accent-foreground">
-              Ration du jour : <strong>{nombre(etat.ration.rationKg, 2)} kg</strong> en {etat.ration.frequenceRepas} repas
-              <span className="text-muted-foreground"> ({nombre(etat.ration.tauxPct)} % de la biomasse)</span>
+              Ration en cours : <strong>{nombre(i.alimentation.rationEnCoursKgJour, 2)} kg/j</strong>, fixée à la dernière pêche
+              {etat?.ration && <span className="text-muted-foreground"> · {etat.ration.frequenceRepas} repas</span>}
             </p>
+          ) : (
+            etat?.ration && !clos && (
+              <p data-test="ration" className="mt-3 rounded-lg bg-accent px-3 py-2 text-sm text-accent-foreground">
+                Ration conseillée : <strong>{nombre(etat.ration.rationKg, 2)} kg/j</strong> en {etat.ration.frequenceRepas} repas
+                <span className="text-muted-foreground"> ({nombre(etat.ration.tauxPct)} % de la biomasse)</span>
+              </p>
+            )
           )}
           </CardContent>
         </Card>

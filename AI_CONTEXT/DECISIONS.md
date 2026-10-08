@@ -558,6 +558,146 @@ TypeScript 6 et 7 n'incluent plus les `@types` d'office : chaque
 
 ---
 
+## D27 — Pesée et distribution saisies ensemble, sur le téléphone
+
+**Problème.** La pêche de contrôle et le changement de ration qu'elle
+entraîne sont un seul geste au bord du bassin. Deux écrans séparés
+(« Pesée » puis « Aliment ») auraient forcé à rouvrir un second
+formulaire pour la même visite, alors que `Distribution.peseeId`
+existait déjà dans le schéma pour porter ce lien (« Pesée qui a fixé la
+ration de la période, quand elle est connue »).
+
+**Choix.** `Pesee.tsx` (PWA) gagne une carte « Aliment distribué »
+optionnelle — aliment, quantité, prix au kilo — à côté des échantillons.
+Une seule soumission :
+- crée la pesée et ses échantillons comme avant ;
+- crée ou met à jour, **liée par `peseeId`**, une `Distribution` dont la
+  date de début est celle de la pesée ;
+- si les deux champs de l'aliment sont vidés alors qu'une distribution
+  était liée, la supprime.
+
+> **Corrigé par [[D29]].** Le premier jet demandait une « quantité » le
+> jour de la pesée et affichait une ration conseillée calculée **avant**
+> la pesée, sur le poids de la pêche précédente. Sur le terrain, la pêche
+> fixe une ration **journalière** sur le poids **du jour**, qui court
+> jusqu'à la pêche suivante. Ce qui suit reste vrai : un seul écran, le
+> lien `peseeId`, l'aliment et le prix reconduits de la pêche précédente.
+
+L'action « Aliment » du cycle reste par ailleurs disponible seule : on
+distribue de l'aliment tous les jours, on ne pèse pas tous les jours.
+
+**Coût.** Nouvel index Dexie (`distributions: 'id, cycleId, peseeId'`,
+version 2) : toute base déjà installée le construit sans y toucher au
+premier chargement. Le parallèle côté admin est traité séparément
+([[D28]]) — cette section décrivait un manque qui n'existe plus.
+
+---
+
+## D28 — Le même écran pesée+échantillons+aliment, côté admin
+
+**Problème.** L'admin créait une pesée avec le formulaire générique
+(`FormulaireRessource`) : trois champs (date, taux, observation), sans
+aucune notion d'échantillon. Ajouter les échantillons obligeait à
+enregistrer d'abord la pesée à vide, puis à rouvrir sa fiche
+(`FicheParent`) pour ajouter les échantillons un par un, dans un
+formulaire séparé, sans calcul du poids moyen en direct — un manque
+signalé après coup, pas une omission volontaire comme D27 le laissait
+entendre.
+
+**Choix.** `FormulairePesee.tsx`, propre à l'admin (pas de composant
+partagé avec la PWA : la PWA écrit dans Dexie hors ligne, l'admin passe
+par les hooks Refine — `useCreate`/`useUpdate`/`useDelete` avec
+callbacks, cette version de Refine n'a pas de `mutateAsync`), reprend le
+même geste que D27 : pesée, ses échantillons (ajout/retrait de lignes,
+poids moyen calculé en direct), et l'aliment distribué, en une seule
+soumission. Routes littérales `/saisie/pesees/nouveau` et
+`/saisie/pesees/:id`, prioritaires sur le formulaire générique
+`/saisie/:ressource/...` — même principe que `/fermes/nouveau`. L'ancien
+écran `FicheParent type="pesees"` (pesée → liste d'échantillons) est
+retiré : il n'a plus de route qui y mène.
+
+Le numéro (`numero`) n'est pas calculé côté client : le serveur
+l'assigne toujours (`saisie.service.ts`, `numeroter()`), contrairement à
+la PWA qui doit le faire elle-même en écrivant directement dans
+IndexedDB. Pas de bouton de suppression dans le formulaire : l'action
+« Désactiver » du tableau du cycle le couvre déjà.
+
+**Ration conseillée : tranché par [[D29]].** L'admin ne calcule pas
+lui-même la biomasse ni le palier : il appelle `POST /cycles/:id/ration`
+avec la pesée en cours de saisie. Seules deux fonctions triviales de
+`@aqua/shared` y tournent côté client (`aujourdhui`, `ration` — la
+multiplication biomasse × taux, pour arrondir comme partout ailleurs).
+
+**Piège trouvé en testant.** Le premier jet initialisait `dateOperation`
+par un `useEffect({ setDateOperation(aujourdhui()) }, [creation, pesee])`
+— si `pesee` (résultat de `useOne`, désactivé en création) changeait de
+référence après le montage, l'effet se relançait et écrasait une date
+que l'opérateur venait de corriger. Une saisie sur une connexion lente,
+où les listes (lots, aliments, distributions) arrivent après coup, aurait
+pu perdre la date tapée entre-temps. Corrigé par un état initial
+paresseux (`useState(() => creation ? aujourdhui() : '')`) plutôt qu'un
+effet — la date de création ne se réécrit plus jamais après le montage.
+
+**Coût.** Deux formulaires « pesée » distincts (PWA, admin), chacun
+avec son état de chargement et sa logique de sauvegarde — pas de
+composant React partagé possible entre Dexie et Refine.
+
+---
+
+## D29 — La pêche de contrôle fixe une ration journalière, jusqu'à la suivante
+
+**Problème.** D27 et D28 enchaînaient mal la pesée et l'alimentation.
+Le tableur de terrain (Kotouba, feuille « bassins-multiples-modif ») et
+le Déroulé font : poids moyen des échantillons → biomasse (effectif
+après mortalités × **ce** poids) → ration journalière = biomasse × taux →
+répartie entre les aliments → **suivie jusqu'à la pêche suivante**
+(`=AH24+30`). L'application, elle :
+- affichait une ration conseillée calculée **avant** la pesée, sur le
+  poids de la pêche précédente — en retard d'une pêche ;
+- enregistrait `tauxRationPct` sans jamais en tirer de kg/jour
+  (`rationKgJour` existait dans le schéma, rempli nulle part) ;
+- demandait une « quantité (kg) » totale le jour de la pesée, qu'on ne
+  connaît qu'à la pêche suivante ;
+- ne connaissait qu'un aliment par pesée ;
+- comptait l'aliment du cycle par la seule somme des quantités saisies :
+  sans retour pour les compléter, indice de consommation et coût faux.
+
+**Choix.**
+- **Ration sur le poids du jour.** `cycleAuJourDeLaPesee()` reconstitue
+  le cycle tel que la pêche le révèle (cette pesée et ses échantillons,
+  sans les pesées ni les mortalités postérieures) ; `rationDuCycle()`
+  en tire biomasse et palier conseillé. Recalculé à chaque échantillon
+  saisi (PWA, hors ligne) ou via `POST /cycles/:id/ration` (admin) —
+  même fonction des deux côtés (`packages/shared/src/rationnement.ts`).
+- **Taux retenu → kg/jour**, réparti sur une ou plusieurs lignes
+  d'aliment, chacune une `Distribution` liée par `peseeId`, avec
+  `rationKgJour` et `dateDebut` = jour de la pêche. Une seule ligne suit
+  la ration calculée tant qu'on ne la corrige pas.
+- **Quantité déduite, pas saisie** : `quantiteDistribuee()`
+  (`packages/shared/src/alimentation.ts`) = ration × jours, du jour de
+  la pêche jusqu'à la **pêche suivante** (exclue : elle fixe la nouvelle
+  ration), sinon `dateFin` (incluse), sinon la clôture, sinon
+  aujourd'hui (inclus). Jamais au-delà de la clôture ni d'aujourd'hui.
+  Aucune ligne n'est réécrite à la pêche suivante : la fin se lit, elle
+  ne s'écrit pas — rien à synchroniser, aucun conflit possible.
+- **La mesure prime** (comme D14) : une `quantiteTotaleKg` saisie
+  (sacs comptés) remplace ration × jours. `quantiteTotaleKg` devient
+  facultative ; la base exige l'une ou l'autre
+  (`distribution_ration_ou_quantite`, migration `ration_distribution`).
+- `calculerIndicateurs(d, { aujourdhui })` : nouveau contexte, pour la
+  ration encore ouverte ; nouvel indicateur `rationEnCoursKgJour`,
+  affiché sur les fiches cycle (PWA, admin).
+- **Prix vide = prix du référentiel, figé à l'écriture** (API
+  `saisie.service.ts`, PWA `saisie.ts`). Les formulaires l'annonçaient
+  déjà, rien ne l'appliquait : l'aliment comptait pour 0 F.
+
+**Coût.** Une ration ouverte compte chaque jour jusqu'à la pêche
+suivante ou à la clôture : un cycle oublié accumule de l'aliment fictif
+(voir ALERTES.md). L'alerte « pesée en retard » (30 jours) en est le
+garde-fou. Pas de nouvel index Dexie : la version 2 de D27 suffit.
+
+---
+
 ## Décisions en attente
 
 - **Devise de stockage — non tranché, et ce n'est pas du formatage.**

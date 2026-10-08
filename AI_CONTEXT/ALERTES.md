@@ -87,6 +87,29 @@ L'API est fermée par défaut depuis D18 : JWT, cloisonnement par
   `navigator.storage.persist()` est demandé, sans garantie.
 - `@nestjs/jwt` 11 annonce Nest ≤ 11 en dépendance pair ; il fonctionne
   avec Nest 12 (tests verts), l'avertissement de `pnpm install` est connu.
+- **Pesée et distribution liées (D27)** : toute modification de
+  `apps/pwa/src/db.ts` qui touche l'index `distributions` doit passer par
+  un nouveau `this.version(N)`, jamais réécrire la version existante —
+  sinon les téléphones déjà installés ne migrent pas. La distribution
+  liée à une pesée se retrouve par `db.distributions.where('peseeId')`,
+  pas par un champ sur la pesée elle-même.
+- **Ration ouverte (D29)** : la ration fixée à la dernière pêche compte
+  chaque jour jusqu'à la pêche suivante ou à la clôture. Un cycle laissé
+  sans pêche ni clôture accumule de l'aliment fictif (parcours admin :
+  un cycle de 2021 resté ouvert affiche 2 276 kg). Garde-fou : l'alerte
+  « pesée en retard ». Saisir la clôture, ou une `dateFin` / une
+  quantité mesurée, arrête le compte.
+- **Distributions sans ration ni quantité** : refusées par la base
+  (`distribution_ration_ou_quantite`). Une pesée supprimée laisse ses
+  distributions, `peseeId` à `null` : la ration court alors jusqu'à la
+  pêche suivante, comme une distribution saisie seule.
+- **Admin : même geste, écran séparé (D28)** — `pages/FormulairePesee.tsx`
+  fait le même lien pesée+échantillons+aliment que la PWA, mais dans son
+  propre composant (pas de partage possible entre Dexie et les hooks
+  Refine). Une distribution créée depuis le téléphone et liée à une pesée
+  se voit dans l'admin seulement dans la liste plate des distributions
+  du cycle, sans rappel visuel de son `peseeId` — seul le formulaire de
+  pesée affiche ce lien, pas la liste des distributions.
 
 ## Couverture de test de l'API et de l'admin
 
@@ -150,12 +173,10 @@ Les deux sont vérifiés par `pnpm --filter @aqua/e2e test:cycle`.
 ## Couverture de test
 
 `test/b4.ts` couvre `indicateurs.ts` (16 assertions, cycle réel Kotouba
-B4) et, par ricochet, `dates.ts`.
-
-**Non couverts :** `geometrie.ts`, `rationnement.ts`. Zéro assertion.
-Les bornes de palier (`>= poidsMin`, `< poidsMax`, priorité thermique)
-et le `niveauRemplissage` sont exactement le genre de logique où une
-inversion de borne passe inaperçue.
+B4) et, par ricochet, `dates.ts`. `test/geometrie.ts` et
+`test/rationnement.ts` couvrent les bornes de palier (`>= poidsMin`,
+`< poidsMax`, priorité thermique) et `niveauRemplissage` — étape 2 de
+ETAPES.md, faite depuis (cette section datait d'avant).
 
 ## Fichiers les plus sollicités
 

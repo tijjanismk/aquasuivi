@@ -67,7 +67,7 @@ function dernier(mesures: MesureEauAlerte[], champ: keyof MesureEauAlerte) {
 export function calculerAlertes(
   d: CycleComplet,
   ctx: ContexteAlertes,
-  indicateurs: Indicateurs = calculerIndicateurs(d),
+  indicateurs: Indicateurs = calculerIndicateurs(d, { aujourdhui: ctx.aujourdhui }),
 ): Alerte[] {
   const i = indicateurs;
   const a: Alerte[] = [];

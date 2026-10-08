@@ -1,11 +1,16 @@
 # Module : shared/rationnement
 
-Rôle : trouver le palier de ration applicable et en déduire la quantité
-d'aliment du jour.
+Rôle : trouver le palier de ration applicable et en déduire la ration
+journalière qu'une pêche de contrôle fixe (D29).
 
-⚠️ **API publique sans appelant.** Réexporté par `index.ts`, jamais
-appelé dans le dépôt. Destiné à l'écran de saisie mobile (ration
-conseillée au moment de la pesée). Voir ALERTES.md.
+Appelé par la PWA (`donnees.ts` → `etatCycle`, `ecrans/Pesee.tsx`) et
+par l'API (`cycles.service.ts` → `POST /cycles/:id/ration`, utilisé par
+le formulaire de pesée de l'admin). La ration se calcule sur le poids
+**de la pêche en cours de saisie**, pas sur celui de la précédente. Le
+conseil ne contraint pas la saisie : le taux retenu peut s'en écarter.
+
+La quantité d'aliment d'une période (ration × jours jusqu'à la pêche
+suivante) est dans `alimentation.ts` (`quantiteDistribuee`).
 
 ## Fichiers
 - `packages/shared/src/rationnement.ts` (67 l.)
@@ -17,13 +22,19 @@ conseillée au moment de la pesée). Voir ALERTES.md.
 - `rationConseillee(paliers, especeId, poidsMoyenG, biomasseKg,
    temperature?) → { tauxPct, rationKg, frequenceRepas, source } | null`
 
+- `rationDuCycle(indicateurs, paliers, temperature?) → { especeId,
+   poidsMoyenG, effectif, biomasseKg, conseil } | null` — palier de
+   l'espèce du lot le plus lourd, appliqué à la biomasse totale
+- `cycleAuJourDeLaPesee(cycle, pesee, echantillons) → CycleComplet` —
+   le cycle au jour de la pêche, avec ses échantillons en cours de saisie
+
 ## Entrant
-Importé par : `index.ts` uniquement.
-**Devrait l'être par** : écran de pesée du mobile, et l'API si le taux
-conseillé est stocké avec la distribution.
+Importé par : `index.ts`, `apps/pwa/src/donnees.ts`,
+`apps/pwa/src/ecrans/Pesee.tsx`, `apps/api/src/cycles/cycles.service.ts`.
+La ration retenue est stockée dans `Distribution.rationKgJour` (D29).
 
 ## Sortant
-Importe : `./types` (`PalierRationnement`).
+Importe : `./types`, `./indicateurs` (type `Indicateurs` seulement).
 
 ## Règles métier
 - [CONFIRMÉ] Sélection par espèce **et** classe de poids :
@@ -67,5 +78,7 @@ arrondie au décagramme près. Volontaire ou non, ce n'est pas
 besoin terrain — une balance de terrain ne pèse pas au gramme.
 
 ## Couverture
-**Aucun test.** Priorité thermique et bornes sont exactement le genre de
-logique où une inversion passe inaperçue. Étape 2 de ETAPES.md.
+`packages/shared/test/rationnement.ts` (70 l.) — bornes, priorité
+thermique, retombée générique, absence de palier.
+`packages/shared/test/alimentation.ts` — ration sur le poids du jour,
+période close par la pêche suivante, quantité mesurée prioritaire.

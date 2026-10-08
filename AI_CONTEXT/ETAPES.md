@@ -179,6 +179,8 @@ de synchronisation lui-même, côté PWA (étape 7).
       sections d'un cycle (lots, pesées, distributions, traitements,
       récoltes, dépenses, qualité de l'eau) — `src/saisie.ts`
 - [x] **Fiche cycle avec les indicateurs** — `pages/FicheCycle.tsx`
+- [x] Pesée, ses échantillons et l'aliment distribué saisis dans le même
+      écran — `pages/FormulairePesee.tsx`, parallèle admin de D27 (D28)
 - [x] Écran de connexion — `pages/Connexion.tsx`, session dans
       `src/session.ts` (rafraîchissement silencieux, un seul à la fois)
 - [x] Gestion des utilisateurs et des `AccesFerme` — `/admin/utilisateurs`,
@@ -218,6 +220,12 @@ indicateurs s'affichent.
       contrôles** que l'API (D20), contexte lu dans IndexedDB
 - [x] Indicateurs calculés sur le téléphone (`calculerIndicateurs`) et
       ration du jour via `rationConseillee()`
+- [x] Pesée et distribution d'aliment saisies **ensemble** — même
+      formulaire, liées par `peseeId` (D27)
+- [x] La pêche fixe une **ration journalière** sur le poids du jour,
+      répartie entre aliments, qui court jusqu'à la pêche suivante ;
+      l'aliment de la période s'en déduit (D29) — `test:pwa`, `test:saisie`,
+      `packages/shared/test/alimentation.ts`
 - [x] File de synchronisation (`journal`), une entrée par ligne, reprise
       après coupure, relances espacées quand le réseau ment
       (`navigator.onLine` vrai sans internet), écran « À corriger » pour

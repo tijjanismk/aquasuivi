@@ -272,7 +272,27 @@ export class SaisieService {
     if (ressource === 'infrastructures') return this.dimensions(data, id);
     if (ressource === 'traitements') return this.delaiAttente(data, id);
     if (ressource === 'cycles') return this.statutCycle(data, id);
+    if (ressource === 'distributions') return this.prixAliment(data, id);
     return data;
+  }
+
+  /// Prix du kilo laissé vide : celui du référentiel, **figé** sur la ligne.
+  /// Le référentiel évolue, les charges passées non ; et sans prix, l'aliment
+  /// compterait pour 0 F dans les charges du cycle.
+  private async prixAliment(data: Record<string, unknown>, id?: string) {
+    if (data['prixKgApplique'] != null) return data;
+    const existante = id
+      ? ((await this.prisma.client.distribution.findUnique({
+          where: { id },
+          select: { alimentId: true, prixKgApplique: true },
+        })) ?? undefined)
+      : undefined;
+    // Modification sans toucher au prix : on garde celui de la ligne.
+    if (!('prixKgApplique' in data) && existante?.prixKgApplique != null) return data;
+    const alimentId = (data['alimentId'] ?? existante?.alimentId) as string | undefined;
+    if (!alimentId) return data;
+    const aliment = await this.prisma.client.aliment.findUnique({ where: { id: alimentId }, select: { prixKg: true } });
+    return aliment?.prixKg != null ? { ...data, prixKgApplique: aliment.prixKg } : data;
   }
 
   /// Le statut suit la date de clôture quand le client ne le précise pas :

@@ -241,13 +241,18 @@ export const DISTRIBUTIONS: Ressource = {
   libelle: 'Distributions',
   libelleSingulier: 'distribution',
   description:
-    'On enregistre l’aliment réellement distribué, pas le planifié : l’indice de consommation n’a de sens que sur du réel.',
+    'La ration fixée à la pêche de contrôle court jusqu’à la pêche suivante : la quantité de la période en découle. Une quantité mesurée (sacs comptés) la remplace.',
   triDefaut: 'dateDebut',
   parent: { ressource: 'saisie/cycles', champ: 'cycleId' },
   champs: [
     { nom: 'dateDebut', libelle: 'Début', type: 'date', requis: true, enListe: true },
     { nom: 'cycleId', libelle: 'Cycle', type: 'relation', ressourceLiee: 'saisie/cycles' },
-    { nom: 'dateFin', libelle: 'Fin', type: 'date' },
+    {
+      nom: 'dateFin',
+      libelle: 'Fin',
+      type: 'date',
+      aide: 'Dernier jour nourri à cette ration. Vide : jusqu’à la prochaine pêche de contrôle.',
+    },
     {
       nom: 'alimentId',
       libelle: 'Aliment',
@@ -256,14 +261,20 @@ export const DISTRIBUTIONS: Ressource = {
       ressourceLiee: 'referentiels/aliments',
       enListe: true,
     },
-    { nom: 'quantiteTotaleKg', libelle: 'Quantité (kg)', type: 'nombre', requis: true, enListe: true },
-    { nom: 'rationKgJour', libelle: 'Ration (kg/j)', type: 'nombre' },
+    { nom: 'rationKgJour', libelle: 'Ration (kg/j)', type: 'nombre', enListe: true },
+    {
+      nom: 'quantiteTotaleKg',
+      libelle: 'Quantité mesurée (kg)',
+      type: 'nombre',
+      enListe: true,
+      aide: 'Si elle est connue : elle remplace ration × jours. Ration ou quantité, l’une des deux.',
+    },
     {
       nom: 'prixKgApplique',
       libelle: 'Prix au kg appliqué',
       type: 'monnaie',
       enListe: true,
-      aide: 'Prix au moment de l’achat : le référentiel évolue, les charges passées non.',
+      aide: 'Vide : prix du référentiel, figé à l’enregistrement — le référentiel évolue, les charges passées non.',
     },
   ],
 };

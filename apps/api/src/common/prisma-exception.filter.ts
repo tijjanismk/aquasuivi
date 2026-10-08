@@ -30,6 +30,10 @@ const CONTRAINTES: Record<string, { code: string; message: string }> = {
     code: 'VALEUR_NEGATIVE',
     message: 'Le nombre de morts et le remplacement ne peuvent pas être négatifs.',
   },
+  distribution_ration_ou_quantite: {
+    code: 'CHAMP_REQUIS',
+    message: 'Indiquez la ration journalière ou la quantité distribuée.',
+  },
   cycle_cloture_apres_charge: {
     code: 'CYCLE_CLOTURE_AVANT_CHARGE',
     message: 'La date de clôture ne peut pas précéder la date de mise en charge.',

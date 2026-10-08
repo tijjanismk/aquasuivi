@@ -1,7 +1,7 @@
 {
  "racine": "C:\\Users\\USER\\Downloads\\aqua-suivi-socle\\aquasuivi",
  "avertissement": null,
- "nb_fichiers": 135,
+ "nb_fichiers": 136,
  "fichiers": {
   "apps/admin/vite.config.ts": {
    "fichier": "apps/admin/vite.config.ts",
@@ -63,7 +63,7 @@
   "apps/admin/src/App.tsx": {
    "fichier": "apps/admin/src/App.tsx",
    "langage": "ts",
-   "lignes": 283,
+   "lignes": 292,
    "exporte": [
     "App"
    ],
@@ -193,6 +193,12 @@
      "source": "./pages/FicheCycle",
      "symboles": [
       "FicheCycle"
+     ]
+    },
+    {
+     "source": "./pages/FormulairePesee",
+     "symboles": [
+      "FormulairePesee"
      ]
     },
     {
@@ -1511,7 +1517,7 @@
   "apps/admin/src/pages/FicheCycle.tsx": {
    "fichier": "apps/admin/src/pages/FicheCycle.tsx",
    "langage": "ts",
-   "lignes": 286,
+   "lignes": 282,
    "exporte": [
     "FicheCycle"
    ],
@@ -1613,7 +1619,7 @@
   "apps/admin/src/pages/FicheParent.tsx": {
    "fichier": "apps/admin/src/pages/FicheParent.tsx",
    "langage": "ts",
-   "lignes": 158,
+   "lignes": 142,
    "exporte": [
     "FicheParent"
    ],
@@ -1653,12 +1659,10 @@
      "source": "@/saisie",
      "symboles": [
       "CYCLES",
-      "ECHANTILLONS",
       "FERMES",
       "INFRASTRUCTURES",
       "LOTS",
-      "MORTALITES",
-      "PESEES"
+      "MORTALITES"
      ]
     },
     {
@@ -1687,6 +1691,115 @@
      "symboles": [
       "Card",
       "CardContent"
+     ]
+    }
+   ]
+  },
+  "apps/admin/src/pages/FormulairePesee.tsx": {
+   "fichier": "apps/admin/src/pages/FormulairePesee.tsx",
+   "langage": "ts",
+   "lignes": 358,
+   "exporte": [
+    "FormulairePesee"
+   ],
+   "importe": [
+    {
+     "source": "react",
+     "symboles": [
+      "useEffect",
+      "useMemo",
+      "useState"
+     ]
+    },
+    {
+     "source": "@refinedev/core",
+     "symboles": [
+      "useCreate",
+      "useDelete",
+      "useList",
+      "useOne",
+      "useUpdate"
+     ]
+    },
+    {
+     "source": "react-router",
+     "symboles": [
+      "useNavigate",
+      "useParams",
+      "useSearchParams"
+     ]
+    },
+    {
+     "source": "@aqua/shared",
+     "symboles": [
+      "aujourdhui"
+     ]
+    },
+    {
+     "source": "lucide-react",
+     "symboles": [
+      "ArrowLeft",
+      "Plus",
+      "Trash2",
+      "X"
+     ]
+    },
+    {
+     "source": "@/i18n",
+     "symboles": [
+      "t"
+     ]
+    },
+    {
+     "source": "@/erreurs",
+     "symboles": [
+      "messageErreur"
+     ]
+    },
+    {
+     "source": "@/composants/ui/button",
+     "symboles": [
+      "Button"
+     ]
+    },
+    {
+     "source": "@/composants/ui/alert",
+     "symboles": [
+      "Alert",
+      "AlertDescription"
+     ]
+    },
+    {
+     "source": "@/composants/ui/card",
+     "symboles": [
+      "Card",
+      "CardAction",
+      "CardContent",
+      "CardHeader",
+      "CardTitle"
+     ]
+    },
+    {
+     "source": "@/composants/ui/field",
+     "symboles": [
+      "Field",
+      "FieldDescription",
+      "FieldError",
+      "FieldGroup",
+      "FieldLabel"
+     ]
+    },
+    {
+     "source": "@/composants/ui/input",
+     "symboles": [
+      "Input"
+     ]
+    },
+    {
+     "source": "@/composants/ui/native-select",
+     "symboles": [
+      "NativeSelect",
+      "NativeSelectOption"
      ]
     }
    ]
@@ -4011,7 +4124,7 @@
   "apps/pwa/src/db.ts": {
    "fichier": "apps/pwa/src/db.ts",
    "langage": "ts",
-   "lignes": 157,
+   "lignes": 164,
    "exporte": [
     "EntreeJournal",
     "Ligne",
@@ -4882,7 +4995,7 @@
   "apps/pwa/src/ecrans/Pesee.tsx": {
    "fichier": "apps/pwa/src/ecrans/Pesee.tsx",
    "langage": "ts",
-   "lignes": 193,
+   "lignes": 295,
    "exporte": [
     "Pesee"
    ],
@@ -4926,6 +5039,7 @@
     {
      "source": "../formulaires",
      "symboles": [
+      "Champ",
       "FORMULAIRES",
       "Option"
      ]
@@ -4936,6 +5050,12 @@
       "ErreurSaisie",
       "enregistrer",
       "supprimer"
+     ]
+    },
+    {
+     "source": "../donnees",
+     "symboles": [
+      "etatCycle"
      ]
     },
     {
@@ -4981,6 +5101,7 @@
       "Card",
       "CardAction",
       "CardContent",
+      "CardDescription",
       "CardHeader",
       "CardTitle"
      ]
@@ -6144,6 +6265,12 @@
     ]
    },
    {
+    "par": "apps/admin/src/pages/FormulairePesee.tsx",
+    "symboles": [
+     "t"
+    ]
+   },
+   {
     "par": "apps/admin/src/pages/PageFormulaire.tsx",
     "symboles": [
      "t"
@@ -6202,12 +6329,10 @@
     "par": "apps/admin/src/pages/FicheParent.tsx",
     "symboles": [
      "CYCLES",
-     "ECHANTILLONS",
      "FERMES",
      "INFRASTRUCTURES",
      "LOTS",
-     "MORTALITES",
-     "PESEES"
+     "MORTALITES"
     ]
    }
   ],
@@ -6281,6 +6406,14 @@
     "par": "apps/admin/src/App.tsx",
     "symboles": [
      "FicheCycle"
+    ]
+   }
+  ],
+  "apps/admin/src/pages/FormulairePesee.tsx": [
+   {
+    "par": "apps/admin/src/App.tsx",
+    "symboles": [
+     "FormulairePesee"
     ]
    }
   ],
@@ -6412,6 +6545,12 @@
     ]
    },
    {
+    "par": "apps/admin/src/pages/FormulairePesee.tsx",
+    "symboles": [
+     "aujourdhui"
+    ]
+   },
+   {
     "par": "apps/admin/src/pages/Simulation.tsx",
     "symboles": [
      "ResultatSimulation"
@@ -6535,6 +6674,12 @@
     "symboles": [
      "messageErreur"
     ]
+   },
+   {
+    "par": "apps/admin/src/pages/FormulairePesee.tsx",
+    "symboles": [
+     "messageErreur"
+    ]
    }
   ],
   "apps/admin/src/composants/ui/button.tsx": [
@@ -6570,6 +6715,12 @@
    },
    {
     "par": "apps/admin/src/pages/FicheParent.tsx",
+    "symboles": [
+     "Button"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/FormulairePesee.tsx",
     "symboles": [
      "Button"
     ]
@@ -6633,6 +6784,13 @@
    },
    {
     "par": "apps/admin/src/pages/FicheCycle.tsx",
+    "symboles": [
+     "Alert",
+     "AlertDescription"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/FormulairePesee.tsx",
     "symboles": [
      "Alert",
      "AlertDescription"
@@ -6722,6 +6880,16 @@
     ]
    },
    {
+    "par": "apps/admin/src/pages/FormulairePesee.tsx",
+    "symboles": [
+     "Card",
+     "CardAction",
+     "CardContent",
+     "CardHeader",
+     "CardTitle"
+    ]
+   },
+   {
     "par": "apps/admin/src/pages/Simulation.tsx",
     "symboles": [
      "Card",
@@ -6774,6 +6942,16 @@
     ]
    },
    {
+    "par": "apps/admin/src/pages/FormulairePesee.tsx",
+    "symboles": [
+     "Field",
+     "FieldDescription",
+     "FieldError",
+     "FieldGroup",
+     "FieldLabel"
+    ]
+   },
+   {
     "par": "apps/admin/src/pages/Simulation.tsx",
     "symboles": [
      "Field",
@@ -6809,6 +6987,12 @@
     ]
    },
    {
+    "par": "apps/admin/src/pages/FormulairePesee.tsx",
+    "symboles": [
+     "Input"
+    ]
+   },
+   {
     "par": "apps/admin/src/pages/Simulation.tsx",
     "symboles": [
      "Input"
@@ -6825,6 +7009,13 @@
    },
    {
     "par": "apps/admin/src/pages/Consolidation.tsx",
+    "symboles": [
+     "NativeSelect",
+     "NativeSelectOption"
+    ]
+   },
+   {
+    "par": "apps/admin/src/pages/FormulairePesee.tsx",
     "symboles": [
      "NativeSelect",
      "NativeSelectOption"
@@ -7788,6 +7979,12 @@
     "symboles": [
      "useRequete"
     ]
+   },
+   {
+    "par": "apps/pwa/src/ecrans/Pesee.tsx",
+    "symboles": [
+     "etatCycle"
+    ]
    }
   ],
   "apps/pwa/src/format.ts": [
@@ -8371,6 +8568,7 @@
      "Card",
      "CardAction",
      "CardContent",
+     "CardDescription",
      "CardHeader",
      "CardTitle"
     ]
@@ -8437,6 +8635,7 @@
    {
     "par": "apps/pwa/src/ecrans/Pesee.tsx",
     "symboles": [
+     "Champ",
      "FORMULAIRES",
      "Option"
     ]
@@ -8907,15 +9106,15 @@
   ]
  },
  "dependances_externes": {
-  "react": 41,
+  "react": 42,
   "@nestjs": 32,
-  "lucide-react": 22,
+  "lucide-react": 23,
   "node:path": 20,
+  "react-router": 20,
   "node:url": 19,
-  "react-router": 19,
   "pg": 14,
+  "@refinedev": 12,
   "@prisma": 12,
-  "@refinedev": 11,
   "radix-ui": 9,
   "class-variance-authority": 8,
   "zod": 7,

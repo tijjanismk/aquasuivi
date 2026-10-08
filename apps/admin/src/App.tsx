@@ -31,6 +31,7 @@ import { ListeRessource } from './pages/ListeRessource';
 import { PageFormulaire } from './pages/PageFormulaire';
 import { FicheParent } from './pages/FicheParent';
 import { FicheCycle } from './pages/FicheCycle';
+import { FormulairePesee } from './pages/FormulairePesee';
 import { Connexion } from './pages/Connexion';
 import { Simulation } from './pages/Simulation';
 import { Conflits } from './pages/Conflits';
@@ -257,12 +258,20 @@ export function App() {
               element={<ParRessource enfant={<FicheCycle />} />}
             />
             <Route
-              path="/pesees/:id"
-              element={<ParRessource enfant={<FicheParent type="pesees" />} />}
-            />
-            <Route
               path="/lots/:id"
               element={<ParRessource enfant={<FicheParent type="lots" />} />}
+            />
+
+            {/* Pêche de contrôle : pesée, échantillons et aliment dans un
+                seul écran (D27) — routes littérales prioritaires sur le
+                formulaire générique ci-dessous, même principe que /fermes/nouveau. */}
+            <Route
+              path="/saisie/pesees/nouveau"
+              element={<ParRessource enfant={<FormulairePesee />} />}
+            />
+            <Route
+              path="/saisie/pesees/:id"
+              element={<ParRessource enfant={<FormulairePesee />} />}
             />
 
             {/* Formulaires des ressources de saisie, parent en paramètre d'URL. */}

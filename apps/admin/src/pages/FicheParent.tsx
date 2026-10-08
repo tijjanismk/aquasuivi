@@ -3,23 +3,16 @@ import { Link, useParams } from 'react-router';
 import { ArrowLeft } from 'lucide-react';
 import type { Ressource } from '@/description';
 import { champsEnListe } from '@/description';
-import {
-  CYCLES,
-  ECHANTILLONS,
-  FERMES,
-  INFRASTRUCTURES,
-  LOTS,
-  MORTALITES,
-  PESEES,
-} from '@/saisie';
+import { CYCLES, FERMES, INFRASTRUCTURES, LOTS, MORTALITES } from '@/saisie';
 import { formaterDate, formaterMontant, formaterNombre, t } from '@/i18n';
 import { Button } from '@/composants/ui/button';
 import { TableauRessource } from '@/composants/TableauRessource';
 import { Card, CardContent } from '@/composants/ui/card';
 
 /// Fiche d'une ligne « parent » : son résumé, puis la liste de ses enfants.
-/// Ferme → infrastructures, infrastructure → cycles, pesée → échantillons,
-/// lot → mortalités. Quatre écrans, une seule implémentation.
+/// Ferme → infrastructures, infrastructure → cycles, lot → mortalités.
+/// (La pesée a son propre écran, `FormulairePesee`, qui saisit ses
+/// échantillons directement — D27.)
 interface Configuration {
   parent: Ressource;
   enfant: Ressource;
@@ -53,15 +46,6 @@ const CONFIGURATIONS: Record<string, Configuration> = {
       libelle: (l['ferme'] as { nom?: string } | undefined)?.nom ?? FERMES.libelle,
     }),
     titre: (l) => String(l['nom'] ?? ''),
-  },
-  pesees: {
-    parent: PESEES,
-    enfant: ECHANTILLONS,
-    cleEnfant: 'peseeId',
-    lienEnfant: (idEnfant, idParent) =>
-      `/saisie/echantillons/${idEnfant}?retour=${encodeURIComponent(`/pesees/${idParent}`)}`,
-    retour: (l) => ({ chemin: `/cycles/${String(l['cycleId'] ?? '')}`, libelle: 'Cycle' }),
-    titre: (l) => `Pesée n° ${String(l['numero'] ?? '')}`,
   },
   lots: {
     parent: LOTS,

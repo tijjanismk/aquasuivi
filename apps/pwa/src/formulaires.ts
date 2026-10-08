@@ -156,8 +156,9 @@ export const FORMULAIRES: Record<Segment, Formulaire> = {
     champs: [
       { nom: 'alimentId', libelle: 'Aliment', type: 'reference', requis: true, charger: async () => actifs(await db.aliments.toArray()) },
       { nom: 'dateDebut', libelle: 'Du', type: 'date', requis: true, defaut: aujourdHui },
-      { nom: 'dateFin', libelle: 'Au', type: 'date' },
-      { nom: 'quantiteTotaleKg', libelle: 'Quantité', type: 'nombre', unite: 'kg', requis: true },
+      { nom: 'dateFin', libelle: 'Au', type: 'date', aide: 'Laissez vide : la ration court jusqu’à la prochaine pêche de contrôle.' },
+      { nom: 'rationKgJour', libelle: 'Ration par jour', type: 'nombre', unite: 'kg/j' },
+      { nom: 'quantiteTotaleKg', libelle: 'Quantité réelle', type: 'nombre', unite: 'kg', aide: 'Si vous l’avez mesurée (sacs comptés) : elle remplace ration × jours.' },
       { nom: 'prixKgApplique', libelle: 'Prix du kilo', type: 'nombre', unite: 'F', aide: 'Laissez vide pour le prix du référentiel.' },
     ],
   },

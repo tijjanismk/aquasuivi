@@ -603,9 +603,13 @@ model Distribution {
   aliment   Aliment @relation(fields: [alimentId], references: [id], onDelete: Restrict)
 
   dateDebut        DateTime  @db.Date
+  /// Dernier jour nourri à cette ration, inclus. Vide : jusqu'à la pêche suivante (D29).
   dateFin          DateTime? @db.Date
+  /// Ration fixée à la pêche de contrôle, en kg par jour.
   rationKgJour     Decimal?  @db.Decimal(10, 3)
-  quantiteTotaleKg Decimal   @db.Decimal(10, 3)
+  /// Quantité mesurée ; vide, elle se déduit de la ration. L'une des deux est
+  /// exigée (contrainte distribution_ration_ou_quantite).
+  quantiteTotaleKg Decimal?  @db.Decimal(10, 3)
   /// Prix au moment de l'achat : le référentiel évolue, les charges passées non.
   prixKgApplique   Decimal?  @db.Decimal(10, 2)
 

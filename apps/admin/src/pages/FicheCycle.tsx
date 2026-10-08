@@ -26,6 +26,7 @@ interface Indicateurs {
   alimentation: {
     indiceConsommation: number | null;
     alimentDistribueKg: number;
+    rationEnCoursKgJour: number | null;
     coutAlimentParKg: number | null;
   };
   production: {
@@ -195,6 +196,14 @@ export function FicheCycle() {
                 valeur={nb(indicateurs.alimentation.alimentDistribueKg, 1)}
                 unite="kg"
               />
+              {/* Ration fixée à la dernière pêche, qui court jusqu'à la suivante (D29). */}
+              {indicateurs.alimentation.rationEnCoursKgJour !== null && (
+                <Chiffre
+                  libelle="Ration en cours"
+                  valeur={nb(indicateurs.alimentation.rationEnCoursKgJour, 2)}
+                  unite="kg/j"
+                />
+              )}
               <Chiffre
                 libelle="Charges"
                 valeur={formaterMontant(indicateurs.economie.charges.total)}
@@ -268,15 +277,11 @@ export function FicheCycle() {
             taillePage={10}
             cheminNouveau={`/saisie/${section.chemin}/nouveau?cycleId=${id}&retour=${encodeURIComponent(`/cycles/${id}`)}`}
             lienLigne={(ligneId) =>
-              section.chemin === 'pesees'
-                ? `/pesees/${ligneId}`
-                : section.chemin === 'lots'
-                  ? `/lots/${ligneId}`
-                  : `/saisie/${section.chemin}/${ligneId}?retour=${encodeURIComponent(`/cycles/${id}`)}`
+              section.chemin === 'lots'
+                ? `/lots/${ligneId}`
+                : `/saisie/${section.chemin}/${ligneId}?retour=${encodeURIComponent(`/cycles/${id}`)}`
             }
-            {...(section.chemin === 'pesees' || section.chemin === 'lots'
-              ? { libelleLien: t('action.ouvrir') }
-              : {})}
+            {...(section.chemin === 'lots' ? { libelleLien: t('action.ouvrir') } : {})}
           />
         </section>
       ))}

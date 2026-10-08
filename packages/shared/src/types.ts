@@ -97,7 +97,12 @@ export interface Distribution {
   peseeId?: string | null;
   alimentId: string;
   dateDebut: DateISO;
-  quantiteTotaleKg: number;
+  /** Dernier jour nourri à cette ration, inclus. */
+  dateFin?: DateISO | null;
+  /** Ration fixée à la pêche de contrôle, en kg par jour (D29). */
+  rationKgJour?: number | null;
+  /** Quantité réellement distribuée : prime sur ration × jours quand elle est connue. */
+  quantiteTotaleKg?: number | null;
   prixKgApplique?: number | null;
 }
 

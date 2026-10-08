@@ -216,6 +216,12 @@ async function deriver(ressource: Segment, l: Ligne, creation: boolean): Promise
         ? { ...l, finDelaiAttente: ajouterJours(l['dateOperation'], Number(produit['delaiAttenteJours']) || 0) }
         : l;
     }
+    case 'distributions': {
+      // Prix vide : celui du référentiel, figé sur la ligne — même règle que l'API.
+      if (l['prixKgApplique'] != null && l['prixKgApplique'] !== '') return l;
+      const aliment = l['alimentId'] ? await db.aliments.get(String(l['alimentId'])) : undefined;
+      return aliment?.['prixKg'] != null ? { ...l, prixKgApplique: Number(aliment['prixKg']) } : l;
+    }
     default:
       return l;
   }

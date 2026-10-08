@@ -251,6 +251,56 @@ async function parcours(nav: Navigateur) {
     lots[0]?.dateMiseEnCharge === '2021-06-30',
     lots[0]?.dateMiseEnCharge,
   );
+
+  // --- Pêche de contrôle (D28, D29) : la ration se fixe sur le poids du jour ---
+  // 1 000 poissons pesés à 30 g → 30 kg de biomasse, × 4 % retenus = 1,2 kg/j.
+  await nav.aller(
+    `${ADMIN}/saisie/pesees/nouveau?cycleId=${cycleId}&retour=${encodeURIComponent(`/cycles/${cycleId}`)}`,
+  );
+  await nav.attendre(`document.querySelectorAll('[data-test=ech-nombre]').length === 3`, 'formulaire de pesée');
+  await nav.evaluer(OUTILS_SAISIE);
+  await nav.evaluer(`__saisir('dateOperation', '2021-07-30')`);
+  await nav.evaluer(`__saisir('tauxRationPct', '4')`);
+  await nav.evaluer(`(() => {
+    const poser = (el, v) => { Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set.call(el, v); el.dispatchEvent(new Event('input', { bubbles: true })); };
+    poser(document.querySelector('[data-test=ech-nombre]'), '10');
+    poser(document.querySelector('[data-test=ech-poids]'), '300');
+    return true; })()`);
+  await nav.attendre(
+    `(document.querySelector('[data-test=ration-jour]')?.innerText ?? '').includes('1,2')`,
+    'ration calculée par l’API sur le poids du jour',
+  );
+  verifier('pesée : ration sur la biomasse du jour', true, '1,2 kg/j');
+  await nav.attendre(`(document.querySelector('[data-test=aliment]')?.options.length ?? 0) > 1`, 'aliments chargés');
+  await nav.evaluer(`(() => {
+    const s = document.querySelector('[data-test=aliment]');
+    Object.getOwnPropertyDescriptor(HTMLSelectElement.prototype, 'value').set.call(s, s.options[1].value);
+    s.dispatchEvent(new Event('change', { bubbles: true }));
+    return true; })()`);
+  await nav.evaluer(`document.querySelector('[data-test=enregistrer]').click()`);
+  await nav.attendre(`location.pathname === ${JSON.stringify(`/cycles/${cycleId}`)}`, 'pesée enregistrée');
+
+  const distributions = (await (
+    await fetch(`${API}/saisie/distributions?cycleId=${cycleId}&_end=10`)
+  ).json()) as { rationKgJour: number | string | null; quantiteTotaleKg: unknown; peseeId: string | null }[];
+  const d = distributions[0];
+  verifier(
+    'pesée : ration enregistrée, liée, sans quantité',
+    distributions.length === 1 && Number(d?.rationKgJour) === 1.2 && d?.quantiteTotaleKg == null && !!d?.peseeId,
+    JSON.stringify(d),
+  );
+  // Ration encore ouverte : comptée jusqu'à aujourd'hui inclus.
+  const indicateurs = (await (await fetch(`${API}/cycles/${cycleId}/indicateurs`)).json()) as {
+    alimentation: { alimentDistribueKg: number; rationEnCoursKgJour: number | null };
+  };
+  const demain = new Date(Date.now() + 86_400_000).toISOString().slice(0, 10);
+  const jours = Math.round((Date.parse(`${demain}T00:00:00Z`) - Date.parse('2021-07-30T00:00:00Z')) / 86_400_000);
+  verifier(
+    'aliment : ration × jours depuis la pêche',
+    indicateurs.alimentation.alimentDistribueKg === Math.round(1.2 * jours * 1000) / 1000 &&
+      indicateurs.alimentation.rationEnCoursKgJour === 1.2,
+    JSON.stringify(indicateurs.alimentation),
+  );
 }
 
 const joignable = async (url: string) => {

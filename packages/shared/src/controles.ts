@@ -331,8 +331,14 @@ export function controlerDistribution(
   cycle: BornesCycle,
   aujourdhui: DateISO,
 ): Violation[] {
+  // La ration fixée à la pêche suffit : la quantité s'en déduit (D29). La
+  // quantité mesurée, quand on la connaît, la remplace.
+  const sansQuantite = d.quantiteTotaleKg === null || d.quantiteTotaleKg === undefined;
+  const sansRation = d.rationKgJour === null || d.rationKgJour === undefined;
   const v: Violation[] = [
-    ...requis(d.quantiteTotaleKg, 'quantiteTotaleKg', 'La quantité distribuée'),
+    ...(sansQuantite && sansRation
+      ? [{ code: 'CHAMP_REQUIS', champ: 'rationKgJour', message: 'Indiquez la ration journalière ou la quantité distribuée.' }]
+      : []),
     ...strictementPositif(d.quantiteTotaleKg, 'quantiteTotaleKg', 'La quantité distribuée'),
     ...positifOuNul(d.rationKgJour, 'rationKgJour', 'La ration journalière'),
     ...positifOuNul(d.prixKgApplique, 'prixKgApplique', 'Le prix au kilo'),

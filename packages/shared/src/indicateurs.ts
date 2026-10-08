@@ -21,6 +21,7 @@
  */
 
 import { joursEntre, parDate } from './dates.js';
+import { quantiteDistribuee } from './alimentation.js';
 import type { CycleComplet, DateISO, Lot } from './types.js';
 
 const arrondi = (v: number, d = 2) => Math.round(v * 10 ** d) / 10 ** d;
@@ -39,7 +40,12 @@ export interface EtatLot {
   biomasseKg: number;
 }
 
-export function calculerIndicateurs(d: CycleComplet) {
+export interface ContexteIndicateurs {
+  /** Jour du calcul : une ration encore ouverte compte jusqu'à lui (D29). */
+  aujourdhui?: DateISO | null;
+}
+
+export function calculerIndicateurs(d: CycleComplet, ctx: ContexteIndicateurs = {}) {
   const {
     cycle, infrastructure, lots, mortalites, pesees,
     echantillons, distributions, traitements, recoltes, depenses, especes,
@@ -176,7 +182,13 @@ export function calculerIndicateurs(d: CycleComplet) {
       : null;
 
   // -------------------------------------------------------------- alimentation
-  const alimentDistribueKg = arrondi(distributions.reduce((s, x) => s + x.quantiteTotaleKg, 0), 3);
+  // Ration × jours jusqu'à la pêche suivante, sauf quantité mesurée (D29).
+  const contexteAliment = { pesees, dateCloture: cycle.dateCloture, aujourdhui: ctx.aujourdhui };
+  const quantites = distributions.map((x) => ({ x, q: quantiteDistribuee(x, contexteAliment) }));
+  const alimentDistribueKg = arrondi(quantites.reduce((s, { q }) => s + q.kg, 0), 3);
+  const enCours = quantites.filter(({ q }) => q.enCours);
+  const rationEnCoursKgJour =
+    enCours.length > 0 ? arrondi(enCours.reduce((s, { x }) => s + (x.rationKgJour ?? 0), 0), 3) : null;
 
   /**
    * Indice de consommation, rapporté à la production NETTE comme le veut la
@@ -196,7 +208,7 @@ export function calculerIndicateurs(d: CycleComplet) {
   const coutAlevins = francs(coutAlevinsInitial + coutRemplacements);
 
   const coutAliments = francs(
-    distributions.reduce((s, x) => s + x.quantiteTotaleKg * (x.prixKgApplique ?? 0), 0),
+    quantites.reduce((s, { x, q }) => s + q.kg * (x.prixKgApplique ?? 0), 0),
   );
   const coutTraitements = francs(
     traitements.reduce((s, t) => s + (t.quantite ?? 1) * (t.prixUnitaire ?? 0), 0),
@@ -280,6 +292,8 @@ export function calculerIndicateurs(d: CycleComplet) {
     },
     alimentation: {
       alimentDistribueKg,
+      /** Ration qui court depuis la dernière pêche, tous aliments ; `null` sans ration ouverte. */
+      rationEnCoursKgJour,
       indiceConsommation,
       coutAlimentParKg: productionNetteKg > 0 ? francs(coutAliments / productionNetteKg) : null,
     },

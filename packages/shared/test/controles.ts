@@ -83,6 +83,8 @@ const attendu: Array<[string, unknown, unknown]> = [
   ['distribution valide', codes(controlerDistribution({ dateDebut: '2026-03-01', dateFin: '2026-03-31', quantiteTotaleKg: 22 }, CYCLE, AUJ)), 'aucun'],
   ['période inversée', codes(controlerDistribution({ dateDebut: '2026-03-31', dateFin: '2026-03-01', quantiteTotaleKg: 22 }, CYCLE, AUJ)), 'PERIODE_INVERSEE'],
   ['quantité nulle', codes(controlerDistribution({ dateDebut: '2026-03-01', quantiteTotaleKg: 0 }, CYCLE, AUJ)), 'VALEUR_NON_POSITIVE'],
+  ['ration seule, sans quantité (D29)', codes(controlerDistribution({ dateDebut: '2026-03-01', rationKgJour: 1.5 }, CYCLE, AUJ)), 'aucun'],
+  ['ni ration ni quantité', codes(controlerDistribution({ dateDebut: '2026-03-01' }, CYCLE, AUJ)), 'CHAMP_REQUIS'],
 
   // --- Récolte ---
   ['récolte valide', codes(controlerRecolte({ dateOperation: '2026-08-01', poidsKg: 120, prixKg: 1750 }, {}, CYCLE, AUJ)), 'aucun'],
