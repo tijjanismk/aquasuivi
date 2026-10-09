@@ -100,6 +100,26 @@ async function parcours(nav: Navigateur) {
   // --- Une ferme ---
   await nav.aller(`${ADMIN}/fermes/nouveau`);
   await nav.attendre(`!!document.getElementById('nom')`, 'formulaire de ferme');
+  // Position d'un clic sur la carte (étape 11) : le centre de la carte, qui
+  // s'ouvre sur le Mali (17,3 N ; 3,5 O). Le fond OpenStreetMap peut manquer
+  // sans réseau, le clic n'en dépend pas.
+  await nav.attendre(`!!document.querySelector('[data-test=choix-position] .leaflet-container')`, 'carte du formulaire');
+  await nav.evaluer(`(() => {
+    const c = document.querySelector('[data-test=choix-position] .leaflet-container');
+    const r = c.getBoundingClientRect();
+    const o = { bubbles: true, cancelable: true, clientX: r.left + r.width / 2, clientY: r.top + r.height / 2, button: 0 };
+    for (const t of ['mousedown', 'mouseup', 'click']) c.dispatchEvent(new MouseEvent(t, o));
+    return true;
+  })()`);
+  await nav.attendre(`document.getElementById('latitude')?.value !== ''`, 'position remplie par le clic');
+  const clic = await nav.evaluer<[string, string]>(
+    `[document.getElementById('latitude').value, document.getElementById('longitude').value]`,
+  );
+  verifier(
+    'clic sur la carte : latitude et longitude remplies',
+    Math.abs(Number(clic[0]) - 17.3) < 0.5 && Math.abs(Number(clic[1]) + 3.5) < 0.5,
+    clic.join(' ; '),
+  );
   await remplirEtEnregistrer(
     nav,
     { nom: FERME_TEST, promoteur: 'Parcours automatisé', village: 'Kotouba' },
@@ -128,6 +148,12 @@ async function parcours(nav: Navigateur) {
   );
   const fermeId = await idCourant(nav);
   verifier('fiche ferme avec ses infrastructures', Boolean(fermeId), fermeId);
+  const ferme = (await (await fetch(`${API}/saisie/fermes/${fermeId}`)).json()) as { latitude: unknown; longitude: unknown };
+  verifier(
+    'position du clic enregistrée',
+    Number(ferme.latitude) === Number(clic[0]) && Number(ferme.longitude) === Number(clic[1]),
+    `${ferme.latitude} ; ${ferme.longitude}`,
+  );
 
   // --- Une infrastructure : 10 × 10 m, la superficie doit être calculée ---
   await nav.aller(

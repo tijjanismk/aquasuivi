@@ -316,7 +316,10 @@ synchronise avec `https://api.…`.
 - [x] Carte `/carte` (admin) : Leaflet + OpenStreetMap, points colorés
       par alertes, fermes sans coordonnées listées ; CSP de Caddy ouverte
       à `tile.openstreetmap.org`
-- [ ] Saisir latitude / longitude en cliquant sur la carte (fiche ferme)
+- [x] Saisir latitude / longitude en cliquant sur la carte (fiche ferme,
+      admin) — `composants/ChoixPosition.tsx`, chargé à la demande ; le
+      premier point cadre de près, molette laissée au défilement de la page ;
+      `test:saisie`
 - [x] PWA : « utiliser ma position » (GPS) sur la fiche ferme — hors ligne,
       meilleure lecture sur 30 s (arrêt à ± 20 m), précision affichée ;
       coordonnées contrôlées dans l'emprise du Mali (`controlerCoordonnees`,

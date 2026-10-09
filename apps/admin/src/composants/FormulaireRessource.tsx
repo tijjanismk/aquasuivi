@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from 'react';
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import { useCreate, useList, useOne, useUpdate } from '@refinedev/core';
-import { Controller, useForm, useWatch, type Control } from 'react-hook-form';
+import { Controller, useForm, useWatch, type Control, type UseFormSetValue } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import type { Champ, Ressource } from '@/description';
@@ -16,6 +16,9 @@ import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from '@/c
 import { Input } from '@/composants/ui/input';
 import { NativeSelect, NativeSelectOption } from '@/composants/ui/native-select';
 import { Textarea } from '@/composants/ui/textarea';
+
+/// Leaflet n'est chargé que pour un formulaire qui affiche une carte.
+const ChoixPosition = lazy(() => import('./ChoixPosition').then((m) => ({ default: m.ChoixPosition })));
 
 /// Formulaire shadcn (react-hook-form + zod + `Field`), engendré depuis la
 /// description d'une ressource. Les valeurs vivent en chaînes, comme dans les
@@ -186,6 +189,37 @@ function ChampRelation({
         </NativeSelectOption>
       ))}
     </NativeSelect>
+  );
+}
+
+/// Carte cliquable liée aux champs latitude et longitude du formulaire.
+function PositionSurCarte({
+  control,
+  carte,
+  setValue,
+}: {
+  control: Control<Valeurs>;
+  carte: NonNullable<Ressource['carte']>;
+  setValue: UseFormSetValue<Valeurs>;
+}) {
+  const latitude = String(useWatch({ control, name: carte.latitude }) ?? '');
+  const longitude = String(useWatch({ control, name: carte.longitude }) ?? '');
+  const choisir = (lat: string, lon: string) => {
+    const options = { shouldDirty: true, shouldValidate: true };
+    setValue(carte.latitude, lat, options);
+    setValue(carte.longitude, lon, options);
+  };
+  return (
+    <Field className="mt-5">
+      <FieldLabel>Position sur la carte</FieldLabel>
+      <FieldDescription>
+        Cliquez à l’emplacement de la ferme : la latitude et la longitude se remplissent. Le fond de carte
+        OpenStreetMap demande une connexion.
+      </FieldDescription>
+      <Suspense fallback={<p className="text-sm text-muted-foreground">Chargement de la carte…</p>}>
+        <ChoixPosition latitude={latitude} longitude={longitude} onChoisir={choisir} />
+      </Suspense>
+    </Field>
   );
 }
 
@@ -373,6 +407,7 @@ export function FormulaireRessource({
               />
             ))}
           </FieldGroup>
+          {ressource.carte && <PositionSurCarte control={formulaire.control} carte={ressource.carte} setValue={formulaire.setValue} />}
         </CardContent>
       </Card>
 

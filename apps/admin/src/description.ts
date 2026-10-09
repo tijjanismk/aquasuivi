@@ -53,6 +53,8 @@ export interface Ressource {
   /// Une pesée n'existe que dans un cycle : on ne liste jamais « toutes les
   /// pesées », on liste celles d'un cycle.
   parent?: { ressource: string; champ: string };
+  /// Carte cliquable sous le formulaire : un clic remplit ces deux champs.
+  carte?: { latitude: string; longitude: string };
 }
 
 export function champsEnListe(ressource: Ressource): Champ[] {

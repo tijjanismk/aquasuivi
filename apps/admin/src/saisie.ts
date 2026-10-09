@@ -24,6 +24,8 @@ export const FERMES: Ressource = {
   description:
     'Exploitations suivies. La géographie est en clés étrangères, jamais en texte libre : une production doit pouvoir être agrégée par commune, cercle et région.',
   triDefaut: 'nom',
+  // Placer la ferme d'un clic plutôt que de recopier des coordonnées (étape 11).
+  carte: { latitude: 'latitude', longitude: 'longitude' },
   champs: [
     { nom: 'nom', libelle: 'Nom', type: 'texte', requis: true, enListe: true },
     { nom: 'promoteur', libelle: 'Promoteur', type: 'texte', enListe: true },
