@@ -1,5 +1,5 @@
 import { useEffect, useState, type FormEvent } from 'react';
-import { aujourdhui, ErreurSimulation, simuler, type ParametresSimulation, type Simulation } from '@aqua/shared';
+import { aujourdhui, ErreurSimulation, lireNombre, simuler, type ParametresSimulation, type Simulation } from '@aqua/shared';
 import { db } from '../db';
 import { montant, nombre, date } from '../format';
 import { appelApi, ErreurApi } from '../session';
@@ -71,7 +71,14 @@ export function Simuler() {
     const p: Record<string, unknown> = {};
     for (const [k, v] of Object.entries(valeurs)) {
       if (!v.trim()) continue;
-      p[k] = NOMBRES.has(k) ? Number(v.replace(',', '.')) : v;
+      p[k] = NOMBRES.has(k) ? lireNombre(v) : v;
+    }
+    // « 500 000 » et « 12,5 » se lisent ; une saisie illisible est dite, plutôt
+    // qu'un résultat en NaN.
+    const illisible = CHAMPS.find((c) => NOMBRES.has(c.nom) && (valeurs[c.nom] ?? '').trim() && p[c.nom] === null);
+    if (illisible) {
+      setErreur(`${illisible.libelle} : nombre attendu, par exemple 12,5 ou 500 000.`);
+      return;
     }
     try {
       const [especes, types] = await Promise.all([db.especes.toArray(), db.typesInfrastructure.toArray()]);
@@ -86,7 +93,7 @@ export function Simuler() {
     const nom = prompt('Nom de cette simulation ?', 'Mon projet');
     if (!nom) return;
     const parametres: Record<string, unknown> = {};
-    for (const [k, v] of Object.entries(valeurs)) if (v.trim()) parametres[k] = NOMBRES.has(k) ? Number(v.replace(',', '.')) : v;
+    for (const [k, v] of Object.entries(valeurs)) if (v.trim()) parametres[k] = NOMBRES.has(k) ? lireNombre(v) : v;
     try {
       await appelApi('/simulations', { method: 'POST', body: JSON.stringify({ nom, parametres }) });
       setEnregistree(`« ${nom} » est enregistrée dans votre compte.`);

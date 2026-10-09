@@ -1,18 +1,41 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { z } from 'zod';
-import { aujourdhui, ErreurSimulation, simuler, type ParametresSimulation } from '@aqua/shared';
+import { aujourdhui, ErreurSimulation, lireNombre, simuler, type ParametresSimulation } from '@aqua/shared';
 import { PrismaService } from '../prisma/prisma.service.js';
 import { versSortie } from '../common/domaine.js';
 import type { UtilisateurConnecte } from '../auth/garde.js';
 
-const positif = z.coerce.number().positive();
-const positifOuNul = z.coerce.number().min(0);
+/// « 12,5 » et « 500 000 » comme on les tape en français : `z.coerce.number()`
+/// y lisait NaN, et l'écran affichait « expected number, received NaN ».
+const versNombre = (v: unknown) => (typeof v === 'string' ? (v.trim() === '' ? undefined : (lireNombre(v) ?? Number.NaN)) : v);
+const nombre = () =>
+  z.number({ error: (i) => (i.input === undefined ? 'obligatoire' : 'nombre attendu, par exemple 12,5 ou 500 000') });
+const positif = z.preprocess(versNombre, nombre().positive('doit être supérieur à 0'));
+const positifOuNul = z.preprocess(versNombre, nombre().min(0, 'ne peut pas être négatif'));
 const facultatif = (s: z.ZodTypeAny) => z.preprocess((v) => (v === '' || v === null ? undefined : v), s.optional());
+const choix = z.string({ error: 'obligatoire' }).min(1, 'obligatoire');
+
+/// Noms des champs tels que l'écran les affiche, pour des refus lisibles.
+const LIBELLES: Record<string, string> = {
+  capital: 'Capital disponible',
+  especeId: 'Espèce',
+  typeInfrastructureId: 'Type de bassin',
+  taille: 'Surface ou volume',
+  densite: 'Densité',
+  poidsInitialG: 'Poids des alevins',
+  poidsCibleG: 'Poids de vente visé',
+  prixAlevin: 'Prix d’un alevin',
+  prixAlimentKg: 'Prix du kilo d’aliment',
+  prixVenteKg: 'Prix de vente du kilo',
+  autresCharges: 'Autres charges',
+  dateDebut: 'Date de début',
+  nom: 'Nom',
+};
 
 const parametres = z.object({
   capital: positifOuNul,
-  especeId: z.string().min(1),
-  typeInfrastructureId: z.string().min(1),
+  especeId: choix,
+  typeInfrastructureId: choix,
   taille: positif,
   densite: facultatif(positif),
   poidsInitialG: facultatif(positif),
@@ -31,7 +54,12 @@ function lire<T>(schema: z.ZodType<T>, corps: unknown): T {
   if (!r.success) {
     throw new BadRequestException({
       code: 'CHAMPS_INVALIDES',
-      message: r.error.issues.map((i) => `${i.path.join('.')} : ${i.message}`).join(' ; '),
+      message: r.error.issues
+        .map((i) => {
+          const champ = String(i.path.at(-1) ?? '');
+          return `${LIBELLES[champ] ?? champ} : ${i.message}`;
+        })
+        .join(' ; '),
     });
   }
   return r.data;
