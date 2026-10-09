@@ -2,6 +2,7 @@ import { ulid } from 'ulid';
 import {
   ajouterJours,
   aujourdhui,
+  controlerCoordonnees,
   controlerCycle,
   controlerDepense,
   controlerDistribution,
@@ -19,6 +20,8 @@ import {
 } from '@aqua/shared';
 import { db, PARENT, TABLES, type EntreeJournal, type Ligne, type Segment } from './db';
 import { demanderSync } from './sync';
+
+const nombreOuNul = (v: unknown) => (v === null || v === undefined || v === '' ? null : Number(v));
 
 /// Saisie refusée sur le téléphone, avant tout envoi : mêmes règles que
 /// l'API (D20), contexte lu dans IndexedDB au lieu de PostgreSQL.
@@ -53,7 +56,10 @@ async function controler(ressource: Segment, ligne: Ligne, existe: boolean): Pro
 
   switch (ressource) {
     case 'fermes':
-      return l['nom'] ? [] : [{ code: 'CHAMP_REQUIS', champ: 'nom', message: 'Le nom est obligatoire.' }];
+      return [
+        ...(l['nom'] ? [] : [{ code: 'CHAMP_REQUIS', champ: 'nom', message: 'Le nom est obligatoire.' }]),
+        ...controlerCoordonnees({ latitude: nombreOuNul(l['latitude']), longitude: nombreOuNul(l['longitude']) }),
+      ];
     case 'infrastructures':
       return controlerInfrastructure(l);
     case 'cycles': {
@@ -215,6 +221,12 @@ async function deriver(ressource: Segment, l: Ligne, creation: boolean): Promise
       return produit && l['dateOperation']
         ? { ...l, finDelaiAttente: ajouterJours(l['dateOperation'], Number(produit['delaiAttenteJours']) || 0) }
         : l;
+    }
+    case 'distributions': {
+      // Prix vide : celui du référentiel, figé sur la ligne — même règle que l'API.
+      if (l['prixKgApplique'] != null && l['prixKgApplique'] !== '') return l;
+      const aliment = l['alimentId'] ? await db.aliments.get(String(l['alimentId'])) : undefined;
+      return aliment?.['prixKg'] != null ? { ...l, prixKgApplique: Number(aliment['prixKg']) } : l;
     }
     default:
       return l;

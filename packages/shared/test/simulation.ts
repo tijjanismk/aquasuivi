@@ -6,6 +6,7 @@
  */
 import { simuler, ErreurSimulation, type EspeceSimulation, type TypeSimulation } from '../src/simulation.js';
 import { calculerIndicateurs } from '../src/indicateurs.js';
+import { lireNombre } from '../src/nombres.js';
 
 const TILAPIA: EspeceSimulation = {
   id: 'til', nom: 'Tilapia du Nil', gainJournalierRef: 2.1, indiceConsommationRef: 1.6, tauxSurvieRef: 0.9,
@@ -28,6 +29,12 @@ const erreur = (f: () => unknown) => {
 };
 
 const attendu: Array<[string, unknown, unknown]> = [
+  // Saisie à la française (« 12,5 », « 500 000 ») : NaN avec Number().
+  ['virgule décimale', lireNombre('12,5'), 12.5],
+  ['espace des milliers', lireNombre('500 000'), 500000],
+  ['espace insécable d’Intl', lireNombre('1 750,50'), 1750.5],
+  ['vide', lireNombre('  '), null],
+  ['illisible', lireNombre('douze'), null],
   // Même code : le cycle projeté rejoué donne exactement les mêmes indicateurs.
   ['même code que les cycles réels', JSON.stringify(rejoue), JSON.stringify(s.indicateurs)],
 

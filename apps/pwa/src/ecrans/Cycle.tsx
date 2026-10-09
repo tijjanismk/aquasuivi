@@ -9,10 +9,12 @@ import { etatCycle, useRequete } from '../donnees';
 import { date, montant, nombre } from '../format';
 import { supprimer } from '../saisie';
 import { Entete } from '../App';
-import { Alerte, Badge, Card } from '@/ui/divers';
 import { Section, Vide, EnAttente } from './liste';
 import { cn } from '@/lib/utils';
 import { useEnAttente } from './Fermes';
+import { Alert, AlertDescription } from '@/ui/alert';
+import { Badge } from '@/ui/badge';
+import { Card, CardContent } from '@/ui/card';
 
 const ACTIONS: { ressource: Segment | 'pesee'; libelle: string; icone: LucideIcon }[] = [
   { ressource: 'pesee', libelle: 'Pesée', icone: Scale },
@@ -61,7 +63,7 @@ async function historique(cycleId: string): Promise<Operation[]> {
   const ops: Operation[] = [
     ...lots.map((l) => ({ ressource: 'lots' as const, ligne: l, date: l['dateMiseEnCharge'], libelle: 'Mise en charge', detail: `${nombre(l['nombre'], 0)} alevins de ${nombre(l['poidsMoyenG'])} g` })),
     ...pesees.map((p) => ({ ressource: 'pesees' as const, ligne: p, date: p['dateOperation'], libelle: `Pesée ${p['numero'] ?? ''}`, detail: poidsMoyen(p.id) ? `${nombre(poidsMoyen(p.id))} g en moyenne` : 'Échantillons à saisir' })),
-    ...distributions.map((d) => ({ ressource: 'distributions' as const, ligne: d, date: d['dateDebut'], libelle: 'Aliment', detail: `${nombre(d['quantiteTotaleKg'])} kg ${aliments.get(d['alimentId']) ?? ''}` })),
+    ...distributions.map((d) => ({ ressource: 'distributions' as const, ligne: d, date: d['dateDebut'], libelle: 'Aliment', detail: `${d['quantiteTotaleKg'] != null ? `${nombre(d['quantiteTotaleKg'])} kg` : `${nombre(d['rationKgJour'], 2)} kg/j`} ${aliments.get(d['alimentId']) ?? ''}` })),
     ...morts.map((m) => ({ ressource: 'mortalites' as const, ligne: m, date: m['dateConstat'], libelle: 'Mortalité', detail: `${nombre(m['nombre'], 0)} poisson(s)` })),
     ...traitements.map((t) => ({ ressource: 'traitements' as const, ligne: t, date: t['dateOperation'], libelle: 'Traitement', detail: t['finDelaiAttente'] ? `Pas de récolte avant le ${date(t['finDelaiAttente'])}` : (t['motif'] ?? '') })),
     ...recoltes.map((r) => ({ ressource: 'recoltes' as const, ligne: r, date: r['dateOperation'], libelle: 'Récolte', detail: `${nombre(r['poidsKg'])} kg · ${montant(Number(r['poidsKg']) * Number(r['prixKg'] ?? 0))}` })),
@@ -111,14 +113,19 @@ export function Cycle() {
       />
 
       {etat === null && (
-        <Alerte className="mb-4 border-primary/30 bg-primary/5 text-foreground">
-          Commencez par la mise en charge : le nombre d’alevins et leur poids.
-          <Link to={`/saisie/lots/nouveau?cycle=${id}`} className="ml-1 font-medium text-primary underline">Saisir les alevins</Link>
-        </Alerte>
+        <Alert variant="succes" className="mb-4">
+          <AlertDescription>
+            <p>
+              Commencez par la mise en charge : le nombre d’alevins et leur poids.
+              <Link to={`/saisie/lots/nouveau?cycle=${id}`} className="ml-1 font-medium text-primary underline">Saisir les alevins</Link>
+            </p>
+          </AlertDescription>
+        </Alert>
       )}
 
       {i && (
-        <Card data-test="indicateurs" className="mb-4 p-4">
+        <Card data-test="indicateurs" className="mb-4 py-4">
+          <CardContent className="px-4">
           <div className="grid grid-cols-3 gap-2">
             <Chiffre test="effectif" libelle="poissons" valeur={nombre(i.zootechnie.effectifFinal, 0)} />
             <Chiffre test="poids-moyen" libelle="g en moyenne" valeur={nombre(i.zootechnie.poidsMoyenFinalG)} />
@@ -127,12 +134,22 @@ export function Cycle() {
             <Chiffre test="ic" libelle="indice de conso." valeur={nombre(i.alimentation.indiceConsommation, 2)} />
             <Chiffre test="resultat" libelle="résultat" valeur={montant(i.economie.resultat)} long />
           </div>
-          {etat?.ration && !clos && (
+          {/* La ration fixée à la dernière pêche fait foi jusqu'à la suivante (D29) ;
+              le palier du jour n'est qu'un repère tant qu'aucune n'est fixée. */}
+          {!clos && i.alimentation.rationEnCoursKgJour !== null ? (
             <p data-test="ration" className="mt-3 rounded-lg bg-accent px-3 py-2 text-sm text-accent-foreground">
-              Ration du jour : <strong>{nombre(etat.ration.rationKg, 2)} kg</strong> en {etat.ration.frequenceRepas} repas
-              <span className="text-muted-foreground"> ({nombre(etat.ration.tauxPct)} % de la biomasse)</span>
+              Ration en cours : <strong>{nombre(i.alimentation.rationEnCoursKgJour, 2)} kg/j</strong>, fixée à la dernière pêche
+              {etat?.ration && <span className="text-muted-foreground"> · {etat.ration.frequenceRepas} repas</span>}
             </p>
+          ) : (
+            etat?.ration && !clos && (
+              <p data-test="ration" className="mt-3 rounded-lg bg-accent px-3 py-2 text-sm text-accent-foreground">
+                Ration conseillée : <strong>{nombre(etat.ration.rationKg, 2)} kg/j</strong> en {etat.ration.frequenceRepas} repas
+                <span className="text-muted-foreground"> ({nombre(etat.ration.tauxPct)} % de la biomasse)</span>
+              </p>
+            )
           )}
+          </CardContent>
         </Card>
       )}
 
@@ -174,7 +191,7 @@ export function Cycle() {
         </div>
       )}
 
-      {erreur && <Alerte className="mb-4">{erreur}</Alerte>}
+      {erreur && <Alert variant="destructive" className="mb-4"><AlertDescription>{erreur}</AlertDescription></Alert>}
 
       <Section titre="Historique">
         {ops?.length === 0 && <Vide>Aucune opération pour l’instant.</Vide>}

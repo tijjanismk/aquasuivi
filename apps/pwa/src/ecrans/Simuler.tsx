@@ -1,14 +1,15 @@
 import { useEffect, useState, type FormEvent } from 'react';
-import { aujourdhui, ErreurSimulation, simuler, type ParametresSimulation, type Simulation } from '@aqua/shared';
+import { aujourdhui, ErreurSimulation, lireNombre, simuler, type ParametresSimulation, type Simulation } from '@aqua/shared';
 import { db } from '../db';
 import { montant, nombre, date } from '../format';
 import { appelApi, ErreurApi } from '../session';
 import type { Champ, Option } from '../formulaires';
 import { Entete } from '../App';
 import { Button } from '@/ui/button';
-import { Alerte, Card } from '@/ui/divers';
 import { ChampSaisie } from './Saisie';
 import { cn } from '@/lib/utils';
+import { Alert, AlertDescription } from '@/ui/alert';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/ui/card';
 
 const CHAMPS: Champ[] = [
   { nom: 'capital', libelle: 'Capital disponible', type: 'nombre', unite: 'F', requis: true },
@@ -70,7 +71,14 @@ export function Simuler() {
     const p: Record<string, unknown> = {};
     for (const [k, v] of Object.entries(valeurs)) {
       if (!v.trim()) continue;
-      p[k] = NOMBRES.has(k) ? Number(v.replace(',', '.')) : v;
+      p[k] = NOMBRES.has(k) ? lireNombre(v) : v;
+    }
+    // « 500 000 » et « 12,5 » se lisent ; une saisie illisible est dite, plutôt
+    // qu'un résultat en NaN.
+    const illisible = CHAMPS.find((c) => NOMBRES.has(c.nom) && (valeurs[c.nom] ?? '').trim() && p[c.nom] === null);
+    if (illisible) {
+      setErreur(`${illisible.libelle} : nombre attendu, par exemple 12,5 ou 500 000.`);
+      return;
     }
     try {
       const [especes, types] = await Promise.all([db.especes.toArray(), db.typesInfrastructure.toArray()]);
@@ -85,7 +93,7 @@ export function Simuler() {
     const nom = prompt('Nom de cette simulation ?', 'Mon projet');
     if (!nom) return;
     const parametres: Record<string, unknown> = {};
-    for (const [k, v] of Object.entries(valeurs)) if (v.trim()) parametres[k] = NOMBRES.has(k) ? Number(v.replace(',', '.')) : v;
+    for (const [k, v] of Object.entries(valeurs)) if (v.trim()) parametres[k] = NOMBRES.has(k) ? lireNombre(v) : v;
     try {
       await appelApi('/simulations', { method: 'POST', body: JSON.stringify({ nom, parametres }) });
       setEnregistree(`« ${nom} » est enregistrée dans votre compte.`);
@@ -108,25 +116,32 @@ export function Simuler() {
             onChange={(v) => setValeurs((x) => ({ ...x, [c.nom]: v }))}
           />
         ))}
-        {erreur && <Alerte data-test="erreur">{erreur}</Alerte>}
+        {erreur && (
+          <Alert variant="destructive" data-test="erreur">
+            <AlertDescription>{erreur}</AlertDescription>
+          </Alert>
+        )}
         <Button type="submit" size="lg" data-test="calculer">Calculer</Button>
       </form>
 
       {r && (
         <div data-test="resultat" className="mt-6 flex flex-col gap-4">
-          <Card className={cn('p-4', r.rentabilite.resultat >= 0 ? 'border-primary/40' : 'border-destructive/40')}>
-            <div className="text-sm text-muted-foreground">Résultat du cycle</div>
-            <div data-test="sim-resultat" className={cn('text-2xl font-semibold tabular-nums', r.rentabilite.resultat < 0 && 'text-destructive')}>
-              {montant(r.rentabilite.resultat)}
-            </div>
-            <div className="text-sm text-muted-foreground">
-              {r.rentabilite.rentabilitePct !== null && `${nombre(r.rentabilite.rentabilitePct)} % de rentabilité · `}
-              {montant(r.rentabilite.resultatAnnuel)} par an ({nombre(r.projection.cyclesParAn)} cycles)
-            </div>
+          <Card className={cn('py-4', r.rentabilite.resultat >= 0 ? 'border-primary/40' : 'border-destructive/40')}>
+            <CardHeader className="px-4">
+              <CardDescription>Résultat du cycle</CardDescription>
+              <CardTitle data-test="sim-resultat" className={cn('text-2xl tabular-nums', r.rentabilite.resultat < 0 && 'text-destructive')}>
+                {montant(r.rentabilite.resultat)}
+              </CardTitle>
+              <CardDescription>
+                {r.rentabilite.rentabilitePct !== null && `${nombre(r.rentabilite.rentabilitePct)} % de rentabilité · `}
+                {montant(r.rentabilite.resultatAnnuel)} par an ({nombre(r.projection.cyclesParAn)} cycles)
+              </CardDescription>
+            </CardHeader>
           </Card>
 
-          <Card className="p-4">
-            <h2 className="mb-1 text-sm font-semibold">Financement</h2>
+          <Card className="gap-2 py-4">
+            <CardHeader className="px-4"><CardTitle className="text-sm">Financement</CardTitle></CardHeader>
+            <CardContent className="px-4">
             <Ligne libelle="À dépenser avant la vente" valeur={montant(r.financement.besoin)} fort />
             <Ligne libelle="Capital disponible" valeur={montant(r.financement.capital)} />
             <p data-test="financement" className={cn('mt-2 rounded-md px-3 py-2 text-sm', r.financement.suffisant ? 'bg-accent text-accent-foreground' : 'bg-destructive/10 text-destructive')}>
@@ -134,32 +149,41 @@ export function Simuler() {
                 ? `Le capital suffit, avec ${montant(r.financement.ecart)} de marge.`
                 : `Il manque ${montant(-r.financement.ecart)}. Avec ce capital : ${nombre(r.financement.tailleFinancable)} m² ou m³ à cette densité.`}
             </p>
+            </CardContent>
           </Card>
 
-          <Card className="p-4">
-            <h2 className="mb-1 text-sm font-semibold">Production</h2>
+          <Card className="gap-2 py-4">
+            <CardHeader className="px-4"><CardTitle className="text-sm">Production</CardTitle></CardHeader>
+            <CardContent className="px-4">
             <Ligne libelle="Alevins" valeur={nombre(r.projection.effectifInitial, 0)} />
             <Ligne libelle="Poissons vendus" valeur={nombre(r.projection.effectifFinal, 0)} />
             <Ligne libelle="Durée" valeur={`${r.projection.dureeJours} jours, récolte vers le ${date(r.projection.dateRecolte)}`} />
             <Ligne libelle="Production" valeur={`${nombre(r.projection.productionKg)} kg`} fort />
             <Ligne libelle="Aliment à prévoir" valeur={`${nombre(r.projection.alimentKg)} kg`} />
+            </CardContent>
           </Card>
 
-          <Card className="p-4">
-            <h2 className="mb-1 text-sm font-semibold">Seuil de rentabilité</h2>
+          <Card className="gap-2 py-4">
+            <CardHeader className="px-4"><CardTitle className="text-sm">Seuil de rentabilité</CardTitle></CardHeader>
+            <CardContent className="px-4">
             <Ligne libelle="Prix de revient du kilo" valeur={montant(r.rentabilite.prixRevientKg)} fort />
             <Ligne libelle="Vendre au moins" valeur={`${nombre(r.rentabilite.seuilProductionKg)} kg au prix visé`} />
+            </CardContent>
           </Card>
 
-          <Card className="p-4 text-sm text-muted-foreground">
-            <h2 className="mb-1 font-semibold text-foreground">Hypothèses</h2>
-            <ul className="list-disc pl-5">
-              {r.hypotheses.map((h) => <li key={h}>{h}</li>)}
-            </ul>
+          <Card className="gap-2 py-4">
+            <CardHeader className="px-4"><CardTitle className="text-sm">Hypothèses</CardTitle></CardHeader>
+            <CardContent className="px-4 text-sm text-muted-foreground">
+              <ul className="list-disc pl-5">
+                {r.hypotheses.map((h) => <li key={h}>{h}</li>)}
+              </ul>
+            </CardContent>
           </Card>
 
           {enregistree ? (
-            <Alerte className="border-primary/30 bg-primary/5 text-foreground">{enregistree}</Alerte>
+            <Alert variant="succes">
+              <AlertDescription>{enregistree}</AlertDescription>
+            </Alert>
           ) : (
             navigator.onLine && <Button variant="outline" onClick={() => void enregistrer()}>Enregistrer dans mon compte</Button>
           )}

@@ -15,6 +15,7 @@
     "test:cycle": "tsx test/parcours-cycle.ts",
     "test:admin": "tsx test/parcours-admin.ts",
     "typecheck": "tsc --noEmit",
+    "donnees": "tsx donnees/donnees-test.ts",
     "test:mcp": "tsx test/parcours-mcp.ts",
     "test:saisie": "tsx test/parcours-saisie.ts"
   },
@@ -22,7 +23,7 @@
     "@types/node": "^24.0.0",
     "pg": "^8.13.1",
     "@types/pg": "^8.11.10",
-    "tsx": "^4.21.0",
-    "typescript": "^5.9.0"
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
   }
 }

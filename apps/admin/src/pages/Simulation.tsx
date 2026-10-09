@@ -5,8 +5,11 @@ import { appelApi } from '@/session';
 import { formaterDate, formaterMontant, formaterNombre } from '@/i18n';
 import { cn } from '@/lib/utils';
 import { Button } from '@/composants/ui/button';
-import { Input, Label, Select } from '@/composants/ui/champ';
-import { Alerte, Card } from '@/composants/ui/divers';
+import { Alert, AlertDescription } from '@/composants/ui/alert';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/composants/ui/card';
+import { Field, FieldDescription, FieldGroup, FieldLabel } from '@/composants/ui/field';
+import { Input } from '@/composants/ui/input';
+import { NativeSelect, NativeSelectOption } from '@/composants/ui/native-select';
 
 interface ChampSim {
   nom: string;
@@ -63,8 +66,16 @@ export function Simulation() {
       .catch(() => setEnregistrees([]));
   useEffect(() => void recharger(), []);
 
-  const parametres = () =>
-    Object.fromEntries(Object.entries(valeurs).filter(([, v]) => v.trim() !== ''));
+  const parametres = (v: Record<string, string> = valeurs) =>
+    Object.fromEntries(Object.entries(v).filter(([, x]) => x.trim() !== ''));
+
+  /// Une valeur changée rend le résultat affiché faux : on le retire plutôt
+  /// que de laisser croire qu'il correspond aux nouveaux chiffres — et
+  /// « Enregistrer » n'enregistre ainsi que ce qui a été calculé.
+  const changer = (nom: string, v: string) => {
+    setValeurs((x) => ({ ...x, [nom]: v }));
+    setResultat(null);
+  };
 
   const envoyer = async (chemin: string, corps: unknown) => {
     const r = await appelApi(chemin, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(corps) });
@@ -73,15 +84,18 @@ export function Simulation() {
     return donnees;
   };
 
-  const calculer = async (e: FormEvent) => {
-    e.preventDefault();
+  const calculerAvec = async (p: Record<string, string>) => {
     setErreur(null);
     try {
-      setResultat(await envoyer('/simulations/calculer', parametres()));
+      setResultat(await envoyer('/simulations/calculer', p));
     } catch (x) {
       setResultat(null);
       setErreur((x as Error).message);
     }
+  };
+  const calculer = (e: FormEvent) => {
+    e.preventDefault();
+    void calculerAvec(parametres());
   };
 
   const enregistrer = async () => {
@@ -96,7 +110,7 @@ export function Simulation() {
   };
 
   const options = (choix: ChampSim['choix']) =>
-    ((choix === 'especes' ? especes : types).data?.data ?? []).map((l) => ({ id: String(l['id']), nom: String(l['nom']) }));
+    ((choix === 'especes' ? especes : types).result.data ?? []).map((l) => ({ id: String(l['id']), nom: String(l['nom']) }));
 
   const r = resultat;
   return (
@@ -108,60 +122,71 @@ export function Simulation() {
       </p>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
-        <Card className="p-5">
-          <form data-test="form-simulation" onSubmit={calculer} className="grid gap-4 sm:grid-cols-2">
+        <Card>
+          <CardHeader>
+            <CardTitle>Projet</CardTitle>
+            <CardDescription>Densité et poids de vente laissés vides suivent les repères de l’espèce.</CardDescription>
+          </CardHeader>
+          <CardContent>
+          <form data-test="form-simulation" onSubmit={calculer}>
+            <FieldGroup className="grid gap-4 sm:grid-cols-2">
             {CHAMPS.map((c) => (
-              <div key={c.nom} className="flex flex-col gap-1.5">
-                <Label htmlFor={`sim-${c.nom}`}>
+              <Field key={c.nom}>
+                <FieldLabel htmlFor={`sim-${c.nom}`}>
                   {c.libelle}
                   {c.requis && <span className="text-destructive"> *</span>}
-                </Label>
+                </FieldLabel>
                 {c.choix ? (
-                  <Select id={`sim-${c.nom}`} value={valeurs[c.nom] ?? ''} onChange={(e) => setValeurs((v) => ({ ...v, [c.nom]: e.target.value }))}>
-                    <option value="">Choisir…</option>
-                    {options(c.choix).map((o) => <option key={o.id} value={o.id}>{o.nom}</option>)}
-                  </Select>
+                  <NativeSelect id={`sim-${c.nom}`} value={valeurs[c.nom] ?? ''} onChange={(e) => changer(c.nom, e.target.value)}>
+                    <NativeSelectOption value="">Choisir…</NativeSelectOption>
+                    {options(c.choix).map((o) => <NativeSelectOption key={o.id} value={o.id}>{o.nom}</NativeSelectOption>)}
+                  </NativeSelect>
                 ) : (
-                  <Input id={`sim-${c.nom}`} inputMode="decimal" value={valeurs[c.nom] ?? ''} onChange={(e) => setValeurs((v) => ({ ...v, [c.nom]: e.target.value }))} />
+                  <Input id={`sim-${c.nom}`} inputMode="decimal" value={valeurs[c.nom] ?? ''} onChange={(e) => changer(c.nom, e.target.value)} />
                 )}
-                {c.aide && <p className="text-xs text-muted-foreground">{c.aide}</p>}
-              </div>
+                {c.aide && <FieldDescription>{c.aide}</FieldDescription>}
+              </Field>
             ))}
-            {erreur && <Alerte className="sm:col-span-2">{erreur}</Alerte>}
+            {erreur && <Alert variant="destructive" className="sm:col-span-2"><AlertDescription>{erreur}</AlertDescription></Alert>}
             <div className="flex gap-2 sm:col-span-2">
               <Button type="submit" data-test="calculer">Calculer</Button>
               {r && <Button type="button" variant="outline" onClick={() => void enregistrer()}>Enregistrer</Button>}
             </div>
+            </FieldGroup>
           </form>
+          </CardContent>
         </Card>
 
         {r && (
-          <Card data-test="resultat" className="p-5">
-            <div className="mb-4">
-              <div className="text-sm text-muted-foreground">Résultat du cycle</div>
-              <div data-test="sim-resultat" className={cn('text-3xl font-semibold tabular-nums', r.rentabilite.resultat < 0 && 'text-destructive')}>
+          <Card data-test="resultat">
+            <CardHeader>
+              <CardDescription>Résultat du cycle</CardDescription>
+              <CardTitle data-test="sim-resultat" className={cn('text-3xl tabular-nums', r.rentabilite.resultat < 0 && 'text-destructive')}>
                 {formaterMontant(r.rentabilite.resultat)}
-              </div>
-              <div className="text-sm text-muted-foreground">
+              </CardTitle>
+              <CardDescription>
                 {r.rentabilite.rentabilitePct !== null && `${formaterNombre(r.rentabilite.rentabilitePct)} % · `}
                 {formaterMontant(r.rentabilite.resultatAnnuel)} par an
-              </div>
-            </div>
-            <Alerte className={cn('mb-4', r.financement.suffisant && 'border-primary/30 bg-primary/5 text-foreground')}>
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+            <Alert variant={r.financement.suffisant ? 'succes' : 'destructive'} className="mb-4"><AlertDescription>
               {r.financement.suffisant
                 ? `Capital suffisant : ${formaterMontant(r.financement.besoin)} à engager, ${formaterMontant(r.financement.ecart)} de marge.`
-                : `Il manque ${formaterMontant(-r.financement.ecart)} sur ${formaterMontant(r.financement.besoin)}. Taille finançable : ${formaterNombre(r.financement.tailleFinancable)}.`}
-            </Alerte>
+                : `Il manque ${formaterMontant(-r.financement.ecart)} sur ${formaterMontant(r.financement.besoin)}. Taille finançable : ${formaterNombre(r.financement.tailleFinancable)} ${r.indicateurs.production.uniteMesure}.`}
+            </AlertDescription></Alert>
             <Ligne libelle="Alevins → poissons vendus" valeur={`${formaterNombre(r.projection.effectifInitial)} → ${formaterNombre(r.projection.effectifFinal)}`} />
             <Ligne libelle="Durée" valeur={`${r.projection.dureeJours} jours (${formaterNombre(r.projection.cyclesParAn)} cycles/an)`} />
             <Ligne libelle="Production" valeur={`${formaterNombre(r.projection.productionKg)} kg`} />
             <Ligne libelle="Aliment" valeur={`${formaterNombre(r.projection.alimentKg)} kg`} />
             <Ligne libelle="Charges totales" valeur={formaterMontant(r.indicateurs.economie.charges.total)} />
-            <Ligne libelle="Prix de revient / seuil de prix" valeur={formaterMontant(r.rentabilite.prixRevientKg ?? 0)} />
-            <Ligne libelle="Production minimale à vendre" valeur={`${formaterNombre(r.rentabilite.seuilProductionKg ?? 0)} kg`} />
+            {/* Sans production, pas de prix de revient : « — » plutôt qu'un 0 F trompeur. */}
+            <Ligne libelle="Prix de revient / seuil de prix" valeur={r.rentabilite.prixRevientKg !== null ? formaterMontant(r.rentabilite.prixRevientKg) : '—'} />
+            <Ligne libelle="Production minimale à vendre" valeur={r.rentabilite.seuilProductionKg !== null ? `${formaterNombre(r.rentabilite.seuilProductionKg)} kg` : '—'} />
             <ul className="mt-4 list-disc pl-5 text-xs text-muted-foreground">
               {r.hypotheses.map((h) => <li key={h}>{h}</li>)}
             </ul>
+            </CardContent>
           </Card>
         )}
       </div>
@@ -174,7 +199,14 @@ export function Simulation() {
               <button
                 key={s.id}
                 type="button"
-                onClick={() => setValeurs(Object.fromEntries(Object.entries(s.parametres).map(([k, v]) => [k, String(v)])))}
+                data-test="simulation-enregistree"
+                onClick={() => {
+                  // Recharger une simulation, c'est aussi revoir son résultat :
+                  // sans recalcul, l'écran gardait celui de la précédente.
+                  const v = Object.fromEntries(Object.entries(s.parametres).map(([k, x]) => [k, String(x ?? '')]));
+                  setValeurs(v);
+                  void calculerAvec(parametres(v));
+                }}
                 className="flex items-center justify-between rounded-lg border bg-card px-4 py-2 text-left text-sm hover:bg-accent"
               >
                 <span className="font-medium">{s.nom}</span>

@@ -39,6 +39,11 @@ dans l'URL (`?cycleId=…&statut=EN_COURS`). Liste blanche stricte.
   signalée non conforme — c'est une règle de sécurité sanitaire
 - [CONFIRMÉ] Les dates de terrain traversent la frontière en
   « AAAA-MM-JJ » dans les deux sens ; jamais d'horodatage ISO
+- [CONFIRMÉ] **Ferme** : la commune doit appartenir au cercle, le cercle
+  à la région, sinon 422 `RATTACHEMENT_INCOHERENT`
+  (`controles.service.ts:150`, `territoire()`). S'applique aussi aux
+  fermes reçues par la synchronisation. Sans cela, la consolidation
+  compterait la même ferme dans deux territoires selon le niveau
 
 ## Piège : la conversion avant le calcul
 

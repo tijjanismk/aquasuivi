@@ -44,10 +44,43 @@ L'API est fermée par défaut depuis D18 : JWT, cloisonnement par
 - **Consolidation** : recalcul de chaque cycle (2 000 au plus, signalé
   `tronque`). Pour un tableau de bord national, matérialiser les
   indicateurs des cycles bouclés.
-- **Géographie** : seule la région de Sikasso est chargée (étape 3) ;
+- **Géographie** : le Mali est chargé, Bamako compris ;
   les fermes sans territoire tombent dans « Non renseigné ».
 
+## Interface et carte — à savoir
+
+- **Carte** : fond OpenStreetMap servi par Internet ; hors ligne, seuls
+  les points restent. Politique d'usage d'OSM : pas de trafic lourd ni
+  de pré-téléchargement — au-delà d'un usage d'administration, héberger
+  ses tuiles (D25). La CSP de `deploy/Caddyfile` autorise
+  `tile.openstreetmap.org` : **changer de fournisseur = changer la CSP**.
+- **`index.css` et `ui/` sont dupliqués** entre admin et PWA : toute
+  retouche du thème ou d'un composant se fait dans les deux.
+- **Ajouter un composant shadcn** : `shadcn add` 4.21 écrit
+  `import { cn } from "cn"` (et installe un paquet npm `cn`) et écrase
+  `button.tsx`. Procédure sûre : `--dry-run` pour voir ce qui change,
+  ou lire `https://ui.shadcn.com/r/styles/new-york-v4/<nom>.json`, copier
+  `files[].content`, remplacer `"cn"` par `"@/lib/utils"` et
+  `@/registry/new-york-v4/ui/` par l'alias de l'app, ajouter soi-même les
+  `dependencies` listées. Le registre expire souvent ici (réseau lent).
+- **Cases à cocher Radix** : un `<button role="checkbox">`, pas un
+  `<input>`. `__saisir` (e2e) lit `aria-checked` ; un test qui ferait
+  `.checked` lirait `undefined`.
+- **Versions bloquées** (D26) : API en TypeScript 6 (Nest CLI), admin en
+  React Router 7 (Refine). À relever quand Nest et Refine suivront.
+- **`@nestjs/jwt` 11** n'annonce pas NestJS 12 (avertissement de pair
+  à l'installation), sans effet constaté.
+
 ## PWA — à savoir
+
+- **GPS** (`ecrans/Position.tsx`) : le navigateur ne donne la position
+  qu'en HTTPS (ou sur `localhost`). Une PWA ouverte en `http://` sur le
+  réseau local (téléphone de test → poste de développement) affiche
+  « Localisation refusée ». En production, Caddy sert en HTTPS et autorise
+  `geolocation=(self)` (`deploy/Caddyfile`).
+- **Coordonnées hors du Mali refusées** (`controlerCoordonnees`, marge
+  ~20 km) : une ferme frontalière réelle au-delà de la marge serait
+  rejetée. Élargir `EMPRISE_MALI` si le cas se présente.
 
 - **Composants UI dupliqués** : `apps/pwa/src/ui/` est une copie de
   `apps/admin/src/composants/ui/` (bouton, champs, carte). Deux copies à
@@ -63,6 +96,29 @@ L'API est fermée par défaut depuis D18 : JWT, cloisonnement par
   `navigator.storage.persist()` est demandé, sans garantie.
 - `@nestjs/jwt` 11 annonce Nest ≤ 11 en dépendance pair ; il fonctionne
   avec Nest 12 (tests verts), l'avertissement de `pnpm install` est connu.
+- **Pesée et distribution liées (D27)** : toute modification de
+  `apps/pwa/src/db.ts` qui touche l'index `distributions` doit passer par
+  un nouveau `this.version(N)`, jamais réécrire la version existante —
+  sinon les téléphones déjà installés ne migrent pas. La distribution
+  liée à une pesée se retrouve par `db.distributions.where('peseeId')`,
+  pas par un champ sur la pesée elle-même.
+- **Ration ouverte (D29)** : la ration fixée à la dernière pêche compte
+  chaque jour jusqu'à la pêche suivante ou à la clôture. Un cycle laissé
+  sans pêche ni clôture accumule de l'aliment fictif (parcours admin :
+  un cycle de 2021 resté ouvert affiche 2 276 kg). Garde-fou : l'alerte
+  « pesée en retard ». Saisir la clôture, ou une `dateFin` / une
+  quantité mesurée, arrête le compte.
+- **Distributions sans ration ni quantité** : refusées par la base
+  (`distribution_ration_ou_quantite`). Une pesée supprimée laisse ses
+  distributions, `peseeId` à `null` : la ration court alors jusqu'à la
+  pêche suivante, comme une distribution saisie seule.
+- **Admin : même geste, écran séparé (D28)** — `pages/FormulairePesee.tsx`
+  fait le même lien pesée+échantillons+aliment que la PWA, mais dans son
+  propre composant (pas de partage possible entre Dexie et les hooks
+  Refine). Une distribution créée depuis le téléphone et liée à une pesée
+  se voit dans l'admin seulement dans la liste plate des distributions
+  du cycle, sans rappel visuel de son `peseeId` — seul le formulaire de
+  pesée affiche ce lien, pas la liste des distributions.
 
 ## Couverture de test de l'API et de l'admin
 
@@ -93,13 +149,14 @@ pas le lancer sur une base qui compte.
 
 ## Orphelins signalés par le script
 
-`geometrie.ts` a trouvé son appelant : l'API le branche à l'écriture
-d'une infrastructure.
+**Aucun** (carte du 26/09/2026, 119 fichiers). `rationnement.ts` a trouvé
+son consommateur : `rationConseillee` sert la PWA (`pwa/src/donnees.ts`).
 
-Reste `packages/shared/src/rationnement.ts` — **API publique sans
-consommateur**. Ce n'est pas du code mort : la ration conseillée doit
-s'afficher à la saisie sur mobile (étape 7), et rien ne l'appelle encore.
-**Ne pas supprimer.**
+`admin/src/pages/Carte.tsx` n'est importé que **dynamiquement**
+(`lazy(() => import('./pages/Carte'))` dans `App.tsx`, pour ne charger
+Leaflet qu'à l'ouverture de la carte) : le script le voit depuis qu'il lit
+les `import()`. Un fichier chargé autrement (route en chaîne, outil
+externe) resterait signalé à tort — vérifier par `grep` avant de supprimer.
 
 ## Résolu — lignes supprimées, contrôles de cycle, délai forgé
 
@@ -125,12 +182,10 @@ Les deux sont vérifiés par `pnpm --filter @aqua/e2e test:cycle`.
 ## Couverture de test
 
 `test/b4.ts` couvre `indicateurs.ts` (16 assertions, cycle réel Kotouba
-B4) et, par ricochet, `dates.ts`.
-
-**Non couverts :** `geometrie.ts`, `rationnement.ts`. Zéro assertion.
-Les bornes de palier (`>= poidsMin`, `< poidsMax`, priorité thermique)
-et le `niveauRemplissage` sont exactement le genre de logique où une
-inversion de borne passe inaperçue.
+B4) et, par ricochet, `dates.ts`. `test/geometrie.ts` et
+`test/rationnement.ts` couvrent les bornes de palier (`>= poidsMin`,
+`< poidsMax`, priorité thermique) et `niveauRemplissage` — étape 2 de
+ETAPES.md, faite depuis (cette section datait d'avant).
 
 ## Fichiers les plus sollicités
 
@@ -138,13 +193,34 @@ Modifier ces fichiers a le plus d'effets de bord :
 
 | Fichier | Importé par |
 |---|---|
-| `packages/shared/src/types.ts` | 5 fichiers — **toute signature change casse partout** |
-| `packages/shared/src/dates.ts` | 1 |
-| `packages/shared/src/indicateurs.ts` | 1 (le test) |
+| `apps/api/src/auth/garde.ts` | 16 — tous les contrôleurs de l'API |
+| `apps/pwa/src/db.ts` | 15 — schéma IndexedDB : toute table change la version Dexie |
+| `packages/shared/src/index.ts` | 14 — point d'entrée de `@aqua/shared` |
+| `apps/admin/src/i18n.ts` | 12 |
+| `apps/api/src/prisma/prisma.service.ts` | 11 |
+| `packages/shared/src/types.ts` | 10 — **toute signature change casse partout** |
+| `apps/admin/src/description.ts` | 10 — décrit tous les écrans génériques |
 
 ## Symboles dupliqués
 
-Aucun.
+48 noms exportés par plusieurs fichiers (carte du 27/09/2026, 135
+fichiers). **Voulus** pour l'essentiel :
+
+- **Composants shadcn** (`Button`, `Card` et ses parties, `Field` et ses
+  parties, `Badge`, `Alert`, `Input`, `NativeSelect`, `Label`,
+  `Separator`, `buttonVariants`, `cn`…) : copies identiques entre
+  `admin/src/composants/ui/` et `pwa/src/ui/`, comme `index.css`. Deux
+  apps, deux bundles, pas de paquet d'interface commun — **modifier les
+  deux**. La PWA n'a que ce qu'elle utilise (ni `checkbox`, ni `table`,
+  ni `textarea`).
+- **Même nom, sens différent** : `Carte` (page carte de l'admin / carte
+  de liste de la PWA), `Alerte` (bandeau d'interface / alerte métier de
+  `shared`), `Simulation`, `Connexion`, `App`, `Cycle`, `Ferme`, `Pesee`
+  (écran contre type). Sans risque tant qu'on importe par chemin.
+- **À surveiller** : `Utilisateur` (admin, PWA, API) et `API_URL` (admin,
+  PWA, MCP) décrivent la même chose trois fois ; un champ ajouté à l'un
+  doit l'être aux autres. `REFERENTIELS` (admin / PWA) et `RESSOURCES`
+  (deux services de l'API) listent des ressources qui doivent concorder.
 
 ## Divergences connues entre le schéma et les types partagés
 
@@ -166,8 +242,16 @@ Aucun.
   confirmer auprès du service vétérinaire avant production.
 - `seed.ts` — un seul `codeFao` renseigné (`TLN`). Les 7 autres espèces
   attendent leur code ASFIS.
-- Géographie : une seule région (Sikasso), deux cercles, cinq communes.
-  Le Mali complet reste à charger.
+- Géographie : découpage complet chargé, mais **les noms de communes du
+  fichier sont ceux d'un village chef-lieu** (cercle de Kayes : « DI »,
+  « GUEMOU »… et non « Kayes »), en majuscules. Bamako, absent du fichier,
+  est ajouté par `bamako.json` comme **district** (`Region.type`), avec
+  un cercle technique « Bamako » et des codes **non officiels** (`00`,
+  `0001`, `000101xx`) — à remplacer si l’INSTAT en fournit. Les villages
+  du fichier ne sont pas chargés.
+- Géographie : une ligne retirée par le seed (cercle et communes fictifs de
+  l'ancien seed) **ne part pas vers les PWA déjà synchronisées** — la
+  synchro géographique ne transporte pas les suppressions.
 - `seed.ts` utilise `createMany({ skipDuplicates: true })` : le relancer
   **ne met pas à jour** une ligne existante, il la saute. Corriger une
   valeur du référentiel demande de passer par l'admin ou par SQL.
@@ -176,6 +260,11 @@ Aucun.
   sur Docker.
 
 ## Résolu depuis la dernière carte
+
+- Le script de carte résout maintenant le monorepo : alias `@/` par
+  paquet, `@aqua/shared` vers `packages/shared/src/index.ts`, `./x.js`
+  vers `x.ts` (NodeNext), `import()` dynamiques. L'ancienne carte ne
+  couvrait qu'une partie des fichiers ; celle-ci en indexe 119.
 
 - `datasource.url` retiré du schéma, `prisma.config.ts` en place :
   `db:migrate` et `db:seed` fonctionnent.

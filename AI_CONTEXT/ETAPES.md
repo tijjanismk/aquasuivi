@@ -93,8 +93,13 @@ de saisie (`controles.ts`), vérifiés aussi par l'API dans
       vétérinaire (`seed.ts:89-91` — places tenues, règle de sécurité
       alimentaire)
 - [ ] Renseigner les codes ASFIS des 7 espèces sans `codeFao`
-- [ ] Charger la géographie complète du Mali (aujourd'hui : Sikasso /
-      Sikasso / Finkolo seulement)
+- [x] Charger la géographie complète du Mali — `prisma/data/decoupage_mali.json`
+      (19 régions, 157 cercles, 792 communes, codes officiels) + district de
+      Bamako (`bamako.json`, `Region.type = DISTRICT`, cercle technique
+      « Bamako » choisi d’office dans les formulaires, codes « 00… » maison) ; listes Région → Cercle →
+      Commune en cascade (admin `dependDe`, PWA `dependDe`) et cohérence
+      contrôlée à l’écriture d’une ferme (`RATTACHEMENT_INCOHERENT`) ; villages
+      du fichier non chargés, `Ferme.village` reste un texte
 
 **Fin :** la migration applique les 6 contraintes SQL, et une tentative
 d'ouvrir deux cycles sur le même bassin est rejetée par la base.
@@ -174,6 +179,8 @@ de synchronisation lui-même, côté PWA (étape 7).
       sections d'un cycle (lots, pesées, distributions, traitements,
       récoltes, dépenses, qualité de l'eau) — `src/saisie.ts`
 - [x] **Fiche cycle avec les indicateurs** — `pages/FicheCycle.tsx`
+- [x] Pesée, ses échantillons et l'aliment distribué saisis dans le même
+      écran — `pages/FormulairePesee.tsx`, parallèle admin de D27 (D28)
 - [x] Écran de connexion — `pages/Connexion.tsx`, session dans
       `src/session.ts` (rafraîchissement silencieux, un seul à la fois)
 - [x] Gestion des utilisateurs et des `AccesFerme` — `/admin/utilisateurs`,
@@ -213,6 +220,12 @@ indicateurs s'affichent.
       contrôles** que l'API (D20), contexte lu dans IndexedDB
 - [x] Indicateurs calculés sur le téléphone (`calculerIndicateurs`) et
       ration du jour via `rationConseillee()`
+- [x] Pesée et distribution d'aliment saisies **ensemble** — même
+      formulaire, liées par `peseeId` (D27)
+- [x] La pêche fixe une **ration journalière** sur le poids du jour,
+      répartie entre aliments, qui court jusqu'à la pêche suivante ;
+      l'aliment de la période s'en déduit (D29) — `test:pwa`, `test:saisie`,
+      `packages/shared/test/alimentation.ts`
 - [x] File de synchronisation (`journal`), une entrée par ligne, reprise
       après coupure, relances espacées quand le réseau ment
       (`navigator.onLine` vrai sans internet), écran « À corriger » pour
@@ -288,6 +301,30 @@ vérifie qu'API, admin et PWA hors ligne donnent le même résultat.
 
 **Fin :** `https://terrain.…` s'installe sur un téléphone Android et
 synchronise avec `https://api.…`.
+
+---
+
+## Étape 11 — Interface : shadcn, Radix, thème vert, carte `[~]` (D24–D26)
+
+- [x] Dernières versions : React 19, Vite 8, TypeScript 7 (API en 6),
+      Refine 5, React Router 8 (7 dans l'admin) — D26
+- [x] `components.json` (admin, PWA) : `pnpm dlx shadcn@latest add …`
+- [x] Composants officiels shadcn (Card, Table, Field, Input, NativeSelect,
+      Alert, Badge…) dans l'admin et la PWA ; formulaires admin en
+      react-hook-form + zod ; e2e (11 parcours) et `test:shared` verts
+- [x] Thème vert `--vert-50` … `--vert-950`, clair et sombre, admin = PWA
+- [x] Carte `/carte` (admin) : Leaflet + OpenStreetMap, points colorés
+      par alertes, fermes sans coordonnées listées ; CSP de Caddy ouverte
+      à `tile.openstreetmap.org`
+- [x] Saisir latitude / longitude en cliquant sur la carte (fiche ferme,
+      admin) — `composants/ChoixPosition.tsx`, chargé à la demande ; le
+      premier point cadre de près, molette laissée au défilement de la page ;
+      `test:saisie`
+- [x] PWA : « utiliser ma position » (GPS) sur la fiche ferme — hors ligne,
+      meilleure lecture sur 30 s (arrêt à ± 20 m), précision affichée ;
+      coordonnées contrôlées dans l'emprise du Mali (`controlerCoordonnees`,
+      API et PWA) — `ecrans/Position.tsx`, `test:pwa`
+- [ ] Carte hors ligne : tuiles auto-hébergées (PMTiles du Mali), D25
 
 ---
 

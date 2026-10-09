@@ -9,6 +9,11 @@ du clic jusqu'à PostgreSQL.
 - `apps/e2e/test/parcours-mcp.ts` — le serveur MCP en JSON-RPC (`test:mcp`)
 - `apps/e2e/test/parcours-admin.ts` — les référentiels en navigateur (`test:admin`)
 - `apps/e2e/test/parcours-saisie.ts` — la saisie en navigateur (`test:saisie`)
+- `apps/e2e/donnees/donnees-test.ts` — **pas un test** : remplit la base
+  de démonstration par l'API (6 fermes « [TEST] » géolocalisées sauf une,
+  10 cycles, 4 comptes 7999…, mot de passe `test-aqua-2026`) ;
+  `pnpm db:donnees-test`, `-- --effacer` pour retirer. Rejouable, aléa à
+  graine fixe. Jamais en production
 
 Chacun se lance seul : `pnpm --filter @aqua/e2e test:saisie`.
 

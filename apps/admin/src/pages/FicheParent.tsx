@@ -3,23 +3,16 @@ import { Link, useParams } from 'react-router';
 import { ArrowLeft } from 'lucide-react';
 import type { Ressource } from '@/description';
 import { champsEnListe } from '@/description';
-import {
-  CYCLES,
-  ECHANTILLONS,
-  FERMES,
-  INFRASTRUCTURES,
-  LOTS,
-  MORTALITES,
-  PESEES,
-} from '@/saisie';
+import { CYCLES, FERMES, INFRASTRUCTURES, LOTS, MORTALITES } from '@/saisie';
 import { formaterDate, formaterMontant, formaterNombre, t } from '@/i18n';
 import { Button } from '@/composants/ui/button';
-import { Card } from '@/composants/ui/divers';
 import { TableauRessource } from '@/composants/TableauRessource';
+import { Card, CardContent } from '@/composants/ui/card';
 
 /// Fiche d'une ligne « parent » : son résumé, puis la liste de ses enfants.
-/// Ferme → infrastructures, infrastructure → cycles, pesée → échantillons,
-/// lot → mortalités. Quatre écrans, une seule implémentation.
+/// Ferme → infrastructures, infrastructure → cycles, lot → mortalités.
+/// (La pesée a son propre écran, `FormulairePesee`, qui saisit ses
+/// échantillons directement — D27.)
 interface Configuration {
   parent: Ressource;
   enfant: Ressource;
@@ -54,15 +47,6 @@ const CONFIGURATIONS: Record<string, Configuration> = {
     }),
     titre: (l) => String(l['nom'] ?? ''),
   },
-  pesees: {
-    parent: PESEES,
-    enfant: ECHANTILLONS,
-    cleEnfant: 'peseeId',
-    lienEnfant: (idEnfant, idParent) =>
-      `/saisie/echantillons/${idEnfant}?retour=${encodeURIComponent(`/pesees/${idParent}`)}`,
-    retour: (l) => ({ chemin: `/cycles/${String(l['cycleId'] ?? '')}`, libelle: 'Cycle' }),
-    titre: (l) => `Pesée n° ${String(l['numero'] ?? '')}`,
-  },
   lots: {
     parent: LOTS,
     enfant: MORTALITES,
@@ -96,7 +80,7 @@ export function FicheParent({ type }: { type: keyof typeof CONFIGURATIONS }) {
   const { id = '' } = useParams();
   const config = CONFIGURATIONS[type]!;
   const requete = useOne({ resource: config.parent.nom, id });
-  const ligne = (requete.data?.data ?? {}) as Record<string, unknown>;
+  const ligne = (requete.result ?? {}) as Record<string, unknown>;
 
   const retour = config.retour(ligne);
   const cheminActuel = `/${config.parent.chemin}/${id}`;
@@ -123,7 +107,8 @@ export function FicheParent({ type }: { type: keyof typeof CONFIGURATIONS }) {
         </Link>
       </div>
 
-      <Card className="mb-8 grid grid-cols-2 gap-4 p-5 sm:grid-cols-3 lg:grid-cols-4">
+      <Card className="mb-8 py-5">
+        <CardContent className="grid grid-cols-2 gap-4 px-5 sm:grid-cols-3 lg:grid-cols-4">
         {champsEnListe(config.parent).map((champ) => (
           <div key={champ.nom}>
             <div className="text-xs text-muted-foreground">{champ.libelle}</div>
@@ -132,6 +117,7 @@ export function FicheParent({ type }: { type: keyof typeof CONFIGURATIONS }) {
             </div>
           </div>
         ))}
+        </CardContent>
       </Card>
 
       <section>

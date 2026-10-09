@@ -4,10 +4,10 @@ import { db } from '../db';
 import { useRequete } from '../donnees';
 import { date } from '../format';
 import { Entete } from '../App';
-import { stylesBouton } from '@/ui/button';
-import { Badge } from '@/ui/divers';
+import { buttonVariants } from '@/ui/button';
 import { Carte, Section, Vide } from './liste';
 import { useEnAttente } from './Fermes';
+import { Badge } from '@/ui/badge';
 
 export function Bassin() {
   const { id = '' } = useParams();
@@ -35,7 +35,7 @@ export function Bassin() {
         titre="Cycles"
         action={
           !ouvert && (
-            <Link to={`/saisie/cycles/nouveau?infrastructure=${id}`} data-test="nouveau-cycle" className={stylesBouton({ size: 'sm' })}>
+            <Link to={`/saisie/cycles/nouveau?infrastructure=${id}`} data-test="nouveau-cycle" className={buttonVariants({ size: 'sm' })}>
               <Plus /> Ouvrir un cycle
             </Link>
           )

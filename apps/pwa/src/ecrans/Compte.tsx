@@ -5,7 +5,8 @@ import { useRequete } from '../donnees';
 import { deconnecter, utilisateur } from '../session';
 import { Entete } from '../App';
 import { Button } from '@/ui/button';
-import { Alerte, Card } from '@/ui/divers';
+import { Alert, AlertDescription } from '@/ui/alert';
+import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/card';
 
 export function Compte() {
   const naviguer = useNavigate();
@@ -23,14 +24,18 @@ export function Compte() {
   return (
     <>
       <Entete titre="Mon compte" retour="/" />
-      <Card className="mb-4 p-4 text-sm">
-        <div className="font-medium">{[moi?.prenom, moi?.nom].filter(Boolean).join(' ')}</div>
-        <div className="text-muted-foreground">{moi?.telephone}</div>
+      <Card className="mb-4 py-4">
+        <CardHeader className="px-4">
+          <CardTitle className="text-base">{[moi?.prenom, moi?.nom].filter(Boolean).join(' ')}</CardTitle>
+          <CardDescription>{moi?.telephone}</CardDescription>
+        </CardHeader>
       </Card>
       {nonEnvoyes > 0 && (
-        <Alerte className="mb-4">
-          {nonEnvoyes} saisie(s) pas encore envoyée(s). Connectez-vous à un réseau avant de vous déconnecter.
-        </Alerte>
+        <Alert variant="destructive" className="mb-4">
+          <AlertDescription>
+            {nonEnvoyes} saisie(s) pas encore envoyée(s). Connectez-vous à un réseau avant de vous déconnecter.
+          </AlertDescription>
+        </Alert>
       )}
       <Button variant="outline" className="w-full" data-test="deconnexion" onClick={() => void sortir()}>
         <LogOut /> Se déconnecter

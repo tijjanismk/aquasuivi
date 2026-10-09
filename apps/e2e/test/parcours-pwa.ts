@@ -107,6 +107,13 @@ async function parcours(nav: Navigateur) {
   await nav.attendre(`!!document.getElementById('champ-nom')`, 'formulaire ferme servi hors ligne');
   verifier('interface servie sans réseau (service worker)', true, true);
   await saisir({ nom: `${NOM_TEST} ferme`, village: 'Kotouba' });
+  // « Utiliser ma position » : le GPS répond sans réseau. Kotouba, ± 8 m.
+  await nav.position(11.2701, -5.5203, 8);
+  await cliquer('[data-test=gps-relever]');
+  await nav.attendre(`(document.querySelector('[data-test=gps-etat]')?.innerText ?? '').includes('relevée')`, 'position GPS relevée');
+  verifier('GPS hors ligne : latitude remplie', await ev<string>(`document.getElementById('champ-latitude').value`), '11,270100');
+  verifier('GPS hors ligne : longitude remplie', await ev<string>(`document.getElementById('champ-longitude').value`), '-5,520300');
+  verifier('GPS : précision annoncée', (await ev<string>(`document.querySelector('[data-test=gps-etat]').innerText`)).includes('± 8 m'), true);
   await enregistrer('^/fermes/', 'ferme créée hors ligne');
   const fermeId = await cheminId();
 
@@ -148,10 +155,14 @@ async function parcours(nav: Navigateur) {
   await nav.attendre(`!!document.querySelector('[data-test=erreur-champ]')`, 'refus local');
   verifier('contrôle local : plus de morts que de poissons', await ev<string>(`document.querySelector('[data-test=erreur-champ]').innerText`), 'Il ne reste que 940 poisson(s) dans ce lot.');
 
-  for (const [dateOperation, echantillons] of [
-    ['2021-11-28', [[8, 2350], [9, 2680], [8, 2375]]],
-    ['2021-12-28', [[7, 2455], [8, 2820], [7, 2450]]],
-  ] as [string, [number, number][]][]) {
+  // D29 : la ration se fixe sur le poids de CETTE pêche (biomasse du jour ×
+  // 2,5 %) et court jusqu'à la suivante. Pêche 1 : 940 × 296,2 g = 278,4 kg
+  // → 6,96 kg/j d'un aliment, pendant 30 jours. Pêche 2 : 940 × 351,1 g →
+  // 8,25 kg/j, sans aliment choisi, pour que la période reste bornée.
+  for (const [dateOperation, echantillons, rationAttendue, avecAliment] of [
+    ['2021-11-28', [[8, 2350], [9, 2680], [8, 2375]], '6,96 kg/j', true],
+    ['2021-12-28', [[7, 2455], [8, 2820], [7, 2450]], '8,25 kg/j', false],
+  ] as [string, [number, number][], string, boolean][]) {
     await nav.aller(`${PWA}/cycles/${cycleId}/pesee`);
     await nav.attendre(`document.querySelectorAll('[data-test=ech-nombre]').length === 3`, 'formulaire de pesée');
     await saisir({ dateOperation, tauxRationPct: '2,5' });
@@ -161,6 +172,13 @@ async function parcours(nav: Navigateur) {
       ${JSON.stringify(echantillons)}.forEach(([a, b], i) => { poser(n[i], String(a)); poser(p[i], String(b)); });
       return true; })()`);
     await nav.attendre(`(document.querySelector('[data-test=moyenne]')?.innerText ?? '').includes('g en moyenne')`, 'poids moyen calculé en direct');
+    await nav.attendre(`(document.querySelector('[data-test=ration-jour]')?.innerText ?? '') !== '—'`, 'ration calculée en direct');
+    verifier(`pêche du ${dateOperation} : ration sur le poids du jour`, await ev<string>(`document.querySelector('[data-test=ration-jour]').innerText.replace(/\\s/g, ' ')`), rationAttendue);
+    await ev(`(() => {
+      const s = document.querySelector('[data-test=aliment]');
+      Object.getOwnPropertyDescriptor(HTMLSelectElement.prototype, 'value').set.call(s, ${avecAliment} ? s.options[1].value : '');
+      s.dispatchEvent(new Event('change', { bubbles: true }));
+      return true; })()`);
     await enregistrer(`^/cycles/${cycleId}$`, 'pesée enregistrée');
   }
 
@@ -224,6 +242,15 @@ async function parcours(nav: Navigateur) {
   verifier('serveur : même indice de conso.', Math.round(serveur['alimentation']?.indiceConsommation * 100) / 100, local.ic);
   verifier('serveur : même résultat', serveur['economie']?.resultat, local.resultat);
   verifier('serveur : même biomasse', Math.round(serveur['production']?.biomasseFinaleKg * 10) / 10, local.biomasse);
+  const [ration] = await sql(
+    'SELECT "rationKgJour"::float AS r, "quantiteTotaleKg" AS q, "peseeId" AS p FROM "Distribution" WHERE "cycleId" = $1 AND "rationKgJour" IS NOT NULL',
+    [cycleId],
+  );
+  verifier('ration de la pêche envoyée au serveur, sans quantité', [ration?.r, ration?.q, !!ration?.p].join(' '), '6.96  true');
+  // 6,96 kg/j × 30 jours (pêche suivante) + 204 + 390 kg mesurés.
+  verifier('aliment : ration close par la pêche suivante', serveur['alimentation']?.alimentDistribueKg, 802.8);
+  const [coordonnees] = await sql('SELECT latitude::float AS lat, longitude::float AS lon FROM "Ferme" WHERE id = $1', [fermeId]);
+  verifier('ferme : position GPS arrivée au serveur', `${coordonnees?.lat} ${coordonnees?.lon}`, '11.2701 -5.5203');
   const [delai] = await sql('SELECT "finDelaiAttente"::text AS fin FROM "Traitement" WHERE "cycleId" = $1', [cycleId]);
   verifier('délai d’attente recalculé au serveur', typeof delai?.fin, 'string');
 }

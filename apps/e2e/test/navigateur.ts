@@ -38,6 +38,8 @@ export interface Navigateur {
   /// Mode avion simulé : les requêtes échouent, `navigator.onLine` passe à
   /// faux et l'évènement `offline` part, comme sur un téléphone sans réseau.
   horsLigne(coupe: boolean): Promise<void>;
+  /// GPS simulé : la page lit cette position, permission accordée d'office.
+  position(latitude: number, longitude: number, precision: number): Promise<void>;
   fermer(): Promise<void>;
 }
 
@@ -138,6 +140,11 @@ export async function ouvrirNavigateur(port = 9333): Promise<Navigateur> {
         uploadThroughput: -1,
       });
     },
+    async position(latitude, longitude, precision) {
+      const origine = await evaluer<string>('location.origin');
+      await envoyer('Browser.grantPermissions', { origin: origine, permissions: ['geolocation'] });
+      await envoyer('Emulation.setGeolocationOverride', { latitude, longitude, accuracy: precision });
+    },
     async fermer() {
       ws.close();
       // Chrome démarre des processus enfants : tuer le seul parent en laisse.
@@ -170,6 +177,11 @@ window.__saisir = (id, valeur) => {
   if (!el) throw new Error('champ introuvable : ' + id);
   if (el.type === 'checkbox') {
     if (el.checked !== valeur) el.click();
+    return true;
+  }
+  // Case à cocher Radix (shadcn) : un <button role="checkbox">, l'état est dans aria-checked.
+  if (el.getAttribute('role') === 'checkbox') {
+    if ((el.getAttribute('aria-checked') === 'true') !== valeur) el.click();
     return true;
   }
   const setter = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el), 'value').set;

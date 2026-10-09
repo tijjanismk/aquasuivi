@@ -102,6 +102,13 @@ class Base extends Dexie {
       journal: '++seq, id, etat',
       meta: 'cle',
     });
+    // v2 : la pesée et la distribution d'aliment se saisissent ensemble
+    // (écran Pesee.tsx), qui a besoin de retrouver la distribution déjà
+    // liée à une pesée. Seule la table qui change d'index est listée,
+    // Dexie garde le reste tel quel et réindexe les lignes déjà en base.
+    this.version(2).stores({
+      distributions: 'id, cycleId, peseeId',
+    });
   }
 }
 

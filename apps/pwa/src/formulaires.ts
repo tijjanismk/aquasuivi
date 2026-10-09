@@ -27,8 +27,11 @@ export interface Champ {
   unite?: string;
   aide?: string;
   options?: Option[];
-  /// Choix lus dans IndexedDB (référentiels, lots du cycle…).
-  charger?: (ctx: Contexte) => Promise<Option[]>;
+  /// Choix lus dans IndexedDB (référentiels, lots du cycle…). `valeurs` : le
+  /// formulaire en cours, pour les listes en cascade.
+  charger?: (ctx: Contexte, valeurs: Record<string, string>) => Promise<Option[]>;
+  /// Liste en cascade : rechargée, et vidée, quand ce champ change.
+  dependDe?: string;
   defaut?: (ctx: Contexte) => unknown;
 }
 
@@ -37,6 +40,9 @@ export interface Formulaire {
   /// Champ qui rattache la ligne à son parent, rempli par l'écran.
   parent?: { champ: string; depuis: keyof Contexte };
   champs: Champ[];
+  /// Bouton « Utiliser ma position » sous la longitude : remplit `latitude`
+  /// et `longitude` depuis le GPS du téléphone.
+  position?: boolean;
 }
 
 const actifs = (lignes: Ligne[], libelle: (l: Ligne) => string = (l) => l['nom']) =>
@@ -64,9 +70,27 @@ export const FORMULAIRES: Record<Segment, Formulaire> = {
       { nom: 'nom', libelle: 'Nom de la ferme', type: 'texte', requis: true },
       { nom: 'promoteur', libelle: 'Promoteur', type: 'texte' },
       { nom: 'telephone', libelle: 'Téléphone', type: 'texte' },
-      { nom: 'regionId', libelle: 'Région', type: 'reference', charger: async () => actifs(await db.regions.toArray()) },
+      { nom: 'regionId', libelle: 'Région / district', type: 'reference', charger: async () => actifs(await db.regions.toArray()) },
+      {
+        nom: 'cercleId',
+        libelle: 'Cercle',
+        type: 'reference',
+        dependDe: 'regionId',
+        charger: async (_, v) => (v['regionId'] ? actifs(await db.cercles.where('regionId').equals(v['regionId']).toArray()) : []),
+      },
+      {
+        nom: 'communeId',
+        libelle: 'Commune',
+        type: 'reference',
+        dependDe: 'cercleId',
+        charger: async (_, v) => (v['cercleId'] ? actifs(await db.communes.where('cercleId').equals(v['cercleId']).toArray()) : []),
+      },
       { nom: 'village', libelle: 'Village', type: 'texte' },
+      { nom: 'latitude', libelle: 'Latitude', type: 'nombre', unite: '°', aide: 'Positive au Mali, par exemple 11,27.' },
+      { nom: 'longitude', libelle: 'Longitude', type: 'nombre', unite: '°', aide: 'Négative à l’ouest de Greenwich, par exemple -5,52.' },
     ],
+    // Sur place, le GPS évite la virgule mal placée et le signe moins oublié.
+    position: true,
   },
   infrastructures: {
     titre: 'Nouveau bassin',
@@ -139,8 +163,9 @@ export const FORMULAIRES: Record<Segment, Formulaire> = {
     champs: [
       { nom: 'alimentId', libelle: 'Aliment', type: 'reference', requis: true, charger: async () => actifs(await db.aliments.toArray()) },
       { nom: 'dateDebut', libelle: 'Du', type: 'date', requis: true, defaut: aujourdHui },
-      { nom: 'dateFin', libelle: 'Au', type: 'date' },
-      { nom: 'quantiteTotaleKg', libelle: 'Quantité', type: 'nombre', unite: 'kg', requis: true },
+      { nom: 'dateFin', libelle: 'Au', type: 'date', aide: 'Laissez vide : la ration court jusqu’à la prochaine pêche de contrôle.' },
+      { nom: 'rationKgJour', libelle: 'Ration par jour', type: 'nombre', unite: 'kg/j' },
+      { nom: 'quantiteTotaleKg', libelle: 'Quantité réelle', type: 'nombre', unite: 'kg', aide: 'Si vous l’avez mesurée (sacs comptés) : elle remplace ration × jours.' },
       { nom: 'prixKgApplique', libelle: 'Prix du kilo', type: 'nombre', unite: 'F', aide: 'Laissez vide pour le prix du référentiel.' },
     ],
   },

@@ -4,10 +4,12 @@ import {
   aujourdhui,
   calculerAlertes,
   calculerIndicateurs,
-  rationConseillee,
+  rationDuCycle,
   type Alerte,
+  type ConseilRation,
   type CycleComplet,
   type Indicateurs,
+  type PalierRationnement,
 } from '@aqua/shared';
 import { db, type Ligne } from './db';
 
@@ -105,7 +107,9 @@ export async function cycleComplet(cycleId: string): Promise<CycleComplet | null
       peseeId: d['peseeId'] ?? null,
       alimentId: d['alimentId'],
       dateDebut: d['dateDebut'],
-      quantiteTotaleKg: Number(d['quantiteTotaleKg']),
+      dateFin: d['dateFin'] ?? null,
+      rationKgJour: nb(d['rationKgJour']),
+      quantiteTotaleKg: nb(d['quantiteTotaleKg']),
       prixKgApplique: nb(d['prixKgApplique']),
     })),
     traitements: traitements.map((t) => ({
@@ -153,25 +157,49 @@ export async function cycleComplet(cycleId: string): Promise<CycleComplet | null
 
 export interface EtatCycle {
   indicateurs: Indicateurs;
-  ration: ReturnType<typeof rationConseillee>;
+  ration: ConseilRation;
   alertes: Alerte[];
 }
 
-/// Indicateurs et ration conseillée du jour : palier de l'espèce du lot le
-/// plus lourd, à son poids moyen, appliqué à la biomasse totale du bassin, et
-/// corrigé par la dernière température relevée. En polyculture, c'est une
-/// approximation : un seul aliment est distribué pour tout le bassin.
+/// Paliers actifs des espèces voulues, au format du calcul partagé.
+export async function paliersDe(especeIds: string[]): Promise<PalierRationnement[]> {
+  const lignes = await db.paliers.where('especeId').anyOf(especeIds).toArray();
+  return lignes
+    .filter((p) => p['actif'] !== false)
+    .map((p) => ({
+      id: p.id,
+      especeId: p['especeId'],
+      poidsMin: Number(p['poidsMin']),
+      poidsMax: Number(p['poidsMax']),
+      temperatureMin: nb(p['temperatureMin']),
+      temperatureMax: nb(p['temperatureMax']),
+      tauxPct: Number(p['tauxPct']),
+      frequenceRepas: Number(p['frequenceRepas']),
+      source: p['source'] ?? null,
+    }));
+}
+
+/// Dernière température relevée dans le bassin, au plus tard le jour donné.
+export async function temperatureAu(cycleId: string, jour: string): Promise<number | null> {
+  const mesures = await db.mesures.where('cycleId').equals(cycleId).toArray();
+  const avant = mesures.filter((m) => m['temperature'] != null && String(m['dateMesure']) <= jour);
+  return nb(parDate(avant, 'dateMesure').at(-1)?.['temperature']);
+}
+
+/// Indicateurs et ration conseillée du jour, corrigée par la dernière
+/// température relevée (`rationDuCycle`, même calcul que l'API).
 export async function etatCycle(cycleId: string): Promise<EtatCycle | null> {
   const complet = await cycleComplet(cycleId);
   if (!complet || complet.lots.length === 0) return null;
-  const indicateurs = calculerIndicateurs(complet);
+  const auj = aujourdhui();
+  const indicateurs = calculerIndicateurs(complet, { aujourdhui: auj });
   const releves = await db.mesures.where('cycleId').equals(cycleId).toArray();
   // Même moteur que l'API (étape 8) : l'alerte d'oxygène s'affiche au bord
   // du bassin, sans attendre le réseau.
   const alertes = calculerAlertes(
     complet,
     {
-      aujourdhui: aujourdhui(),
+      aujourdhui: auj,
       mesures: releves.map((m) => ({
         dateMesure: m['dateMesure'],
         heure: m['heure'] ?? null,
@@ -182,30 +210,10 @@ export async function etatCycle(cycleId: string): Promise<EtatCycle | null> {
     },
     indicateurs,
   );
-
-  const principal = [...indicateurs.lots].sort((a, b) => b.biomasseKg - a.biomasseKg)[0];
-  let ration: EtatCycle['ration'] = null;
-  if (principal && principal.effectif > 0) {
-    const paliers = await db.paliers.where('especeId').equals(principal.lot.especeId).toArray();
-    const mesures = await db.mesures.where('cycleId').equals(cycleId).toArray();
-    const derniere = parDate(mesures.filter((m) => m['temperature'] != null), 'dateMesure').at(-1);
-    ration = rationConseillee(
-      paliers.map((p) => ({
-        id: p.id,
-        especeId: p['especeId'],
-        poidsMin: Number(p['poidsMin']),
-        poidsMax: Number(p['poidsMax']),
-        temperatureMin: nb(p['temperatureMin']),
-        temperatureMax: nb(p['temperatureMax']),
-        tauxPct: Number(p['tauxPct']),
-        frequenceRepas: Number(p['frequenceRepas']),
-        source: p['source'] ?? null,
-      })),
-      principal.lot.especeId,
-      principal.poidsMoyenG,
-      indicateurs.lots.reduce((s, l) => s + l.biomasseKg, 0),
-      nb(derniere?.['temperature']),
-    );
-  }
-  return { indicateurs, ration, alertes };
+  const etat = rationDuCycle(
+    indicateurs,
+    await paliersDe([...new Set(complet.lots.map((l) => l.especeId))]),
+    await temperatureAu(cycleId, auj),
+  );
+  return { indicateurs, ration: etat?.conseil ?? null, alertes };
 }

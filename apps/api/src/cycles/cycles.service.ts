@@ -1,6 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
-import { aujourdhui, calculerAlertes, calculerIndicateurs, type CycleComplet } from '@aqua/shared';
+import {
+  aujourdhui,
+  calculerAlertes,
+  calculerIndicateurs,
+  cycleAuJourDeLaPesee,
+  rationDuCycle,
+  type CycleComplet,
+} from '@aqua/shared';
 import { PrismaService } from '../prisma/prisma.service.js';
 import type { UtilisateurConnecte } from '../auth/garde.js';
 import { fermesLisibles } from '../auth/portee.js';
@@ -36,7 +43,43 @@ export class CyclesService {
   /// lit rien elle-même (D13) : c'est ce qui la rend rejouable sur le téléphone
   /// à partir du cache local.
   async indicateurs(cycleId: string, u: UtilisateurConnecte) {
-    return calculerIndicateurs((await this.charger(cycleId, u)).agregat);
+    return calculerIndicateurs((await this.charger(cycleId, u)).agregat, { aujourdhui: aujourdhui() });
+  }
+
+  /// Ration qu'une pêche de contrôle permet de fixer (D29), calculée sur la
+  /// pesée telle qu'elle est en train d'être saisie : son jour, ses
+  /// échantillons, les mortalités constatées jusque-là. Rien n'est écrit.
+  async ration(
+    cycleId: string,
+    u: UtilisateurConnecte,
+    pesee: { id?: string; dateOperation: string; echantillons: { lotId?: string | null; nombre: number; poidsTotalG: number }[] },
+  ) {
+    const { agregat, mesures } = await this.charger(cycleId, u);
+    const id = pesee.id ?? 'saisie';
+    const jour = cycleAuJourDeLaPesee(
+      agregat,
+      { id, numero: agregat.pesees.find((p) => p.id === id)?.numero ?? 0, dateOperation: pesee.dateOperation },
+      pesee.echantillons.map((e, n) => ({ id: `${id}-${n}`, lotId: e.lotId ?? null, numero: n + 1, nombre: e.nombre, poidsTotalG: e.poidsTotalG })),
+    );
+    if (jour.lots.length === 0) return null;
+    const especeIds = [...new Set(jour.lots.map((l) => l.especeId))];
+    const paliers = await this.prisma.client.palierRationnement.findMany({ where: { especeId: { in: especeIds }, actif: true } });
+    const temperature = mesures.filter((m) => m.temperature !== null && m.dateMesure <= pesee.dateOperation).at(-1)?.temperature;
+    return rationDuCycle(
+      calculerIndicateurs(jour),
+      paliers.map((p) => ({
+        id: p.id,
+        especeId: p.especeId,
+        poidsMin: nb(p.poidsMin),
+        poidsMax: nb(p.poidsMax),
+        temperatureMin: nbOuNul(p.temperatureMin),
+        temperatureMax: nbOuNul(p.temperatureMax),
+        tauxPct: nb(p.tauxPct),
+        frequenceRepas: p.frequenceRepas,
+        source: p.source,
+      })),
+      temperature,
+    );
   }
 
   async alertes(cycleId: string, u: UtilisateurConnecte) {
@@ -134,7 +177,7 @@ export class CyclesService {
       else g.cyclesEnCours++;
       const { agregat } = await this.charger(c.id, u);
       if (agregat.lots.length > 0) {
-        const i = calculerIndicateurs(agregat);
+        const i = calculerIndicateurs(agregat, { aujourdhui: aujourdhui() });
         g.productionKg += i.production.productionRecolteeKg;
         g.produits += i.economie.produits.total;
         g.charges += i.economie.charges.total;
@@ -254,7 +297,9 @@ export class CyclesService {
         peseeId: d.peseeId,
         alimentId: d.alimentId,
         dateDebut: jour(d.dateDebut),
-        quantiteTotaleKg: nb(d.quantiteTotaleKg),
+        dateFin: jourOuNul(d.dateFin),
+        rationKgJour: nbOuNul(d.rationKgJour),
+        quantiteTotaleKg: nbOuNul(d.quantiteTotaleKg),
         prixKgApplique: nbOuNul(d.prixKgApplique),
       })),
       traitements: cycle.traitements.map((t) => ({

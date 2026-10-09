@@ -21,7 +21,7 @@ export const UTILISATEURS: Ressource = {
     { nom: 'role', libelle: 'Rôle', type: 'enum', options: ROLES, requis: true, enListe: true },
     {
       nom: 'regionId',
-      libelle: 'Région',
+      libelle: 'Région / district',
       type: 'relation',
       ressourceLiee: 'geographie/regions',
       enListe: true,

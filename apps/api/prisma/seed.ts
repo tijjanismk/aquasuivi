@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { PrismaClient } from '@prisma/client';
@@ -537,37 +538,7 @@ async function main() {
     });
     console.log(`Created ${paliers.count} rationing tiers`);
 
-    // === GEOGRAPHY: Mali ===
-    // Rejouable : le nom de région est unique, la créer deux fois échouerait.
-    const region = (await prisma.region.findUnique({ where: { nom: 'Sikasso' } })) ?? await prisma.region.create({
-      data: {
-        nom: 'Sikasso',
-        cercles: {
-          create: [
-            {
-              nom: 'Sikasso',
-              communes: {
-                create: [
-                  { nom: 'Kotouba' },
-                  { nom: 'Siby' },
-                  { nom: 'Kaladjan' },
-                ],
-              },
-            },
-            {
-              nom: 'Koulikoro',
-              communes: {
-                create: [
-                  { nom: 'Koulikoro' },
-                  { nom: 'Niono' },
-                ],
-              },
-            },
-          ],
-        },
-      },
-    });
-    console.log(`Created region: ${region.nom}`);
+    await geographie();
 
     await administrateur();
 
@@ -579,6 +550,71 @@ async function main() {
     await prisma.$disconnect();
     await pool.end();
   }
+}
+
+interface Decoupage {
+  code: string;
+  name: string;
+  /// Absent : une région.
+  type?: 'REGION' | 'DISTRICT';
+  cercles: { code: string; name: string; communes: { code: string; name: string }[] }[];
+}
+
+/// Découpage administratif du Mali : 19 régions, 157 cercles, 792 communes,
+/// plus le district de Bamako (`bamako.json`, absent du fichier source ;
+/// codes « 00… » attribués ici, pas officiels). Le district n'a pas de
+/// cercle : son cercle « Bamako » est technique.
+/// Rejouable : chaque ligne est retrouvée par son code, sinon par son nom
+/// (lignes saisies avant le chargement, qui reçoivent alors leur code), et
+/// son nom est remis à celui du fichier. Une ligne absente du fichier n'est
+/// retirée que si aucune ferme n'y pointe.
+/// Les villages du fichier ne sont pas chargés : `Ferme.village` reste un texte.
+async function geographie() {
+  const lire = (nom: string) =>
+    JSON.parse(readFileSync(path.resolve(path.dirname(fileURLToPath(import.meta.url)), 'data', nom), 'utf8')) as Decoupage[];
+  const decoupage = [...lire('bamako.json'), ...lire('decoupage_mali.json')];
+  let cercles = 0;
+  let communes = 0;
+  for (const r of decoupage) {
+    // « Région de Sikasso » → « Sikasso », le nom déjà en base et dans les comptes.
+    // Un district garde son nom entier : « District de Bamako » n'est pas une région.
+    const type = r.type ?? 'REGION';
+    const nomRegion = type === 'REGION' ? r.name.replace(/^Région de /, '') : r.name;
+    const regionExistante =
+      (await prisma.region.findUnique({ where: { code: r.code } })) ??
+      (await prisma.region.findUnique({ where: { nom: nomRegion } }));
+    const region = regionExistante
+      ? await prisma.region.update({ where: { id: regionExistante.id }, data: { code: r.code, nom: nomRegion, type } })
+      : await prisma.region.create({ data: { code: r.code, nom: nomRegion, type } });
+
+    for (const c of r.cercles) {
+      const cercleExistant =
+        (await prisma.cercle.findUnique({ where: { code: c.code } })) ??
+        (await prisma.cercle.findUnique({ where: { regionId_nom: { regionId: region.id, nom: c.name } } }));
+      const cercle = cercleExistant
+        ? await prisma.cercle.update({ where: { id: cercleExistant.id }, data: { code: c.code, nom: c.name, regionId: region.id } })
+        : await prisma.cercle.create({ data: { code: c.code, nom: c.name, regionId: region.id } });
+      cercles++;
+
+      for (const m of c.communes) {
+        const communeExistante =
+          (await prisma.commune.findUnique({ where: { code: m.code } })) ??
+          (await prisma.commune.findUnique({ where: { cercleId_nom: { cercleId: cercle.id, nom: m.name } } }));
+        if (communeExistante) {
+          await prisma.commune.update({ where: { id: communeExistante.id }, data: { code: m.code, nom: m.name, cercleId: cercle.id } });
+        } else {
+          await prisma.commune.create({ data: { code: m.code, nom: m.name, cercleId: cercle.id } });
+        }
+        communes++;
+      }
+    }
+  }
+  // Lignes de l'ancien seed (Kotouba, Siby… sous Sikasso) : absentes du
+  // découpage, donc sans code. Retirées si aucune ferme n'y pointe.
+  const communesRetirees = await prisma.commune.deleteMany({ where: { code: null, fermes: { none: {} } } });
+  const cerclesRetires = await prisma.cercle.deleteMany({ where: { code: null, fermes: { none: {} }, communes: { none: {} } } });
+  console.log(`Géographie : ${decoupage.length} régions et districts, ${cercles} cercles, ${communes} communes`
+    + ` (${cerclesRetires.count} cercles et ${communesRetirees.count} communes hors découpage retirés)`);
 }
 
 /// Premier compte ADMIN. L'inscription libre ne donne que PISCICULTEUR (D19) :

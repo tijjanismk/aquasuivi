@@ -5,9 +5,9 @@ import { useRequete } from '../donnees';
 import { FORMULAIRES } from '../formulaires';
 import { abandonner, reessayer } from '../saisie';
 import { Entete } from '../App';
-import { Button, stylesBouton } from '@/ui/button';
-import { Card } from '@/ui/divers';
+import { Button, buttonVariants } from '@/ui/button';
 import { Vide } from './liste';
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/ui/card';
 
 /// Où corriger une saisie refusée : le formulaire de la ligne, avec son cycle.
 async function lien(e: EntreeJournal): Promise<string | null> {
@@ -35,15 +35,17 @@ export function Corrections() {
       {rejets?.length === 0 && <Vide>Rien à corriger : tout est parti.</Vide>}
       <div className="flex flex-col gap-2">
         {rejets?.map(({ e, lien: vers }) => (
-          <Card key={e.seq} data-test="rejet" className="p-4">
-            <div className="text-sm font-medium">
-              {FORMULAIRES[e.ressource].titre.replace(/^Nouve(au|lle) /, '')}
-              {e.operation === 'supprimer' && ' — suppression'}
-            </div>
-            <p data-test="motif" className="mt-1 text-sm text-destructive">{e.message}</p>
-            <div className="mt-3 flex gap-2">
+          <Card key={e.seq} data-test="rejet" className="gap-3 py-4">
+            <CardHeader className="px-4">
+              <CardTitle className="text-sm">
+                {FORMULAIRES[e.ressource].titre.replace(/^Nouve(au|lle) /, '')}
+                {e.operation === 'supprimer' && ' — suppression'}
+              </CardTitle>
+              <CardDescription data-test="motif" className="text-destructive">{e.message}</CardDescription>
+            </CardHeader>
+            <CardFooter className="gap-2 px-4">
               {vers && (
-                <Link to={vers} className={stylesBouton({ size: 'sm' })}>Corriger</Link>
+                <Link to={vers} className={buttonVariants({ size: 'sm' })}>Corriger</Link>
               )}
               <Button
                 size="sm"
@@ -55,7 +57,7 @@ export function Corrections() {
               >
                 Abandonner
               </Button>
-            </div>
+            </CardFooter>
           </Card>
         ))}
       </div>

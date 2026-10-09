@@ -37,6 +37,15 @@ pnpm dev:admin            # http://localhost:5173
 pnpm dev:pwa              # http://localhost:5180 — l'application de terrain
 ```
 
+Pour remplir l'admin et la PWA de données de démonstration (API démarrée) :
+
+```bash
+pnpm db:donnees-test      # 6 fermes « [TEST] », 10 cycles, 4 comptes (mot de passe test-aqua-2026)
+pnpm db:donnees-test -- --effacer   # les retire
+```
+
+Rejouable, il efface d'abord son passage précédent. **Jamais en production.**
+
 Un particulier crée son compte depuis l'application de terrain, avec son
 numéro de téléphone ; les rôles d'encadrement se donnent dans l'admin.
 

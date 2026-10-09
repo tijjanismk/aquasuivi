@@ -9,8 +9,10 @@ import { messageErreur } from '@/erreurs';
 import { formaterDate, formaterMontant, formaterNombre, t } from '@/i18n';
 import { cn } from '@/lib/utils';
 import { Button } from '@/composants/ui/button';
-import { Input } from '@/composants/ui/champ';
-import { Alerte, Badge, Card } from '@/composants/ui/divers';
+import { Alert, AlertDescription } from '@/composants/ui/alert';
+import { Badge } from '@/composants/ui/badge';
+import { Card, CardContent } from '@/composants/ui/card';
+import { Input } from '@/composants/ui/input';
 import {
   Table,
   TableBody,
@@ -105,14 +107,14 @@ export function TableauRessource({
 
   const requete = useList({
     resource: ressource.nom,
-    pagination: { current: page, pageSize: taillePage },
+    pagination: { currentPage: page, pageSize: taillePage },
     sorters: [{ field: tri.champ, order: tri.ordre }],
     filters: filtresRefine,
   });
 
   const colonnes = champsEnListe(ressource);
-  const lignes = (requete.data?.data ?? []) as Record<string, unknown>[];
-  const total = requete.data?.total ?? 0;
+  const lignes = (requete.result.data ?? []) as Record<string, unknown>[];
+  const total = requete.result.total ?? 0;
   const dernierePage = Math.max(Math.ceil(total / taillePage), 1);
 
   function basculerTri(champ: string) {
@@ -143,7 +145,7 @@ export function TableauRessource({
           </div>
         )}
         <span className="text-sm text-muted-foreground">
-          {requete.isLoading ? t('liste.chargement') : t('liste.lignes', { n: total })}
+          {requete.query.isLoading ? t('liste.chargement') : t('liste.lignes', { n: total })}
         </span>
         {cheminNouveau && (
           <Link to={cheminNouveau} className="ml-auto">
@@ -155,18 +157,18 @@ export function TableauRessource({
         )}
       </div>
 
-      {requete.isError && (
-        <Alerte className="mb-3" data-test="erreur">
-          {messageErreur(requete.error) ?? t('erreur.apiInjoignable')}
-        </Alerte>
+      {requete.query.isError && (
+        <Alert variant="destructive" className="mb-3" data-test="erreur">
+          <AlertDescription>{messageErreur(requete.query.error) ?? t('erreur.apiInjoignable')}</AlertDescription>
+        </Alert>
       )}
 
-      {!requete.isLoading && lignes.length === 0 ? (
-        <Card className="border-dashed p-8 text-center text-sm text-muted-foreground">
-          {t('liste.vide')}
+      {!requete.query.isLoading && lignes.length === 0 ? (
+        <Card className="border-dashed py-8">
+          <CardContent className="text-center text-sm text-muted-foreground">{t('liste.vide')}</CardContent>
         </Card>
       ) : (
-        <Card className="overflow-hidden">
+        <Card className="gap-0 overflow-hidden py-0">
           <Table>
             <TableHeader>
               <TableRow className="hover:bg-transparent">

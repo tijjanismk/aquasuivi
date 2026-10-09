@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from 'react';
+import { Fragment, useEffect, useState, type FormEvent } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router';
 import { Trash2 } from 'lucide-react';
 import type { Violation } from '@aqua/shared';
@@ -6,10 +6,13 @@ import { db, TABLES, type Ligne, type Segment } from '../db';
 import { FORMULAIRES, type Champ, type Contexte, type Formulaire, type Option } from '../formulaires';
 import { enregistrer, ErreurSaisie, supprimer } from '../saisie';
 import { Entete } from '../App';
+import { BoutonPosition } from './Position';
 import { Button } from '@/ui/button';
-import { Input, Label, Select } from '@/ui/champ';
-import { Alerte } from '@/ui/divers';
 import { Vide } from './liste';
+import { Alert, AlertDescription } from '@/ui/alert';
+import { Input } from '@/ui/input';
+import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from '@/ui/field';
+import { NativeSelect, NativeSelectOption } from '@/ui/native-select';
 
 const SEGMENTS = Object.keys(FORMULAIRES) as Segment[];
 
@@ -78,19 +81,19 @@ export function ChampSaisie({ champ, valeur, onChange, options, erreur }: {
     value: valeur,
   };
   return (
-    <div className="flex flex-col gap-1.5">
-      <Label htmlFor={id}>
+    <Field data-invalid={erreur ? true : undefined}>
+      <FieldLabel htmlFor={id}>
         {champ.libelle}
         {champ.unite && <span className="font-normal text-muted-foreground"> ({champ.unite})</span>}
         {champ.requis && <span className="text-destructive"> *</span>}
-      </Label>
+      </FieldLabel>
       {champ.type === 'choix' || champ.type === 'reference' ? (
-        <Select {...commun} className="h-11 text-base" onChange={(e) => onChange(e.target.value)}>
-          <option value="">{champ.requis ? 'Choisir…' : '—'}</option>
+        <NativeSelect {...commun} className="h-11 text-base" onChange={(e) => onChange(e.target.value)}>
+          <NativeSelectOption value="">{champ.requis ? 'Choisir…' : '—'}</NativeSelectOption>
           {(champ.options ?? options ?? []).map((o) => (
-            <option key={o.valeur} value={o.valeur}>{o.libelle}</option>
+            <NativeSelectOption key={o.valeur} value={o.valeur}>{o.libelle}</NativeSelectOption>
           ))}
-        </Select>
+        </NativeSelect>
       ) : (
         <Input
           {...commun}
@@ -101,11 +104,11 @@ export function ChampSaisie({ champ, valeur, onChange, options, erreur }: {
         />
       )}
       {erreur ? (
-        <p data-test="erreur-champ" className="text-xs text-destructive">{erreur}</p>
+        <FieldError data-test="erreur-champ">{erreur}</FieldError>
       ) : (
-        champ.aide && <p className="text-xs text-muted-foreground">{champ.aide}</p>
+        champ.aide && <FieldDescription>{champ.aide}</FieldDescription>
       )}
-    </div>
+    </Field>
   );
 }
 
@@ -148,7 +151,7 @@ export function Saisie() {
         initiales[champ.nom] = versTexte(existante ? existante[champ.nom] : champ.defaut?.(c));
       }
       const choix: Record<string, Option[]> = {};
-      for (const champ of f.champs) if (champ.charger) choix[champ.nom] = await champ.charger(c);
+      for (const champ of f.champs) if (champ.charger) choix[champ.nom] = await champ.charger(c, initiales);
       setCtx(c);
       setLigne(existante);
       setValeurs(initiales);
@@ -191,25 +194,59 @@ export function Saisie() {
     naviguer(ressource === 'fermes' ? '/' : destination(ressource, ligne ?? { id }, ctx), { replace: true });
   };
 
+  /// Change un champ ; ceux qui en dépendent (cercle, puis commune) sont vidés
+  /// et leurs choix relus pour la nouvelle valeur. Un seul choix possible — le
+  /// cercle technique du district de Bamako — est pris d’office.
+  const changer = async (nom: string, v: string) => {
+    const suivantes = { ...valeurs, [nom]: v };
+    const aRecharger: Champ[] = [];
+    const aVider = [nom];
+    while (aVider.length > 0) {
+      const parent = aVider.pop();
+      for (const c of f.champs) {
+        if (c.dependDe === parent) {
+          suivantes[c.nom] = '';
+          aRecharger.push(c);
+          aVider.push(c.nom);
+        }
+      }
+    }
+    const choix: Record<string, Option[]> = {};
+    // Dans l’ordre de la cascade : la commune se lit avec le cercle déjà choisi.
+    for (const c of aRecharger) {
+      choix[c.nom] = c.charger ? await c.charger(ctx, suivantes) : [];
+      if (choix[c.nom]!.length === 1) suivantes[c.nom] = choix[c.nom]![0]!.valeur;
+    }
+    setValeurs(suivantes);
+    setOptions((o) => ({ ...o, ...choix }));
+  };
+
   const parChamp = new Map(violations.filter((v) => v.champ).map((v) => [v.champ!, v.message]));
   const generales = violations.filter((v) => !v.champ || !f.champs.some((c) => c.nom === v.champ));
 
   return (
     <>
       <Entete titre={f.titre} retour={destination(ressource, ligne ?? { id: '' }, ctx)} />
-      <form data-test="formulaire" onSubmit={soumettre} className="flex flex-col gap-4" noValidate>
+      <form data-test="formulaire" onSubmit={soumettre} noValidate>
+        <FieldGroup className="gap-4">
         {f.champs.map((champ) => (
-          <ChampSaisie
-            key={champ.nom}
-            champ={champ}
-            valeur={valeurs[champ.nom] ?? ''}
-            options={options[champ.nom]}
-            erreur={parChamp.get(champ.nom)}
-            onChange={(v) => setValeurs((x) => ({ ...x, [champ.nom]: v }))}
-          />
+          <Fragment key={champ.nom}>
+            <ChampSaisie
+              champ={champ}
+              valeur={valeurs[champ.nom] ?? ''}
+              options={options[champ.nom]}
+              erreur={parChamp.get(champ.nom)}
+              onChange={(v) => void changer(champ.nom, v)}
+            />
+            {f.position && champ.nom === 'longitude' && (
+              <BoutonPosition onPosition={(latitude, longitude) => setValeurs((x) => ({ ...x, latitude, longitude }))} />
+            )}
+          </Fragment>
         ))}
         {generales.length > 0 && (
-          <Alerte data-test="refus">{generales.map((v) => v.message).join(' ')}</Alerte>
+          <Alert variant="destructive" data-test="refus">
+            <AlertDescription>{generales.map((v) => v.message).join(' ')}</AlertDescription>
+          </Alert>
         )}
         <Button type="submit" size="lg" disabled={attente} data-test="enregistrer">
           Enregistrer
@@ -219,6 +256,7 @@ export function Saisie() {
             <Trash2 /> Supprimer
           </Button>
         )}
+        </FieldGroup>
       </form>
     </>
   );

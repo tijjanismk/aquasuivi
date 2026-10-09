@@ -81,6 +81,18 @@ async function parcours() {
   verifier('API : production cohérente', api['projection']?.['productionKg'] > 0, true);
   verifier('API : cycle projeté fourni', api['cycleProjete']?.['cycle']?.['statut'], 'BOUCLE');
   verifier('API : paramètre manquant refusé', (await a.appel('POST', '/simulations/calculer', { ...parametres, prixVenteKg: undefined })).corps['code'], 'CHAMPS_INVALIDES');
+  // Saisie telle que l'écran l'envoie, à la française : « 500 000 », « 12,5 ».
+  const francais = await a.appel('POST', '/simulations/calculer', {
+    ...parametres,
+    capital: String(parametres.capital).replace(/\B(?=(\d{3})+$)/g, ' '),
+    densite: '12,5',
+  });
+  verifier('API : « 500 000 » et « 12,5 » acceptés', `${francais.statut} ${francais.corps['projection']?.['densite']}`, '200 12.5');
+  verifier(
+    'API : saisie illisible expliquée en français',
+    (await a.appel('POST', '/simulations/calculer', { ...parametres, taille: 'cent' })).corps['message'],
+    'Surface ou volume : nombre attendu, par exemple 12,5 ou 500 000',
+  );
   verifier('API : repère manquant expliqué', (await a.appel('POST', '/simulations/calculer', { ...parametres, especeId: 'inexistante' })).corps['code'], 'SIMULATION_IMPOSSIBLE');
 
   const enreg = await a.appel('POST', '/simulations', { nom: 'Étang de 100 m²', parametres });

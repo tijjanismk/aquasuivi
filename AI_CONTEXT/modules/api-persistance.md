@@ -22,7 +22,10 @@ référentiels de démarrage.
 sur mobile) : `Espece`, `TypeInfrastructure`, `Aliment`,
 `ProduitSanitaire`, `PalierRationnement`
 
-**Géographie** : `Region` → `Cercle` → `Commune`
+**Géographie** : `Region` → `Cercle` → `Commune`, chacun avec son `code`
+(`Region.type` : `REGION` ou `DISTRICT` — Bamako, dont l’unique cercle est
+technique)
+officiel (nullable : lignes antérieures au découpage)
 
 **Identité et droits** : `User`, `AccesFerme`, `Appareil`
 
@@ -46,8 +49,8 @@ d'infrastructure, du bassin en ciment au RAS, chacun avec un `code`
 unique (`BASSIN_CIMENT`, `ETANG_TERRE`, `RAS`…) · 8 aliments (Sabalagnon
 local, gamme Skretting, son de riz, tourteau de coton) · 5 produits
 sanitaires · 12 paliers de rationnement (tilapia, clarias) · géographie :
-région Sikasso, cercles Sikasso (communes Kotouba, Siby, Kaladjan) et
-Koulikoro (Koulikoro, Niono).
+découpage complet du Mali lu dans `prisma/data/decoupage_mali.json`
+(rejouable, par code ; « Région de X » devient « X »).
 
 ## Règles métier
 - [CONFIRMÉ] Clés primaires **ULID générés par le client** ; le
