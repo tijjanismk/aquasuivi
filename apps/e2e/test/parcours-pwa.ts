@@ -107,6 +107,13 @@ async function parcours(nav: Navigateur) {
   await nav.attendre(`!!document.getElementById('champ-nom')`, 'formulaire ferme servi hors ligne');
   verifier('interface servie sans réseau (service worker)', true, true);
   await saisir({ nom: `${NOM_TEST} ferme`, village: 'Kotouba' });
+  // « Utiliser ma position » : le GPS répond sans réseau. Kotouba, ± 8 m.
+  await nav.position(11.2701, -5.5203, 8);
+  await cliquer('[data-test=gps-relever]');
+  await nav.attendre(`(document.querySelector('[data-test=gps-etat]')?.innerText ?? '').includes('relevée')`, 'position GPS relevée');
+  verifier('GPS hors ligne : latitude remplie', await ev<string>(`document.getElementById('champ-latitude').value`), '11,270100');
+  verifier('GPS hors ligne : longitude remplie', await ev<string>(`document.getElementById('champ-longitude').value`), '-5,520300');
+  verifier('GPS : précision annoncée', (await ev<string>(`document.querySelector('[data-test=gps-etat]').innerText`)).includes('± 8 m'), true);
   await enregistrer('^/fermes/', 'ferme créée hors ligne');
   const fermeId = await cheminId();
 
@@ -242,6 +249,8 @@ async function parcours(nav: Navigateur) {
   verifier('ration de la pêche envoyée au serveur, sans quantité', [ration?.r, ration?.q, !!ration?.p].join(' '), '6.96  true');
   // 6,96 kg/j × 30 jours (pêche suivante) + 204 + 390 kg mesurés.
   verifier('aliment : ration close par la pêche suivante', serveur['alimentation']?.alimentDistribueKg, 802.8);
+  const [coordonnees] = await sql('SELECT latitude::float AS lat, longitude::float AS lon FROM "Ferme" WHERE id = $1', [fermeId]);
+  verifier('ferme : position GPS arrivée au serveur', `${coordonnees?.lat} ${coordonnees?.lon}`, '11.2701 -5.5203');
   const [delai] = await sql('SELECT "finDelaiAttente"::text AS fin FROM "Traitement" WHERE "cycleId" = $1', [cycleId]);
   verifier('délai d’attente recalculé au serveur', typeof delai?.fin, 'string');
 }

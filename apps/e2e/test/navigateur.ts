@@ -38,6 +38,8 @@ export interface Navigateur {
   /// Mode avion simulé : les requêtes échouent, `navigator.onLine` passe à
   /// faux et l'évènement `offline` part, comme sur un téléphone sans réseau.
   horsLigne(coupe: boolean): Promise<void>;
+  /// GPS simulé : la page lit cette position, permission accordée d'office.
+  position(latitude: number, longitude: number, precision: number): Promise<void>;
   fermer(): Promise<void>;
 }
 
@@ -137,6 +139,11 @@ export async function ouvrirNavigateur(port = 9333): Promise<Navigateur> {
         downloadThroughput: -1,
         uploadThroughput: -1,
       });
+    },
+    async position(latitude, longitude, precision) {
+      const origine = await evaluer<string>('location.origin');
+      await envoyer('Browser.grantPermissions', { origin: origine, permissions: ['geolocation'] });
+      await envoyer('Emulation.setGeolocationOverride', { latitude, longitude, accuracy: precision });
     },
     async fermer() {
       ws.close();

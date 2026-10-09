@@ -73,6 +73,15 @@ L'API est fermée par défaut depuis D18 : JWT, cloisonnement par
 
 ## PWA — à savoir
 
+- **GPS** (`ecrans/Position.tsx`) : le navigateur ne donne la position
+  qu'en HTTPS (ou sur `localhost`). Une PWA ouverte en `http://` sur le
+  réseau local (téléphone de test → poste de développement) affiche
+  « Localisation refusée ». En production, Caddy sert en HTTPS et autorise
+  `geolocation=(self)` (`deploy/Caddyfile`).
+- **Coordonnées hors du Mali refusées** (`controlerCoordonnees`, marge
+  ~20 km) : une ferme frontalière réelle au-delà de la marge serait
+  rejetée. Élargir `EMPRISE_MALI` si le cas se présente.
+
 - **Composants UI dupliqués** : `apps/pwa/src/ui/` est une copie de
   `apps/admin/src/composants/ui/` (bouton, champs, carte). Deux copies à
   garder alignées ; les factoriser dans un paquet `@aqua/ui` le jour où

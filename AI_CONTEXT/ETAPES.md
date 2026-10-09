@@ -317,7 +317,10 @@ synchronise avec `https://api.…`.
       par alertes, fermes sans coordonnées listées ; CSP de Caddy ouverte
       à `tile.openstreetmap.org`
 - [ ] Saisir latitude / longitude en cliquant sur la carte (fiche ferme)
-- [ ] PWA : « utiliser ma position » (GPS) à la création d'une ferme
+- [x] PWA : « utiliser ma position » (GPS) sur la fiche ferme — hors ligne,
+      meilleure lecture sur 30 s (arrêt à ± 20 m), précision affichée ;
+      coordonnées contrôlées dans l'emprise du Mali (`controlerCoordonnees`,
+      API et PWA) — `ecrans/Position.tsx`, `test:pwa`
 - [ ] Carte hors ligne : tuiles auto-hébergées (PMTiles du Mali), D25
 
 ---

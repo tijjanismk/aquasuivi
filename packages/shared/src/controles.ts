@@ -99,6 +99,42 @@ function requis(valeur: unknown, champ: string, libelle: string): Violation[] {
 }
 
 // -----------------------------------------------------------------------------
+//  Ferme
+// -----------------------------------------------------------------------------
+
+/**
+ * Emprise du Mali (10,2° à 25° N, 12,2° O à 4,3° E), avec une marge d'environ
+ * 20 km. Hors de ce cadre, c'est presque toujours une erreur de saisie — le
+ * plus souvent une longitude ouest tapée sans son signe moins — et la ferme
+ * tomberait au milieu de l'Atlantique ou du Niger voisin sur la carte.
+ */
+export const EMPRISE_MALI = { latMin: 10, latMax: 25.2, lonMin: -12.5, lonMax: 4.5 } as const;
+
+export function controlerCoordonnees(f: { latitude?: Nombre; longitude?: Nombre }): Violation[] {
+  const lat = f.latitude ?? null;
+  const lon = f.longitude ?? null;
+  if (lat === null && lon === null) return [];
+  if (lat === null || lon === null) {
+    const champ = lat === null ? 'latitude' : 'longitude';
+    return [{ code: 'CHAMP_REQUIS', champ, message: 'La latitude et la longitude vont ensemble : renseignez les deux, ou aucune.' }];
+  }
+  const dans = (la: number, lo: number) =>
+    la >= EMPRISE_MALI.latMin && la <= EMPRISE_MALI.latMax && lo >= EMPRISE_MALI.lonMin && lo <= EMPRISE_MALI.lonMax;
+  if (dans(lat, lon)) return [];
+  if (dans(lat, -lon)) {
+    return [{
+      code: 'COORDONNEES_HORS_MALI',
+      champ: 'longitude',
+      message: `À l’ouest de Greenwich, la longitude est négative : ${String(-lon).replace('.', ',')} et non ${String(lon).replace('.', ',')} ?`,
+    }];
+  }
+  if (dans(lon, lat)) {
+    return [{ code: 'COORDONNEES_HORS_MALI', champ: 'latitude', message: 'Latitude et longitude semblent inversées.' }];
+  }
+  return [{ code: 'COORDONNEES_HORS_MALI', champ: 'latitude', message: 'Ce point est hors du Mali : vérifiez la latitude et la longitude.' }];
+}
+
+// -----------------------------------------------------------------------------
 //  Infrastructure
 // -----------------------------------------------------------------------------
 

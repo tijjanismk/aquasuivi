@@ -40,6 +40,9 @@ export interface Formulaire {
   /// Champ qui rattache la ligne à son parent, rempli par l'écran.
   parent?: { champ: string; depuis: keyof Contexte };
   champs: Champ[];
+  /// Bouton « Utiliser ma position » sous la longitude : remplit `latitude`
+  /// et `longitude` depuis le GPS du téléphone.
+  position?: boolean;
 }
 
 const actifs = (lignes: Ligne[], libelle: (l: Ligne) => string = (l) => l['nom']) =>
@@ -83,7 +86,11 @@ export const FORMULAIRES: Record<Segment, Formulaire> = {
         charger: async (_, v) => (v['cercleId'] ? actifs(await db.communes.where('cercleId').equals(v['cercleId']).toArray()) : []),
       },
       { nom: 'village', libelle: 'Village', type: 'texte' },
+      { nom: 'latitude', libelle: 'Latitude', type: 'nombre', unite: '°', aide: 'Positive au Mali, par exemple 11,27.' },
+      { nom: 'longitude', libelle: 'Longitude', type: 'nombre', unite: '°', aide: 'Négative à l’ouest de Greenwich, par exemple -5,52.' },
     ],
+    // Sur place, le GPS évite la virgule mal placée et le signe moins oublié.
+    position: true,
   },
   infrastructures: {
     titre: 'Nouveau bassin',

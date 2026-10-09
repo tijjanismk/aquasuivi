@@ -3,6 +3,7 @@
  * ce qui est refusé ici l'est partout.
  */
 import {
+  controlerCoordonnees,
   controlerCycle,
   controlerDepense,
   controlerDistribution,
@@ -85,6 +86,15 @@ const attendu: Array<[string, unknown, unknown]> = [
   ['quantité nulle', codes(controlerDistribution({ dateDebut: '2026-03-01', quantiteTotaleKg: 0 }, CYCLE, AUJ)), 'VALEUR_NON_POSITIVE'],
   ['ration seule, sans quantité (D29)', codes(controlerDistribution({ dateDebut: '2026-03-01', rationKgJour: 1.5 }, CYCLE, AUJ)), 'aucun'],
   ['ni ration ni quantité', codes(controlerDistribution({ dateDebut: '2026-03-01' }, CYCLE, AUJ)), 'CHAMP_REQUIS'],
+
+  // --- Coordonnées d'une ferme ---
+  ['ferme sans coordonnées', codes(controlerCoordonnees({})), 'aucun'],
+  ['Finkolo (11,27 N ; 5,52 O)', codes(controlerCoordonnees({ latitude: 11.27, longitude: -5.52 })), 'aucun'],
+  ['latitude sans longitude', codes(controlerCoordonnees({ latitude: 11.27 })), 'CHAMP_REQUIS'],
+  ['longitude ouest sans signe moins', codes(controlerCoordonnees({ latitude: 11.27, longitude: 5.52 })), 'COORDONNEES_HORS_MALI'],
+  ['signe moins : message qui le dit', controlerCoordonnees({ latitude: 11.27, longitude: 5.52 })[0]?.champ, 'longitude'],
+  ['latitude et longitude inversées', controlerCoordonnees({ latitude: -5.52, longitude: 11.27 })[0]?.champ, 'latitude'],
+  ['point à Paris', codes(controlerCoordonnees({ latitude: 48.85, longitude: 2.35 })), 'COORDONNEES_HORS_MALI'],
 
   // --- Récolte ---
   ['récolte valide', codes(controlerRecolte({ dateOperation: '2026-08-01', poidsKg: 120, prixKg: 1750 }, {}, CYCLE, AUJ)), 'aucun'],

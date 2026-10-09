@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import {
   aujourdhui,
+  controlerCoordonnees,
   controlerCycle,
   controlerDepense,
   controlerDistribution,
@@ -27,7 +28,7 @@ const NUMERIQUES = new Set([
   'poidsTotalG', 'quantiteTotaleKg', 'rationKgJour', 'prixKgApplique',
   'quantite', 'prixUnitaire', 'poidsKg', 'prixKg', 'montant',
   'temperature', 'oxygeneDissous', 'ph', 'transparenceSecchi', 'ammoniacNh3',
-  'nitrites', 'alcalinite', 'salinite',
+  'nitrites', 'alcalinite', 'salinite', 'latitude', 'longitude',
 ]);
 
 type Ligne = Record<string, any>;
@@ -106,7 +107,7 @@ export class ControlesService {
     const auj = aujourdhui();
     switch (ressource) {
       case 'fermes':
-        return this.territoire(l);
+        return [...(await this.territoire(l)), ...controlerCoordonnees(l)];
       case 'infrastructures':
         return controlerInfrastructure(l);
       case 'cycles':

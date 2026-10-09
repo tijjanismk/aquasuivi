@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from 'react';
+import { Fragment, useEffect, useState, type FormEvent } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router';
 import { Trash2 } from 'lucide-react';
 import type { Violation } from '@aqua/shared';
@@ -6,6 +6,7 @@ import { db, TABLES, type Ligne, type Segment } from '../db';
 import { FORMULAIRES, type Champ, type Contexte, type Formulaire, type Option } from '../formulaires';
 import { enregistrer, ErreurSaisie, supprimer } from '../saisie';
 import { Entete } from '../App';
+import { BoutonPosition } from './Position';
 import { Button } from '@/ui/button';
 import { Vide } from './liste';
 import { Alert, AlertDescription } from '@/ui/alert';
@@ -229,14 +230,18 @@ export function Saisie() {
       <form data-test="formulaire" onSubmit={soumettre} noValidate>
         <FieldGroup className="gap-4">
         {f.champs.map((champ) => (
-          <ChampSaisie
-            key={champ.nom}
-            champ={champ}
-            valeur={valeurs[champ.nom] ?? ''}
-            options={options[champ.nom]}
-            erreur={parChamp.get(champ.nom)}
-            onChange={(v) => void changer(champ.nom, v)}
-          />
+          <Fragment key={champ.nom}>
+            <ChampSaisie
+              champ={champ}
+              valeur={valeurs[champ.nom] ?? ''}
+              options={options[champ.nom]}
+              erreur={parChamp.get(champ.nom)}
+              onChange={(v) => void changer(champ.nom, v)}
+            />
+            {f.position && champ.nom === 'longitude' && (
+              <BoutonPosition onPosition={(latitude, longitude) => setValeurs((x) => ({ ...x, latitude, longitude }))} />
+            )}
+          </Fragment>
         ))}
         {generales.length > 0 && (
           <Alert variant="destructive" data-test="refus">
